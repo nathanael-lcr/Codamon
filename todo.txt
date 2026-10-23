@@ -1,4 +1,5 @@
 Faire en sorte que les cartes soient toujours des mêmes dimensions (0,720:1)
+Rendre cohérent l'utilisation de tailwind à travers les fichiers
 Fix l'unpacking
 Avoir des pondération de probabilité de drop en BDD
 Avoir une table profiles qui stocke les infos du profil

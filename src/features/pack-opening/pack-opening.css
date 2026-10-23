@@ -3,8 +3,6 @@
 }
 
 .pack-page {
-  width: min(100%, 72rem);
-  margin-inline: auto;
   padding-bottom: 2rem;
 }
 
@@ -46,7 +44,6 @@
   justify-items: center;
   gap: 1rem;
   border: 1px solid #28335d;
-  border-radius: 1.7rem;
   background:
     radial-gradient(ellipse at 50% 52%, rgb(81 67 180 / 40%), transparent 45%),
     radial-gradient(ellipse at 50% 100%, rgb(44 59 115 / 36%), transparent 55%),
@@ -412,7 +409,6 @@
 @media (min-width: 640px) {
   .pack-room {
     min-height: min(72vh, 50rem);
-    border-radius: 2rem;
     gap: 1.7rem;
     padding: 3rem;
   }

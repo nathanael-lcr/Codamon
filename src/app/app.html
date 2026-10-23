@@ -1,8 +1,15 @@
 <div class="min-h-screen bg-slate-50 pb-20 text-slate-900 md:pb-0">
   <header class="border-b border-slate-200 bg-white">
     <div class="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
-      <a routerLink="/" class="flex items-center gap-2 font-semibold tracking-tight" aria-label="Codamon, accueil">
-        <span class="grid size-9 place-items-center rounded-xl bg-indigo-600 text-sm font-bold text-white">C</span>
+      <a
+        routerLink="/"
+        class="flex items-center gap-2 font-semibold tracking-tight"
+        aria-label="Codamon, accueil"
+      >
+        <span
+          class="grid size-9 place-items-center rounded-xl bg-indigo-600 text-sm font-bold text-white"
+          >C</span
+        >
         <span>Codamon</span>
       </a>
 
@@ -15,14 +22,6 @@
           class="rounded-lg px-4 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100"
         >
           Dashboard
-        </a>
-        <a
-          routerLink="/account"
-          routerLinkActive="bg-slate-100 text-slate-950"
-          ariaCurrentWhenActive="page"
-          class="rounded-lg px-4 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100"
-        >
-          Compte
         </a>
         <a
           routerLink="/pack"
@@ -51,7 +50,7 @@
     </div>
   </header>
 
-  <main class="mx-auto max-w-6xl px-5 py-8 sm:py-12">
+  <main>
     <router-outlet />
   </main>
 
