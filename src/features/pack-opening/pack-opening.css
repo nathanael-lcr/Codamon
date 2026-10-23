@@ -74,7 +74,6 @@
     0 0 38px rgb(139 92 246 / 24%),
     inset 0 0 0 4px rgb(255 255 255 / 12%);
   color: white;
-  transform: rotate(-3deg);
   transition:
     transform 350ms ease,
     box-shadow 350ms ease;
@@ -326,7 +325,11 @@
   border-radius: 1rem;
   background:
     radial-gradient(circle at 50% 40%, rgb(251 191 36 / 13%), transparent 40%),
-    repeating-radial-gradient(ellipse at center, transparent 0 20px, rgb(255 255 255 / 6%) 21px 22px);
+    repeating-radial-gradient(
+      ellipse at center,
+      transparent 0 20px,
+      rgb(255 255 255 / 6%) 21px 22px
+    );
 }
 
 .pull-back-mark {

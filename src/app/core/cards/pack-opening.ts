@@ -17,9 +17,7 @@ export function createRandomPack(cards: readonly Card[], random = Math.random): 
     throw new Error(`Il faut au moins ${PACK_SIZE} cartes publiées pour ouvrir un pack.`);
   }
 
-  const availableByRarity = new Map<CardRarity, Card[]>(
-    RARITY_ORDER.map((rarity) => [rarity, []]),
-  );
+  const availableByRarity = new Map<CardRarity, Card[]>(RARITY_ORDER.map((rarity) => [rarity, []]));
 
   for (const card of cards) {
     const rarity = isCardRarity(card.rarity) ? card.rarity : 'common';

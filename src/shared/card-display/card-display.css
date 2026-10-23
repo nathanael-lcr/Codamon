@@ -38,12 +38,15 @@
   z-index: 3;
   inset: 0;
   border-radius: inherit;
-  background: radial-gradient(
-    circle at var(--pointer-x, 50%) var(--pointer-y, 50%),
-    rgb(255 255 255 / 62%),
-    rgb(255 255 255 / 18%) 20%,
-    transparent 58%
-  );
+  background:
+    radial-gradient(
+      circle at var(--pointer-x, 50%) var(--pointer-y, 50%),
+      rgb(255 255 255 / 70%),
+      rgb(255 255 255 / 20%) 18%,
+      transparent 52%
+    ),
+    linear-gradient(120deg, transparent 25%, rgb(255 255 255 / 24%) 45%, transparent 65%);
+  mix-blend-mode: screen;
   content: '';
   opacity: 0;
   pointer-events: none;
@@ -51,28 +54,28 @@
 }
 
 .trading-card[data-rarity='common'] {
-  --card-accent: #64748b;
-  --card-accent-soft: #f1f5f9;
+  --card-accent: #4d9b52;
+  --card-accent-soft: #e8f5df;
 }
 
 .trading-card[data-rarity='rare'] {
   --card-accent: #2563eb;
-  --card-accent-soft: #eff6ff;
+  --card-accent-soft: #e6efff;
 }
 
 .trading-card[data-rarity='epic'] {
   --card-accent: #9333ea;
-  --card-accent-soft: #faf5ff;
+  --card-accent-soft: #e9d5ff;
 }
 
 .trading-card[data-rarity='legendary'] {
   --card-accent: #d97706;
-  --card-accent-soft: #fffbeb;
+  --card-accent-soft: #fde68a;
 }
 
 .trading-card[data-rarity='mythic'] {
-  --card-accent: #e11d48;
-  --card-accent-soft: #fff1f2;
+  --card-accent: #d4a72c;
+  --card-accent-soft: #fff0a8;
 }
 
 .card-content {
@@ -210,6 +213,7 @@
 }
 
 .card-details {
+  margin-bottom: 1rem;
   display: grid;
   gap: 0.45rem;
   padding: 0.5rem 0.1rem 0.3rem;
@@ -253,7 +257,7 @@
 }
 
 .card-stat-hp dd {
-  color: #dc2626;
+  color: #57a848;
 }
 
 .card-description {
@@ -332,6 +336,224 @@
   color: #b91c1c;
 }
 
+.card-basic {
+  border-width: 5px;
+  border-radius: 1.15rem;
+  background: linear-gradient(145deg, #fff 8%, var(--card-accent-soft) 100%);
+}
+
+.card-basic .card-content {
+  padding: 0.6rem;
+}
+
+.card-basic .card-art {
+  aspect-ratio: 1.38 / 1;
+  border: 3px solid color-mix(in srgb, var(--card-accent) 45%, white);
+  border-radius: 0.35rem;
+  background: linear-gradient(145deg, var(--card-accent-soft), #fff);
+}
+
+.card-basic .card-details {
+  gap: 0;
+  padding-top: 0.35rem;
+}
+
+.card-basic .card-description,
+.card-basic .card-ability,
+.card-basic .card-quote,
+.card-basic .card-stat-defense,
+.card-basic .card-stat-speed {
+  display: none;
+}
+
+.card-basic .card-footer {
+  padding-top: 0.4rem;
+}
+
+.card-full-art,
+.card-mythic {
+  border-color: var(--card-accent);
+  background: #111827;
+}
+
+.card-full-art .card-content,
+.card-mythic .card-content {
+  display: flex;
+  min-height: 34rem;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1rem;
+  z-index: 2;
+}
+
+.card-full-art .card-art,
+.card-mythic .card-art {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  aspect-ratio: auto;
+  border: 0;
+  border-radius: inherit;
+  background: linear-gradient(145deg, var(--card-accent-soft), #111827);
+  box-shadow: none;
+}
+
+.card-full-art .card-art img,
+.card-mythic .card-art img {
+  object-fit: cover;
+}
+
+.card-full-art .card-art figcaption,
+.card-mythic .card-art figcaption {
+  right: 0.9rem;
+  bottom: 0.9rem;
+  border-color: rgb(255 255 255 / 45%);
+  background: rgb(15 23 42 / 62%);
+  color: white;
+  backdrop-filter: blur(8px);
+}
+
+.card-full-art::after,
+.card-mythic::after {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    linear-gradient(180deg, rgb(2 6 23 / 72%), transparent 34%),
+    linear-gradient(0deg, rgb(2 6 23 / 88%), transparent 56%);
+  content: '';
+  pointer-events: none;
+}
+
+.card-full-art .card-heading,
+.card-mythic .card-heading,
+.card-full-art .card-details,
+.card-mythic .card-details,
+.card-full-art .card-footer,
+.card-mythic .card-footer {
+  position: relative;
+  z-index: 2;
+}
+
+.card-full-art .card-number,
+.card-mythic .card-number,
+.card-full-art .card-type,
+.card-mythic .card-type {
+  color: rgb(255 255 255 / 82%);
+}
+
+.card-full-art .card-title h2,
+.card-mythic .card-title h2 {
+  color: white;
+  text-shadow: 0 2px 12px rgb(0 0 0 / 55%);
+}
+
+.card-full-art .card-title p,
+.card-mythic .card-title p {
+  color: color-mix(in srgb, var(--card-accent) 65%, white);
+}
+
+.card-full-art .card-details,
+.card-mythic .card-details {
+  gap: 0.55rem;
+  margin-top: auto;
+  padding: 0.75rem;
+  border: 1px solid rgb(255 255 255 / 38%);
+  border-radius: 0.85rem;
+  background: rgb(15 23 42 / 63%);
+  color: white;
+  backdrop-filter: blur(10px);
+}
+
+.card-full-art .card-stats,
+.card-mythic .card-stats {
+  border-color: rgb(255 255 255 / 26%);
+  background: rgb(255 255 255 / 12%);
+}
+
+.card-full-art .card-stat + .card-stat,
+.card-mythic .card-stat + .card-stat {
+  border-color: rgb(255 255 255 / 22%);
+}
+
+.card-full-art .card-stat dt,
+.card-mythic .card-stat dt,
+.card-full-art .card-stat dd,
+.card-mythic .card-stat dd,
+.card-full-art .card-description,
+.card-mythic .card-description,
+.card-full-art .card-ability p,
+.card-mythic .card-ability p,
+.card-full-art .card-quote,
+.card-mythic .card-quote {
+  color: white;
+}
+
+.card-full-art .card-ability,
+.card-mythic .card-ability {
+  border-color: color-mix(in srgb, var(--card-accent) 58%, white);
+  background: rgb(255 255 255 / 12%);
+}
+
+.card-full-art .card-ability h3,
+.card-mythic .card-ability h3 {
+  color: color-mix(in srgb, var(--card-accent) 55%, white);
+}
+
+.card-full-art .card-quote cite,
+.card-mythic .card-quote cite {
+  color: rgb(255 255 255 / 72%);
+}
+
+.card-full-art .card-footer,
+.card-mythic .card-footer {
+  border-color: rgb(255 255 255 / 35%);
+  color: rgb(255 255 255 / 78%);
+  padding-top: 0.55rem;
+}
+
+.card-mythic {
+  border-width: 7px;
+  border-color: transparent;
+  background:
+    linear-gradient(#111827, #111827) padding-box,
+    linear-gradient(135deg, #fff4b8, #b7791f 30%, #fff2a6 48%, #9b6b19 70%, #fff0a6) border-box;
+  box-shadow:
+    0 24px 48px -25px rgb(15 23 42 / 55%),
+    0 0 18px color-mix(in srgb, var(--card-accent) 65%, transparent),
+    inset 0 0 0 2px rgb(255 248 190 / 85%);
+}
+
+.card-mythic::before {
+  background:
+    radial-gradient(
+      circle at var(--pointer-x, 50%) var(--pointer-y, 50%),
+      rgb(255 250 204 / 88%),
+      rgb(255 215 80 / 28%) 24%,
+      transparent 56%
+    ),
+    linear-gradient(115deg, transparent 20%, rgb(255 240 150 / 48%) 45%, transparent 68%);
+}
+
+.card-mythic .card-rarity {
+  background: linear-gradient(135deg, #fff2a6, #b7791f 55%, #fff1a3);
+  color: #482f08;
+  box-shadow: 0 0 14px rgb(255 213 79 / 62%);
+}
+
+.card-mythic .card-title h2 {
+  text-shadow:
+    0 2px 14px rgb(0 0 0 / 75%),
+    0 0 18px rgb(255 215 79 / 45%);
+}
+
+.card-stage-compact .card-full-art .card-content,
+.card-stage-compact .card-mythic .card-content {
+  min-height: 27rem;
+  padding: 0.7rem;
+}
+
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
   .trading-card:hover {
     box-shadow:
@@ -342,6 +564,17 @@
 
   .trading-card:hover::before {
     opacity: 0.7;
+  }
+
+  .card-mythic:hover {
+    box-shadow:
+      0 38px 70px -28px rgb(15 23 42 / 62%),
+      0 0 32px color-mix(in srgb, var(--card-accent) 90%, transparent),
+      inset 0 0 0 2px rgb(255 248 190 / 95%);
+  }
+
+  .card-mythic:hover::before {
+    opacity: 1;
   }
 }
 

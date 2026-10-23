@@ -1,0 +1,12 @@
+Faire en sorte que les cartes soient toujours des mêmes dimensions (0,720:1)
+Fix l'unpacking
+Avoir des pondération de probabilité de drop en BDD
+Avoir une table profiles qui stocke les infos du profil
+Avoir une table inventory qui pointe vers un profil et une liste de cartes (Les doublons sont autorisés)
+Finir le design des cartes
+Fix le tearing sur l'animation de hover
+Fix le highlight sous le curseur pendant le hover
+Sécuriser le sign-up (uniquement des addresses en coda.school ou coda-student.school)
+Comme Pokemon TCGP avoir des séries de cartes avec 30~50 cartes par séries.
+5 Packs gratuits par jour et dans chaque pack il y a 7 cartes.
+Introduire la monnaie
