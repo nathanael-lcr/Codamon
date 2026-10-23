@@ -67,6 +67,27 @@ describe('CardDisplayComponent', () => {
     expect(element.textContent).not.toContain('creator-id');
   });
 
+  it('selects the matching layout for each rarity tier', () => {
+    const element = fixture.nativeElement as HTMLElement;
+    const article = element.querySelector('.trading-card') as HTMLElement;
+
+    fixture.componentRef.setInput('card', { ...card, rarity: 'common' });
+    fixture.detectChanges();
+    expect(article.classList.contains('card-basic')).toBe(true);
+
+    fixture.componentRef.setInput('card', { ...card, rarity: 'rare' });
+    fixture.detectChanges();
+    expect(article.classList.contains('card-basic')).toBe(true);
+
+    fixture.componentRef.setInput('card', { ...card, rarity: 'epic' });
+    fixture.detectChanges();
+    expect(article.classList.contains('card-full-art')).toBe(true);
+
+    fixture.componentRef.setInput('card', { ...card, rarity: 'mythic' });
+    fixture.detectChanges();
+    expect(article.classList.contains('card-mythic')).toBe(true);
+  });
+
   it('shows a visual fallback when the illustration cannot load', () => {
     const image = fixture.nativeElement.querySelector('img') as HTMLImageElement;
     image.dispatchEvent(new Event('error'));

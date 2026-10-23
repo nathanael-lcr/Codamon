@@ -3,6 +3,9 @@
     class="trading-card"
     [attr.data-rarity]="card().rarity"
     [attr.aria-label]="'Carte ' + card().name"
+    [class.card-basic]="card().rarity === 'common' || card().rarity === 'rare'"
+    [class.card-full-art]="card().rarity === 'epic' || card().rarity === 'legendary'"
+    [class.card-mythic]="card().rarity === 'mythic'"
     [style.--tilt-x]="tiltX() + 'deg'"
     [style.--tilt-y]="tiltY() + 'deg'"
     [style.--pointer-x]="pointerX() + '%'"
@@ -23,7 +26,6 @@
               <p>{{ card().subtitle }}</p>
             }
           </div>
-          <span class="card-type">{{ formatLabel(card().card_type) }}</span>
         </div>
       </header>
 
@@ -42,7 +44,12 @@
       </figure>
 
       <div class="card-details">
-        @if (card().attack !== null || card().defense !== null || card().hp !== null || card().speed !== null) {
+        @if (
+          card().attack !== null ||
+          card().defense !== null ||
+          card().hp !== null ||
+          card().speed !== null
+        ) {
           <dl class="card-stats" aria-label="Statistiques de combat">
             @if (card().hp !== null) {
               <div class="card-stat card-stat-hp">
@@ -51,19 +58,19 @@
               </div>
             }
             @if (card().attack !== null) {
-              <div class="card-stat">
+              <div class="card-stat card-stat-attack">
                 <dt>Attaque</dt>
                 <dd>{{ card().attack }}</dd>
               </div>
             }
             @if (card().defense !== null) {
-              <div class="card-stat">
+              <div class="card-stat card-stat-defense">
                 <dt>Défense</dt>
                 <dd>{{ card().defense }}</dd>
               </div>
             }
             @if (card().speed !== null) {
-              <div class="card-stat">
+              <div class="card-stat card-stat-speed">
                 <dt>Vitesse</dt>
                 <dd>{{ card().speed }}</dd>
               </div>
@@ -101,9 +108,6 @@
 
       <footer class="card-footer">
         <span>{{ card().slug }}</span>
-        <span class="card-published" [class.is-unpublished]="!card().is_active">
-          {{ card().is_active ? 'Publiée' : 'Non publiée' }}
-        </span>
       </footer>
     </div>
   </article>
