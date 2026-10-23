@@ -1,14 +1,29 @@
 import { Routes } from '@angular/router';
-import { AuthTestComponent } from '../features/auth-test/auth-test';
 
 export const routes: Routes = [
   {
-    path: 'auth-test',
-    component: AuthTestComponent,
+    path: '',
+    loadComponent: () =>
+      import('../features/dashboard/dashboard').then((page) => page.DashboardComponent),
   },
-
-  // Conserve ici tes routes existantes.
-  // La route wildcard doit rester en dernier.
+  {
+    path: 'account',
+    loadComponent: () =>
+      import('../features/account/account').then((page) => page.AccountComponent),
+  },
+  {
+    path: 'test-carte',
+    loadComponent: () =>
+      import('../features/test-card/test-card').then((page) => page.TestCardComponent),
+  },
+  {
+    path: 'pack',
+    loadComponent: () => import('../features/pack-opening/pack-opening').then((page) => page.PackOpeningComponent),
+  },
+  {
+    path: 'auth-test',
+    redirectTo: 'account',
+  },
   {
     path: '**',
     redirectTo: '',
