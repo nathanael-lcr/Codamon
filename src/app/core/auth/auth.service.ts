@@ -1,4 +1,5 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
+import { User } from '@supabase/supabase-js';
 import { SupabaseService } from '../supabase/supabase.service';
 
 @Injectable({
@@ -6,6 +7,15 @@ import { SupabaseService } from '../supabase/supabase.service';
 })
 export class AuthService {
   private readonly supabase = inject(SupabaseService).client;
+  readonly user = signal<User | null>(null);
+  readonly initialized = signal(false);
+
+  constructor() {
+    this.supabase.auth.onAuthStateChange((_event, session) => {
+      this.user.set(session?.user ?? null);
+      this.initialized.set(true);
+    });
+  }
 
   // Inscription
   async signUp(email: string, password: string) {
@@ -18,6 +28,7 @@ export class AuthService {
       throw error;
     }
 
+    this.user.set(data.session?.user ?? null);
     return data;
   }
 
@@ -32,6 +43,7 @@ export class AuthService {
       throw error;
     }
 
+    this.user.set(data.user);
     return data;
   }
 
@@ -42,6 +54,8 @@ export class AuthService {
     if (error) {
       throw error;
     }
+
+    this.user.set(null);
   }
 
   // Récupérer la session actuelle
@@ -70,12 +84,4 @@ export class AuthService {
     };
   }
 
-  // Écouter les changements de session
-  onAuthStateChange(callback: (authenticated: boolean, email: string | null) => void) {
-    const { data } = this.supabase.auth.onAuthStateChange((_event, session) => {
-      callback(session !== null, session?.user.email ?? null);
-    });
-
-    return data.subscription;
-  }
 }

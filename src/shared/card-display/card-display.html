@@ -1,0 +1,110 @@
+<div class="card-stage" [class.card-stage-compact]="compact()">
+  <article
+    class="trading-card"
+    [attr.data-rarity]="card().rarity"
+    [attr.aria-label]="'Carte ' + card().name"
+    [style.--tilt-x]="tiltX() + 'deg'"
+    [style.--tilt-y]="tiltY() + 'deg'"
+    [style.--pointer-x]="pointerX() + '%'"
+    [style.--pointer-y]="pointerY() + '%'"
+    (pointermove)="onPointerMove($event)"
+    (pointerleave)="resetTilt()"
+  >
+    <div class="card-content">
+      <header class="card-heading">
+        <div class="card-heading-top">
+          <span class="card-number">N° {{ card().card_number || '—' }}</span>
+          <span class="card-rarity">{{ formatLabel(card().rarity) }}</span>
+        </div>
+        <div class="card-title-row">
+          <div class="card-title">
+            <h2>{{ card().name }}</h2>
+            @if (card().subtitle) {
+              <p>{{ card().subtitle }}</p>
+            }
+          </div>
+          <span class="card-type">{{ formatLabel(card().card_type) }}</span>
+        </div>
+      </header>
+
+      <figure class="card-art">
+        @if (displayImage(); as imageUrl) {
+          <img [src]="imageUrl" [alt]="card().name" (error)="onImageError()" />
+        } @else {
+          <div class="card-art-fallback">
+            <span aria-hidden="true">{{ card().name.charAt(0).toUpperCase() }}</span>
+            <p>Illustration indisponible</p>
+          </div>
+        }
+        @if (card().category) {
+          <figcaption>{{ formatLabel(card().category!) }}</figcaption>
+        }
+      </figure>
+
+      <div class="card-details">
+        @if (card().attack !== null || card().defense !== null || card().hp !== null || card().speed !== null) {
+          <dl class="card-stats" aria-label="Statistiques de combat">
+            @if (card().hp !== null) {
+              <div class="card-stat card-stat-hp">
+                <dt>PV</dt>
+                <dd>{{ card().hp }}</dd>
+              </div>
+            }
+            @if (card().attack !== null) {
+              <div class="card-stat">
+                <dt>Attaque</dt>
+                <dd>{{ card().attack }}</dd>
+              </div>
+            }
+            @if (card().defense !== null) {
+              <div class="card-stat">
+                <dt>Défense</dt>
+                <dd>{{ card().defense }}</dd>
+              </div>
+            }
+            @if (card().speed !== null) {
+              <div class="card-stat">
+                <dt>Vitesse</dt>
+                <dd>{{ card().speed }}</dd>
+              </div>
+            }
+          </dl>
+        }
+
+        @if (card().description) {
+          <p class="card-description">{{ card().description }}</p>
+        }
+
+        @if (card().ability_name || card().ability_description) {
+          <section class="card-ability">
+            <h3>
+              <span aria-hidden="true">✦</span>
+              {{ card().ability_name || 'Capacité spéciale' }}
+            </h3>
+            @if (card().ability_description) {
+              <p>{{ card().ability_description }}</p>
+            }
+          </section>
+        }
+
+        @if (card().quote || card().flavor_text) {
+          <blockquote class="card-quote">
+            @if (card().quote) {
+              <p>« {{ card().quote }} »</p>
+            }
+            @if (card().flavor_text) {
+              <cite>{{ card().flavor_text }}</cite>
+            }
+          </blockquote>
+        }
+      </div>
+
+      <footer class="card-footer">
+        <span>{{ card().slug }}</span>
+        <span class="card-published" [class.is-unpublished]="!card().is_active">
+          {{ card().is_active ? 'Publiée' : 'Non publiée' }}
+        </span>
+      </footer>
+    </div>
+  </article>
+</div>

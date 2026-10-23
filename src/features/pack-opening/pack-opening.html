@@ -1,0 +1,179 @@
+<section class="pack-page">
+  <header class="pack-page-heading">
+    <p class="pack-eyebrow">Le rendez-vous des collectionneurs</p>
+    <h1>Ouverture de pack</h1>
+    <p>Un booster. Cinq cartes. La prochaine surprise t’attend.</p>
+  </header>
+
+  @if (!phase() && !loading() && !error()) {
+    <section class="pack-room" aria-label="Booster prêt à ouvrir">
+      <div class="room-glow" aria-hidden="true"></div>
+      <div class="sealed-pack" aria-hidden="true">
+        <div class="pack-crimp pack-crimp-top"></div>
+        <div class="pack-logo">CODAMON</div>
+        <div class="pack-art">
+          <span>C</span>
+          <i></i>
+        </div>
+        <div class="pack-edition">COLLECTION · SÉRIE 01</div>
+        <div class="pack-crimp pack-crimp-bottom"></div>
+      </div>
+      <div class="pack-intro">
+        <h2>Un booster t’attend</h2>
+        <p>Cinq cartes inédites, révélées une par une. Garde un œil sur les dernières…</p>
+        <button type="button" class="pack-primary-button" (click)="getPack()">
+          Découvrir mon pack
+        </button>
+      </div>
+    </section>
+  }
+
+  @if (loading()) {
+    <section class="pack-room" aria-live="polite">
+      <div class="sealed-pack sealed-pack-loading" aria-hidden="true">
+        <div class="pack-crimp pack-crimp-top"></div>
+        <div class="pack-logo">CODAMON</div>
+        <div class="pack-art"><span>C</span><i></i></div>
+        <div class="pack-edition">COLLECTION · SÉRIE 01</div>
+        <div class="pack-crimp pack-crimp-bottom"></div>
+      </div>
+      <p class="pack-status">Le booster est mélangé…</p>
+    </section>
+  }
+
+  @if (error()) {
+    <section class="pack-message pack-error" role="alert">
+      <span class="pack-message-icon" aria-hidden="true">!</span>
+      <h2>Le booster n’a pas pu être préparé</h2>
+      <p>{{ error() }}</p>
+      <button type="button" class="pack-secondary-button" (click)="retry()">Réessayer</button>
+    </section>
+  }
+
+  @if (phase() === 'sealed') {
+    <section class="pack-room pack-opening-room" aria-label="Booster prêt à ouvrir">
+      <div class="room-glow" aria-hidden="true"></div>
+      <button type="button" class="sealed-pack sealed-pack-button" (click)="openBooster()">
+        <span class="pack-crimp pack-crimp-top"></span>
+        <span class="pack-logo">CODAMON</span>
+        <span class="pack-art"><span>C</span><i></i></span>
+        <span class="pack-edition">COLLECTION · SÉRIE 01</span>
+        <span class="pack-crimp pack-crimp-bottom"></span>
+        <span class="pack-tap-hint">Appuie pour ouvrir</span>
+      </button>
+      <p class="pack-status">Le booster est prêt. Fais sauter le sceau.</p>
+    </section>
+  }
+
+  @if (phase() === 'revealing' && currentCard(); as card) {
+    <section class="reveal-room" aria-label="Révélation du pack">
+      <div class="reveal-heading">
+        <p class="pack-eyebrow">Le booster est ouvert</p>
+        <h2>
+          @if (currentCardRevealed()) {
+            Carte {{ revealedCount() + 1 }} révélée
+          } @else {
+            Une carte se dévoile…
+          }
+        </h2>
+        <p>Carte {{ revealedCount() + 1 }} sur {{ cards().length }}</p>
+      </div>
+
+      <div class="pull-stage">
+        <div
+          class="pull-card"
+          [class.pull-card-revealed]="currentCardRevealed()"
+          [class.pull-card-leaving]="cardLeaving()"
+        >
+          <div class="pull-face pull-back" aria-hidden="true">
+            <div class="pull-back-inner">
+              <span class="pull-back-mark">C</span>
+              <span class="pull-back-label">CODAMON</span>
+            </div>
+          </div>
+          <div class="pull-face pull-front">
+            <app-card-display [card]="card" [compact]="true" />
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal-controls">
+        <div class="reveal-progress" aria-label="Progression du pack">
+          @for (step of cards(); track step.id; let index = $index) {
+            <span
+              class="progress-dot"
+              [class.progress-dot-done]="index < revealedCount() || (index === revealedCount() && currentCardRevealed())"
+              [class.progress-dot-current]="index === revealedCount()"
+              [attr.aria-label]="'Carte ' + (index + 1) + (index < revealedCount() || (index === revealedCount() && currentCardRevealed()) ? ' révélée' : ' à révéler')"
+            ></span>
+          }
+        </div>
+        <p class="reveal-counter">{{ remainingCards() }} carte{{ remainingCards() === 1 ? '' : 's' }} à découvrir</p>
+        <button
+          type="button"
+          class="pack-primary-button"
+          [disabled]="cardLeaving()"
+          (click)="revealOrContinue()"
+        >
+          @if (!currentCardRevealed()) {
+            Révéler la carte
+          } @else if (cardLeaving()) {
+            La carte s’envole…
+          } @else if (revealedCount() === cards().length - 1) {
+            Voir le récapitulatif
+          } @else {
+            Carte suivante
+          }
+        </button>
+      </div>
+    </section>
+  }
+
+  @if (phase() === 'summary') {
+    <section class="pack-summary">
+      <div class="summary-heading">
+        <span class="summary-sparkle" aria-hidden="true">✦</span>
+        <p class="pack-eyebrow">Ouverture terminée</p>
+        <h2>Voici ton tirage</h2>
+        <p>Les {{ cards().length }} cartes de ton pack, de la plus commune à la plus rare.</p>
+      </div>
+
+      <div class="summary-grid">
+        @for (card of cards(); track card.id; let index = $index) {
+          <article
+            class="summary-card"
+            [attr.data-rarity]="card.rarity"
+            [style.animation-delay.ms]="index * 70"
+          >
+            <div class="summary-card-art">
+              @if (card.image_url || card.thumbnail_url) {
+                <img [src]="card.image_url || card.thumbnail_url" [alt]="card.name" />
+              } @else {
+                <span aria-hidden="true">{{ card.name.charAt(0).toUpperCase() }}</span>
+              }
+              <span class="summary-card-index">{{ index + 1 }}</span>
+            </div>
+            <div class="summary-card-info">
+              <p class="summary-card-rarity">{{ card.rarity }}</p>
+              <h3>{{ card.name }}</h3>
+              @if (card.subtitle) {
+                <p class="summary-card-subtitle">{{ card.subtitle }}</p>
+              }
+              @if (card.attack !== null || card.defense !== null || card.hp !== null) {
+                <p class="summary-card-stats">
+                  @if (card.hp !== null) { <span>PV {{ card.hp }}</span> }
+                  @if (card.attack !== null) { <span>ATQ {{ card.attack }}</span> }
+                  @if (card.defense !== null) { <span>DEF {{ card.defense }}</span> }
+                </p>
+              }
+            </div>
+          </article>
+        }
+      </div>
+
+      <button type="button" class="pack-primary-button summary-restart" (click)="getPack()">
+        Ouvrir un autre pack
+      </button>
+    </section>
+  }
+</section>
