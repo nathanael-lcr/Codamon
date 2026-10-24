@@ -65,7 +65,7 @@ describe('PackOpeningComponent', () => {
     fixture.detectChanges();
   }
 
-  it('shows the centered sealed booster before opening', () => {
+  it('shows a simple booster prompt before opening', () => {
     expect(fixture.nativeElement.querySelector('.sealed-pack')).not.toBeNull();
     expect(fixture.nativeElement.textContent).toContain('Découvrir mon pack');
   });
@@ -78,13 +78,14 @@ describe('PackOpeningComponent', () => {
     expect(openRandomPack).toHaveBeenCalledOnce();
     expect(fixture.nativeElement.querySelector('.sealed-pack-button')).not.toBeNull();
 
-    clickButton('Appuie pour ouvrir');
+    clickButton('Ouvrir le booster');
     expect(fixture.nativeElement.textContent).toContain('Carte 1 sur 5');
-    expect(fixture.nativeElement.querySelector('.pull-card-revealed')).toBeNull();
+    expect(fixture.nativeElement.querySelectorAll('.trading-card')).toHaveLength(1);
+    expect(fixture.nativeElement.querySelector('.card-flip-inner-revealed')).toBeNull();
 
     clickButton('Révéler la carte');
     expect(fixture.nativeElement.textContent).toContain('Pack Card 1');
-    expect(fixture.nativeElement.querySelector('.pull-card-revealed')).not.toBeNull();
+    expect(fixture.nativeElement.querySelector('.card-flip-inner-revealed')).not.toBeNull();
 
     vi.useFakeTimers();
     for (let index = 2; index <= pack.length; index++) {
@@ -93,7 +94,7 @@ describe('PackOpeningComponent', () => {
       await vi.advanceTimersByTimeAsync(420);
       fixture.detectChanges();
       expect(fixture.nativeElement.textContent).toContain(`Carte ${index} sur 5`);
-      expect(fixture.nativeElement.querySelector('.pull-card-revealed')).toBeNull();
+      expect(fixture.nativeElement.querySelector('.card-flip-inner-revealed')).toBeNull();
       clickButton('Révéler la carte');
       expect(fixture.nativeElement.textContent).toContain(`Pack Card ${index}`);
     }
@@ -108,10 +109,10 @@ describe('PackOpeningComponent', () => {
     clickButton('Découvrir mon pack');
     await fixture.whenStable();
     fixture.detectChanges();
-    clickButton('Appuie pour ouvrir');
+    clickButton('Ouvrir le booster');
 
     expect(fixture.nativeElement.textContent).toContain('Carte 1 sur 5');
-    expect(fixture.nativeElement.querySelector('.pull-back')).not.toBeNull();
+    expect(fixture.nativeElement.querySelector('.card-back-face')).not.toBeNull();
     expect(fixture.nativeElement.textContent).toContain('Révéler la carte');
   });
 

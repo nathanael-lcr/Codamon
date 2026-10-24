@@ -1,16 +1,7 @@
 <section class="pack-page">
   @if (!phase() && !loading() && !error()) {
     <section class="pack-room" aria-label="Booster prêt à ouvrir">
-      <div class="room-glow" aria-hidden="true"></div>
-      <div class="sealed-pack" aria-hidden="true">
-        <div class="pack-crimp pack-crimp-top"></div>
-        <div class="pack-logo">CODAMON</div>
-        <div class="pack-art">
-          <span>C</span>
-        </div>
-        <div class="pack-edition">COLLECTION · SÉRIE 01</div>
-        <div class="pack-crimp pack-crimp-bottom"></div>
-      </div>
+      <p class="sealed-pack">Booster Codamon</p>
       <div class="pack-intro">
         <h2>Un booster t’attend</h2>
         <p>Cinq cartes inédites, révélées une par une. Garde un œil sur les dernières…</p>
@@ -23,20 +14,12 @@
 
   @if (loading()) {
     <section class="pack-room" aria-live="polite">
-      <div class="sealed-pack sealed-pack-loading" aria-hidden="true">
-        <div class="pack-crimp pack-crimp-top"></div>
-        <div class="pack-logo">CODAMON</div>
-        <div class="pack-art"><span>C</span><i></i></div>
-        <div class="pack-edition">COLLECTION · SÉRIE 01</div>
-        <div class="pack-crimp pack-crimp-bottom"></div>
-      </div>
       <p class="pack-status">Le booster est mélangé…</p>
     </section>
   }
 
   @if (error()) {
     <section class="pack-message pack-error" role="alert">
-      <span class="pack-message-icon" aria-hidden="true">!</span>
       <h2>Le booster n’a pas pu être préparé</h2>
       <p>{{ error() }}</p>
       <button type="button" class="pack-secondary-button" (click)="retry()">Réessayer</button>
@@ -44,15 +27,10 @@
   }
 
   @if (phase() === 'sealed') {
-    <section class="pack-room pack-opening-room" aria-label="Booster prêt à ouvrir">
-      <div class="room-glow" aria-hidden="true"></div>
-      <button type="button" class="sealed-pack sealed-pack-button" (click)="openBooster()">
-        <span class="pack-crimp pack-crimp-top"></span>
-        <span class="pack-logo">CODAMON</span>
-        <span class="pack-art"><span>C</span><i></i></span>
-        <span class="pack-edition">COLLECTION · SÉRIE 01</span>
-        <span class="pack-crimp pack-crimp-bottom"></span>
-        <span class="pack-tap-hint">Appuie pour ouvrir</span>
+    <section class="pack-room" aria-label="Booster prêt à ouvrir">
+      <p class="sealed-pack">Booster prêt</p>
+      <button type="button" class="sealed-pack-button" (click)="openBooster()">
+        Ouvrir le booster
       </button>
     </section>
   }
@@ -72,35 +50,20 @@
       </div>
 
       <div class="pull-stage">
-        <div
+        <app-card-display
           class="pull-card"
-          [class.pull-card-revealed]="currentCardRevealed()"
           [class.pull-card-leaving]="cardLeaving()"
-        >
-          <div class="pull-face pull-back" aria-hidden="true">
-            <div class="pull-back-inner">
-              <span class="pull-back-mark">C</span>
-              <span class="pull-back-label">CODAMON</span>
-            </div>
-          </div>
-          <div class="pull-face pull-front">
-            <app-card-display [card]="card" [compact]="true" />
-          </div>
-        </div>
+          [card]="card"
+          [compact]="true"
+          [flippable]="true"
+          [flipped]="currentCardRevealed()"
+        />
       </div>
 
       <div class="reveal-controls">
-        <div class="reveal-progress" aria-label="Progression du pack">
-          @for (step of cards(); track step.id; let index = $index) {
-            <span
-              class="progress-dot"
-              [class.progress-dot-done]="index < revealedCount() || (index === revealedCount() && currentCardRevealed())"
-              [class.progress-dot-current]="index === revealedCount()"
-              [attr.aria-label]="'Carte ' + (index + 1) + (index < revealedCount() || (index === revealedCount() && currentCardRevealed()) ? ' révélée' : ' à révéler')"
-            ></span>
-          }
-        </div>
-        <p class="reveal-counter">{{ remainingCards() }} carte{{ remainingCards() === 1 ? '' : 's' }} à découvrir</p>
+        <p class="reveal-counter">
+          {{ remainingCards() }} carte{{ remainingCards() === 1 ? '' : 's' }} à découvrir
+        </p>
         <button
           type="button"
           class="pack-primary-button"
@@ -124,7 +87,6 @@
   @if (phase() === 'summary') {
     <section class="pack-summary">
       <div class="summary-heading">
-        <span class="summary-sparkle" aria-hidden="true">✦</span>
         <p class="pack-eyebrow">Ouverture terminée</p>
         <h2>Voici ton tirage</h2>
         <p>Les {{ cards().length }} cartes de ton pack, de la plus commune à la plus rare.</p>
@@ -153,9 +115,15 @@
               }
               @if (card.attack !== null || card.defense !== null || card.hp !== null) {
                 <p class="summary-card-stats">
-                  @if (card.hp !== null) { <span>PV {{ card.hp }}</span> }
-                  @if (card.attack !== null) { <span>ATQ {{ card.attack }}</span> }
-                  @if (card.defense !== null) { <span>DEF {{ card.defense }}</span> }
+                  @if (card.hp !== null) {
+                    <span>PV {{ card.hp }}</span>
+                  }
+                  @if (card.attack !== null) {
+                    <span>ATQ {{ card.attack }}</span>
+                  }
+                  @if (card.defense !== null) {
+                    <span>DEF {{ card.defense }}</span>
+                  }
                 </p>
               }
             </div>

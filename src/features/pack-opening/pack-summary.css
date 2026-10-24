@@ -1,65 +1,6 @@
-.pack-room::before,
-.pack-room::after {
-  position: absolute;
-  z-index: -1;
-  border: 1px solid rgb(199 210 254 / 9%);
-  border-radius: 50%;
-  content: '';
-  inset: 16% 12%;
-  transform: rotate(-14deg);
-}
-
-.pack-room::after {
-  inset: 23% 5%;
-  transform: rotate(12deg);
-}
-
-.room-glow {
-  position: absolute;
-  z-index: -1;
-  width: 17rem;
-  height: 24rem;
-  border-radius: 50%;
-  background: #8b5cf6;
-  filter: blur(100px);
-  opacity: 0.15;
-}
-
-.pack-tap-hint {
-  position: absolute;
-  right: 0;
-  bottom: -2.1rem;
-  left: 0;
-  color: rgb(255 255 255 / 85%);
-  font-size: 0.72rem;
-  font-weight: 750;
-  letter-spacing: 0.12em;
-  text-align: center;
-  text-transform: uppercase;
-}
-
-.pack-status {
-  color: rgb(226 232 240 / 78%);
-  font-size: 0.88rem;
-  line-height: 1.5;
-}
-
 .summary-heading {
   margin-bottom: 1.5rem;
   text-align: center;
-}
-
-.summary-sparkle {
-  display: grid;
-  width: 3.25rem;
-  height: 3.25rem;
-  place-items: center;
-  margin: 0 auto 0.7rem;
-  border-radius: 50%;
-  background: #fef3c7;
-  color: #d97706;
-  font-size: 1.5rem;
-  box-shadow: 0 0 0 8px rgb(251 191 36 / 10%);
 }
 
 .summary-grid {

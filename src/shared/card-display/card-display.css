@@ -33,6 +33,41 @@
     box-shadow 420ms ease;
 }
 
+.card-flip-inner,
+.card-front-face {
+  display: contents;
+}
+
+.card-flip-inner-active {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transition: transform 780ms cubic-bezier(0.2, 0.72, 0.2, 1);
+}
+
+.card-flip-inner-revealed {
+  transform: rotateY(180deg);
+}
+
+.card-flippable .card-front-face,
+.card-flippable .card-back-face {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.card-flippable .card-back-face {
+  transform: rotateY(180deg);
+}
+
+.card-stage-compact .trading-card.card-flippable .card-content {
+  height: 100%;
+  min-height: 0;
+}
+
 .trading-card::before {
   position: absolute;
   z-index: 3;

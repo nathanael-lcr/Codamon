@@ -9,6 +9,8 @@ import { Card } from '../../app/core/cards/card.model';
 export class CardDisplayComponent {
   readonly card = input.required<Card>();
   readonly compact = input(false);
+  readonly flippable = input(false);
+  readonly flipped = input(false);
   protected readonly imageFailed = signal(false);
   protected readonly tiltX = signal(0);
   protected readonly tiltY = signal(0);
@@ -27,7 +29,9 @@ export class CardDisplayComponent {
     if (
       event.pointerType !== 'mouse' ||
       typeof window === 'undefined' ||
-      !window.matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)').matches
+      !window.matchMedia(
+        '(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)',
+      ).matches
     ) {
       return;
     }
@@ -53,5 +57,4 @@ export class CardDisplayComponent {
   protected formatLabel(value: string): string {
     return value.replaceAll('_', ' ');
   }
-
 }

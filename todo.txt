@@ -11,3 +11,8 @@ Sécuriser le sign-up (uniquement des addresses en coda.school ou coda-student.s
 Comme Pokemon TCGP avoir des séries de cartes avec 30~50 cartes par séries.
 5 Packs gratuits par jour et dans chaque pack il y a 7 cartes.
 Introduire la monnaie
+
+
+https://www.figma.com/design/515axWmwNBPjsYilapq9tw/Codamon?node-id=0-1&t=ar40DjvZxUuVDdIc-1
+
+Pour le style se référencer à cette maquette (layout et couleurs/fonts uniquement tout n'est pas à prendre)
