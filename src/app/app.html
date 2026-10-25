@@ -1,49 +1,74 @@
 <div class="min-h-screen bg-slate-50 pb-20 text-slate-900 md:pb-0">
-  <header class="border-b border-slate-200 bg-white">
-    <div class="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
-      <a
-        routerLink="/"
-        class="flex items-center gap-2 font-semibold tracking-tight"
-        aria-label="Codamon, accueil"
-      >
-        <span
-          class="grid size-9 place-items-center rounded-xl bg-indigo-600 text-sm font-bold text-white"
-          >C</span
-        >
-        <span>Codamon</span>
-      </a>
-
-      <nav class="hidden items-center gap-2 md:flex" aria-label="Navigation principale">
+  <header class="border border-slate-200 bg-white m-5 rounded-full shadow-md mx-10">
+    <div class="flex items-center justify-between px-5 py-4 md:mx-3">
+      <div class="flex gap-10 items-center">
         <a
           routerLink="/"
-          routerLinkActive="bg-slate-100 text-slate-950"
-          [routerLinkActiveOptions]="{ exact: true }"
-          ariaCurrentWhenActive="page"
-          class="rounded-lg px-4 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100"
+          z
+          class="flex items-center gap-2 font-semibold tracking-tight text-lg"
+          aria-label="Codamon, accueil"
         >
-          Dashboard
+          <span>Codamon</span>
         </a>
-        <a
-          routerLink="/pack"
-          routerLinkActive="bg-slate-100 text-slate-950"
-          ariaCurrentWhenActive="page"
-          class="rounded-lg px-4 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100"
+
+        <nav
+          #nav
+          class="relative hidden items-center p-1 gap-2 md:flex bg-[#EFEEEB] rounded-full"
+          aria-label="Navigation principale"
         >
-          Packs
-        </a>
-        <a
-          routerLink="/test-carte"
-          routerLinkActive="bg-slate-100 text-slate-950"
-          ariaCurrentWhenActive="page"
-          class="rounded-lg px-4 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100"
-        >
-          Test carte
-        </a>
-      </nav>
+          <span
+            class="absolute top-1 bottom-1 rounded-full bg-stone-300 transition-all duration-300 ease-out"
+            [style.left.px]="pill().left"
+            [style.width.px]="pill().width"
+            [class.opacity-0]="!pill().ready"
+            aria-hidden="true"
+          ></span>
+
+          <a
+            routerLink="/"
+            routerLinkActive
+            #rla1="routerLinkActive"
+            [routerLinkActiveOptions]="{ exact: true }"
+            ariaCurrentWhenActive="page"
+            (isActiveChange)="onActiveChange($event, $any(l1))"
+            #l1
+            class="relative z-10 rounded-full px-4 py-2 text-sm font-medium text-[#45474A] transition"
+            [class.text-black]="rla1.isActive"
+          >
+            Dashboard
+          </a>
+
+          <a
+            routerLink="/pack"
+            routerLinkActive
+            #rla2="routerLinkActive"
+            ariaCurrentWhenActive="page"
+            (isActiveChange)="onActiveChange($event, $any(l2))"
+            #l2
+            class="relative z-10 rounded-full px-4 py-2 text-sm font-medium text-[#45474A] transition"
+            [class.text-black]="rla2.isActive"
+          >
+            Packs
+          </a>
+
+          <a
+            routerLink="/test-carte"
+            routerLinkActive
+            #rla3="routerLinkActive"
+            ariaCurrentWhenActive="page"
+            (isActiveChange)="onActiveChange($event, $any(l3))"
+            #l3
+            class="relative z-10 rounded-full px-4 py-2 text-sm font-medium text-[#45474A] transition"
+            [class.text-black]="rla3.isActive"
+          >
+            Test carte
+          </a>
+        </nav>
+      </div>
 
       <a
         routerLink="/account"
-        class="max-w-36 truncate rounded-full bg-slate-100 px-3 py-1.5 text-xs font-medium text-slate-600 sm:max-w-56"
+        class="max-w-36 truncate rounded-full bg-[#EFEEEB] px-3 py-1.5 text-xs font-medium text-slate-600 sm:max-w-56"
       >
         {{ initialized() ? (user()?.email ?? 'Mon compte') : 'Chargement…' }}
       </a>
@@ -53,43 +78,4 @@
   <main>
     <router-outlet />
   </main>
-
-  <nav
-    class="fixed inset-x-0 bottom-0 z-10 grid grid-cols-4 border-t border-slate-200 bg-white/95 p-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] backdrop-blur md:hidden"
-    aria-label="Navigation mobile"
-  >
-    <a
-      routerLink="/"
-      routerLinkActive="bg-indigo-50 text-indigo-700"
-      [routerLinkActiveOptions]="{ exact: true }"
-      ariaCurrentWhenActive="page"
-      class="flex min-h-12 items-center justify-center rounded-xl text-sm font-medium text-slate-600"
-    >
-      Dashboard
-    </a>
-    <a
-      routerLink="/account"
-      routerLinkActive="bg-indigo-50 text-indigo-700"
-      ariaCurrentWhenActive="page"
-      class="flex min-h-12 items-center justify-center rounded-xl text-sm font-medium text-slate-600"
-    >
-      Compte
-    </a>
-    <a
-      routerLink="/pack"
-      routerLinkActive="bg-indigo-50 text-indigo-700"
-      ariaCurrentWhenActive="page"
-      class="flex min-h-12 items-center justify-center rounded-xl text-sm font-medium text-slate-600"
-    >
-      Packs
-    </a>
-    <a
-      routerLink="/test-carte"
-      routerLinkActive="bg-indigo-50 text-indigo-700"
-      ariaCurrentWhenActive="page"
-      class="flex min-h-12 items-center justify-center rounded-xl text-sm font-medium text-slate-600"
-    >
-      Test carte
-    </a>
-  </nav>
 </div>
