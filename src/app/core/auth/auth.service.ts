@@ -19,15 +19,25 @@ export class AuthService {
 
   // Inscription
   async signUp(email: string, password: string) {
+    const allowedDomains = ['coda.school', 'coda-student.school'];
+  
+    const domain = email.split('@')[1]?.toLowerCase();
+  
+    if (!domain || !allowedDomains.includes(domain)) {
+      throw new Error(
+        'Seules les adresses @coda.school et @coda-student.school sont autorisées.'
+      );
+    }
+  
     const { data, error } = await this.supabase.auth.signUp({
       email,
       password,
     });
-
+  
     if (error) {
       throw error;
     }
-
+  
     this.user.set(data.session?.user ?? null);
     return data;
   }
