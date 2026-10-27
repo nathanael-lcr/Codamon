@@ -1,6 +1,20 @@
 # Codamon
 
 Application web développée avec **Angular, Tailwind CSS et Supabase**.
+Collectionnez des cartes dans le thème de l'école **CODA_** et échangez-les!
+
+## Contribution au projet
+
+Ce projet est ouvert à la collaboration et a pour objectif de permettre aux élèves de **CODA_** de s'exercer au travail sur un projet **Open Source**.
+
+N'hésitez pas à :
+
+- Identifier et signaler des bugs ;
+- Proposer de nouvelles fonctionnalités ;
+- Ouvrir des *issues* pour discuter d'améliorations ;
+- Soumettre des *Pull Requests* pour contribuer au projet.
+
+Toutes les contributions sont les bienvenues et constituent une excellente occasion de découvrir les bonnes pratiques du développement collaboratif.
 
 ## Prérequis
 
@@ -128,34 +142,34 @@ Exécuter les commandes depuis la racine du projet.
 ### Générer un composant
 
 ```bash
-npx ng generate component components/nom-du-composant
+ng generate component components/nom-du-composant
 ```
 
 Version courte :
 
 ```bash
-npx ng g c components/nom-du-composant
+ng g c components/nom-du-composant
 ```
 
 ### Générer un service
 
 ```bash
-npx ng generate service services/nom-du-service
+ng generate service services/nom-du-service
 ```
 
 ### Générer une interface TypeScript
 
 ```bash
-npx ng generate interface models/nom-du-modele
+ng generate interface models/nom-du-modele
 ```
 
 ### Générer un pipe
 
 ```bash
-npx ng generate pipe pipes/nom-du-pipe
+ng generate pipe pipes/nom-du-pipe
 ```
 
-Utiliser `npx ng` pour invoquer la CLI locale du projet plutôt que de dépendre de la version globale installée.
+Utiliser `ng` pour invoquer la CLI locale du projet plutôt que de dépendre de la version globale installée.
 
 ## 6. Tailwind CSS
 
@@ -191,7 +205,20 @@ git commit -m "feat: description de la fonctionnalité"
 git push -u origin feat/nom-de-la-fonctionnalite
 ```
 
-Créer ensuite une Pull Request sur GitHub pour faire relire les changements avant leur fusion dans `main`.
+Créer ensuite une Pull Request sur GitHub pour faire relire les changements avant leur fusion dans `main` ou `preprod`.
+
+### Pour les contributeurs externes
+
+Si vous n'êtes pas collaborateur du dépôt, vous ne pourrez pas pousser directement de branche vers le dépôt principal.
+
+Vous pouvez néanmoins contribuer en :
+
+1. Identifiant un bug ou une amélioration potentielle ;
+2. Ouvrant une Issue sur GitHub pour la décrire ;
+3. Forkant le dépôt si vous souhaitez proposer une correction ou une nouvelle fonctionnalité ;
+4. Soumettant une Pull Request depuis votre fork.
+
+Les *Issues* permettent de discuter des évolutions du projet, d'éviter le travail en double et de coordonner les contributions.
 
 ### Conventions de commit
 
@@ -206,7 +233,7 @@ Créer ensuite une Pull Request sur GitHub pour faire relire les changements ava
 
 - Toujours synchroniser `main` avant de commencer une nouvelle tâche.
 - Ne pas commiter `node_modules/`.
-- Ne pas commiter les secrets ni les fichiers locaux privés.
+- Ne pas commiter les clés secrètes ni les fichiers locaux privés.
 - Ne pas écraser les modifications d'un autre développeur.
 - Résoudre les conflits Git avant de fusionner une branche.
 - Vérifier que l'application fonctionne avant d'ouvrir une Pull Request.
