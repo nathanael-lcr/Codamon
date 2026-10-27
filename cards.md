@@ -26,3 +26,4 @@ Danny Syriphol / "Il s'en fiche" / Il développe son jeu depuis beaucoup d'anné
 Cod'Bar / Le meilleur BDE / Anime au maximum la vie étudiante et fait des events géniaux / Super Rare / BDE
 3008 Brandé Coda / Ne pas oublier le frein à main / On en veut tous une ! Pouvoir représenter les couleurs de coda en voiture génial ! Non ? / Rare / Véhicule
 Gite du Mans / / Repère pour les séminaires de rentrée / Commun / Lieu
+CodaCraft / Serveur Minecraft Etudiants / Créé par Alexis Damien Aka Pehibou on en est aujourd'hui à la 3 eme saison, VANILLA UNIQUEMENT / Super Rare / Minecraft
