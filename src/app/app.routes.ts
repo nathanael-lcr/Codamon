@@ -4,15 +4,22 @@ export const routes: Routes = [
   {
     path: '',
     loadComponent: () =>
-      import('../features/dashboard/dashboard').then(
-        (page) => page.DashboardComponent
+      import('../features/pack-opening/pack-opening').then(
+        (page) => page.PackOpeningComponent
       ),
   },
   {
-    path: 'pack',
+    path: 'collection',
     loadComponent: () =>
-      import('../features/pack-opening/pack-opening').then(
-        (page) => page.PackOpeningComponent
+      import('../features/collection/collection').then(
+        (page) => page.CollectionComponent
+      ),
+  },
+  {
+    path: 'dashboard',
+    loadComponent: () =>
+      import('../features/dashboard/dashboard').then(
+        (page) => page.DashboardComponent
       ),
   },
   {
