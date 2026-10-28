@@ -7,7 +7,7 @@ export const RARITY_WEIGHTS: Record<CardRarity, number> = {
   rare: 25,
   epic: 10,
   legendary: 4,
-  mythic: 1,
+  slegendary: 1,
 };
 
 const RARITY_ORDER = Object.keys(RARITY_WEIGHTS) as CardRarity[];

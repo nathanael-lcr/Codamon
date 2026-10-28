@@ -1,4 +1,4 @@
-export type CardRarity = 'common' | 'rare' | 'epic' | 'legendary' | 'mythic';
+export type CardRarity = 'common' | 'rare' | 'epic' | 'legendary' | 'slegendary';
 export type CardType = 'character' | 'event' | 'item' | 'special';
 
 export interface Card {
@@ -11,7 +11,7 @@ export interface Card {
   flavor_text: string | null;
   quote: string | null;
   rarity: CardRarity | string;
-  category: string | null;
+  serie: string | null;
   card_type: CardType | string;
   image_url: string | null;
   thumbnail_url: string | null;
@@ -23,7 +23,6 @@ export interface Card {
   ability_description: string | null;
   is_active: boolean;
   released_at: string | null;
-  metadata: Record<string, unknown> | null;
   created_by: string | null;
   created_at: string;
   updated_at: string;

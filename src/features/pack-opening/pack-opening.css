@@ -37,15 +37,6 @@
   margin: 0;
 }
 
-.sealed-pack-button,
-.pack-primary-button,
-.pack-secondary-button {
-  cursor: pointer;
-  background-color: #f4d318;
-  padding: 1rem;
-  border-radius: 15px;
-}
-
 .pack-primary-button:disabled {
   cursor: wait;
 }
@@ -88,7 +79,6 @@
   width: min(100%, 27rem);
   perspective: 1400px;
   place-items: center;
-  padding: 0.25rem 0 0.5rem;
 }
 
 .pull-card {
@@ -122,61 +112,6 @@
     opacity: 0;
     transform: translateY(-3rem) scale(0.82) rotate(8deg);
   }
-}
-
-.pull-card .card-back-face {
-  display: grid;
-  place-items: center;
-  overflow: hidden;
-  border-radius: 1.5rem;
-  background:
-    repeating-linear-gradient(45deg, transparent 0 12px, rgb(255 255 255 / 5%) 12px 14px),
-    radial-gradient(ellipse at center, #5b21b6, #1e1b4b 75%);
-  box-shadow:
-    0 25px 55px rgb(30 27 75 / 24%),
-    inset 0 0 0 2px rgb(253 230 138 / 70%);
-  padding: 0.8rem;
-}
-
-.pull-back-inner {
-  display: grid;
-  width: 100%;
-  height: 100%;
-  align-content: center;
-  justify-items: center;
-  gap: 1rem;
-  border: 1px solid rgb(253 230 138 / 46%);
-  border-radius: 1rem;
-  background:
-    radial-gradient(circle at 50% 40%, rgb(251 191 36 / 13%), transparent 40%),
-    repeating-radial-gradient(
-      ellipse at center,
-      transparent 0 20px,
-      rgb(255 255 255 / 6%) 21px 22px
-    );
-}
-
-.pull-back-mark {
-  display: grid;
-  width: 7rem;
-  aspect-ratio: 1;
-  place-items: center;
-  border: 2px solid #fde68a;
-  border-radius: 50%;
-  background: linear-gradient(145deg, #7c3aed, #312e81);
-  box-shadow:
-    0 0 0 8px rgb(253 230 138 / 12%),
-    0 0 38px rgb(251 191 36 / 35%);
-  color: #fef3c7;
-  font-size: 4rem;
-  font-weight: 950;
-}
-
-.pull-back-label {
-  color: #fef3c7;
-  font-size: 0.8rem;
-  font-weight: 900;
-  letter-spacing: 0.28em;
 }
 
 .reveal-controls {

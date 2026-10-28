@@ -1,169 +1,192 @@
-<div class="min-h-screen bg-slate-50 pb-28 text-slate-900 md:pb-0">
-  <header
-    class="hidden md:block mx-3 mt-3 border border-slate-200 bg-white shadow-md md:mx-10 md:rounded-full"
-  >
-    <div class="flex items-center justify-between px-7 py-4">
-      <!-- Logo -->
-      <a
-        routerLink="/"
-        class="flex items-center gap-2 text-lg font-semibold tracking-tight"
-        aria-label="Codamon, accueil"
-      >
-        <span>Codamon</span>
+<div class="min-h-screen bg-[#F6F6F4] text-slate-900 pb-28 md:pb-0">
+  <!-- HEADER DESKTOP -->
+  <header class="hidden md:block border-b border-slate-200 bg-[#F6F6F4]">
+    <div class="mx-auto flex h-20 max-w-[1700px] items-center justify-between px-12">
+      <!-- LOGO -->
+      <a routerLink="/" class="" aria-label="Codamon accueil">
+        <span class="text-3xl font-medium tracking-tight text-[#2049CD]"> codamon </span>
       </a>
 
-      <!-- Navigation Desktop -->
-      <nav
-        #nav
-        class="relative hidden items-center gap-2 rounded-full bg-[#EFEEEB] p-1 md:flex"
-        aria-label="Navigation principale"
-      >
-        <span
-          class="absolute top-1 bottom-1 rounded-full bg-stone-300 transition-all duration-300 ease-out"
-          [style.left.px]="pill().left"
-          [style.width.px]="pill().width"
-          [class.opacity-0]="!pill().ready"
-          aria-hidden="true"
-        ></span>
+      <!-- MENU -->
+      <nav class="flex items-center gap-10" aria-label="Navigation principale">
+        <a
+          routerLink="/pack"
+          routerLinkActive
+          #packRla="routerLinkActive"
+          [routerLinkActiveOptions]="{ exact: true }"
+          [class.text-[#2049CD]]="packRla.isActive"
+          [class.text-slate-600]="!packRla.isActive"
+          class="relative text-sm font-semibold transition-colors duration-200 hover:text-[#2049CD]"
+        >
+          <span
+            [class.-translate-y-1]="packRla.isActive"
+            class="inline-block transition-transform duration-200"
+          >
+            Paquets
+          </span>
+
+          <span
+            aria-hidden="true"
+            [class.opacity-100]="packRla.isActive"
+            [class.opacity-0]="!packRla.isActive"
+            class="absolute inset-x-0 bottom-0 h-0.5 bg-[#2049CD] transition-opacity duration-200"
+          ></span>
+        </a>
 
         <a
           routerLink="/"
           routerLinkActive
-          #rla1="routerLinkActive"
+          #collectionRla="routerLinkActive"
           [routerLinkActiveOptions]="{ exact: true }"
-          (isActiveChange)="onActiveChange($event, $any(collection))"
-          #collection
-          class="relative z-10 rounded-full px-4 py-2 text-sm font-medium transition"
-          [class.text-stone-500]="!rla1.isActive"
-          [class.text-black]="rla1.isActive"
+          [class.text-[#2049CD]]="collectionRla.isActive"
+          [class.text-slate-600]="!collectionRla.isActive"
+          class="relative text-sm font-semibold transition-colors duration-200 hover:text-[#2049CD]"
         >
-          Collection
-        </a>
+          <span
+            [class.-translate-y-1]="collectionRla.isActive"
+            class="inline-block transition-transform duration-200"
+          >
+            Collection
+          </span>
 
-        <a
-          routerLink="/pack"
-          routerLinkActive
-          #rla2="routerLinkActive"
-          [routerLinkActiveOptions]="{ exact: true }"
-          (isActiveChange)="onActiveChange($event, $any(pack))"
-          #pack
-          class="relative z-10 rounded-full px-4 py-2 text-sm font-medium transition"
-          [class.text-stone-500]="!rla2.isActive"
-          [class.text-black]="rla2.isActive"
-        >
-          Packs
-        </a>
-
-        <a
-          routerLink="/test-carte"
-          routerLinkActive
-          #rla3="routerLinkActive"
-          [routerLinkActiveOptions]="{ exact: true }"
-          (isActiveChange)="onActiveChange($event, $any(test))"
-          #test
-          class="relative z-10 rounded-full px-4 py-2 text-sm font-medium transition"
-          [class.text-stone-500]="!rla3.isActive"
-          [class.text-black]="rla3.isActive"
-        >
-          Test carte
-        </a>
-
-        <a
-          routerLink="/echanges"
-          routerLinkActive
-          #rla4="routerLinkActive"
-          [routerLinkActiveOptions]="{ exact: true }"
-          (isActiveChange)="onActiveChange($event, $any(echanges))"
-          #echanges
-          class="relative z-10 rounded-full px-4 py-2 text-sm font-medium transition"
-          [class.text-stone-500]="!rla4.isActive"
-          [class.text-black]="rla4.isActive"
-        >
-          Échanges
+          <span
+            aria-hidden="true"
+            [class.opacity-100]="collectionRla.isActive"
+            [class.opacity-0]="!collectionRla.isActive"
+            class="absolute inset-x-0 bottom-0 h-0.5 bg-[#2049CD] transition-opacity duration-200"
+          ></span>
         </a>
 
         <a
           routerLink="/marche"
           routerLinkActive
-          #rla5="routerLinkActive"
-          [routerLinkActiveOptions]="{ exact: true }"
-          (isActiveChange)="onActiveChange($event, $any(marche))"
-          #marche
-          class="relative z-10 rounded-full px-4 py-2 text-sm font-medium transition"
-          [class.text-stone-500]="!rla5.isActive"
-          [class.text-black]="rla5.isActive"
+          #marcheRla="routerLinkActive"
+          [class.text-[#2049CD]]="marcheRla.isActive"
+          [class.text-slate-600]="!marcheRla.isActive"
+          class="relative text-sm font-semibold transition-colors duration-200 hover:text-[#2049CD]"
         >
-          Marché
+          <span
+            [class.-translate-y-1]="marcheRla.isActive"
+            class="inline-block transition-transform duration-200"
+          >
+            Marché
+          </span>
+
+          <span
+            aria-hidden="true"
+            [class.opacity-100]="marcheRla.isActive"
+            [class.opacity-0]="!marcheRla.isActive"
+            class="absolute inset-x-0 bottom-0 h-0.5 bg-[#2049CD] transition-opacity duration-200"
+          ></span>
+        </a>
+
+        <a
+          routerLink="/echanges"
+          routerLinkActive
+          #echangesRla="routerLinkActive"
+          [class.text-[#2049CD]]="echangesRla.isActive"
+          [class.text-slate-600]="!echangesRla.isActive"
+          class="relative text-sm font-semibold transition-colors duration-200 hover:text-[#2049CD]"
+        >
+          <span
+            [class.-translate-y-1]="echangesRla.isActive"
+            class="inline-block transition-transform duration-200"
+          >
+            Échanges
+          </span>
+
+          <span
+            aria-hidden="true"
+            [class.opacity-100]="echangesRla.isActive"
+            [class.opacity-0]="!echangesRla.isActive"
+            class="absolute inset-x-0 bottom-0 h-0.5 bg-[#2049CD] transition-opacity duration-200"
+          ></span>
+        </a>
+
+        <a
+          routerLink="/classement"
+          routerLinkActive
+          #classementRla="routerLinkActive"
+          [class.text-[#2049CD]]="classementRla.isActive"
+          [class.text-slate-600]="!classementRla.isActive"
+          class="relative text-sm font-semibold transition-colors duration-200 hover:text-[#2049CD]"
+        >
+          <span
+            [class.-translate-y-1]="classementRla.isActive"
+            class="inline-block transition-transform duration-200"
+          >
+            Classement
+          </span>
+
+          <span
+            aria-hidden="true"
+            [class.opacity-100]="classementRla.isActive"
+            [class.opacity-0]="!classementRla.isActive"
+            class="absolute inset-x-0 bottom-0 h-0.5 bg-[#2049CD] transition-opacity duration-200"
+          ></span>
         </a>
       </nav>
 
-      <!-- Compte -->
-      <a
-        routerLink="/account"
-        class="max-w-36 truncate rounded-full bg-[#EFEEEB] px-3 py-1.5 text-xs font-medium text-slate-600 sm:max-w-56"
-      >
+      <!-- ACCOUNT -->
+      <a routerLink="/account" class="text-sm font-semibold text-slate-600 hover:text-slate-900">
         {{ initialized() ? (user()?.email ?? 'Mon compte') : 'Chargement...' }}
       </a>
     </div>
   </header>
 
+  <!-- CONTENU -->
   <main>
     <router-outlet />
   </main>
 
-  <!-- Navigation Mobile -->
-  <nav class="fixed bottom-4 left-3 right-3 z-50 md:hidden" aria-label="Navigation mobile">
+  <!-- NAVIGATION MOBILE -->
+  <nav class="fixed bottom-0 z-50 md:hidden" aria-label="Navigation mobile">
     <div
-      class="flex items-center justify-around rounded-3xl border border-slate-200 bg-white/95 p-2 shadow-xl backdrop-blur"
+      class="flex items-center justify-around border-t border-slate-200 bg-white/95 p-4 px-6"
     >
       <a
         routerLink="/"
-        routerLinkActive="bg-stone-200 text-black"
+        routerLinkActive="bg-[#2049CD] text-white"
         [routerLinkActiveOptions]="{ exact: true }"
-        class="flex min-w-[64px] flex-col items-center rounded-2xl px-3 py-2 text-stone-500 transition"
+        class="flex min-w-[64px] flex-col items-center rounded-2xl px-1 py-2 text-slate-500 transition"
       >
-        <span class="text-lg">🏠</span>
-        <span class="mt-1 text-[11px] font-medium">Collection</span>
+        <span class="mt-1 text-[11px] font-medium"> Collection </span>
       </a>
 
       <a
         routerLink="/pack"
-        routerLinkActive="bg-stone-200 text-black"
+        routerLinkActive="bg-[#2049CD] text-white"
         [routerLinkActiveOptions]="{ exact: true }"
-        class="flex min-w-[64px] flex-col items-center rounded-2xl px-3 py-2 text-stone-500 transition"
+        class="flex min-w-[64px] flex-col items-center rounded-2xl px-1 py-2 text-slate-500 transition"
       >
-        <span class="text-lg">📦</span>
-        <span class="mt-1 text-[11px] font-medium">Packs</span>
+        <span class="mt-1 text-[11px] font-medium"> Packs </span>
       </a>
 
       <a
         routerLink="/test-carte"
-        routerLinkActive="bg-stone-200 text-black"
+        routerLinkActive="bg-[#2049CD] text-white"
         [routerLinkActiveOptions]="{ exact: true }"
-        class="flex min-w-[64px] flex-col items-center rounded-2xl px-3 py-2 text-stone-500 transition"
+        class="flex min-w-[64px] flex-col items-center rounded-2xl px-1 py-2 text-slate-500 transition"
       >
-        <span class="text-lg">🃏</span>
-        <span class="mt-1 text-[11px] font-medium">Test</span>
+        <span class="mt-1 text-[11px] font-medium"> Test </span>
       </a>
 
       <a
         routerLink="/echanges"
-        routerLinkActive="bg-stone-200 text-black"
+        routerLinkActive="bg-[#2049CD] text-white"
         [routerLinkActiveOptions]="{ exact: true }"
-        class="flex min-w-[64px] flex-col items-center rounded-2xl px-3 py-2 text-stone-500 transition"
+        class="flex min-w-[64px] flex-col items-center rounded-2xl px-1 py-2 text-slate-500 transition"
       >
-        <span class="text-lg">🔄</span>
-        <span class="mt-1 text-[11px] font-medium">Échanges</span>
+        <span class="mt-1 text-[11px] font-medium"> Échanges </span>
       </a>
 
       <a
         routerLink="/marche"
-        routerLinkActive="bg-stone-200 text-black"
+        routerLinkActive="bg-[#2049CD] text-white"
         [routerLinkActiveOptions]="{ exact: true }"
-        class="flex min-w-[64px] flex-col items-center rounded-2xl px-3 py-2 text-stone-500 transition"
+        class="flex min-w-[64px] flex-col items-center rounded-2xl px-1 py-2 text-slate-500 transition"
       >
-        <span class="text-lg">🛒</span>
-        <span class="mt-1 text-[11px] font-medium">Marché</span>
+        <span class="mt-1 text-[11px] font-medium"> Marché </span>
       </a>
     </div>
   </nav>
