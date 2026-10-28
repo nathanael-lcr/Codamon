@@ -1,18 +1,27 @@
-Faire en sorte que les cartes soient toujours des mêmes dimensions (0,720:1)
+Faire en sorte que les cartes soient toujours des mêmes dimensions/ratio (0,720:1)
+Importer une library d'icônes modernes à utiliser sur la navigation mobile
+Le recap après l'unpack doit utiliser card-display mais de manière lisible
+En général faire en sorte que partout dans le site ou s'affiche une carte cela soit card-display et que ca soit lisible
+Supprimer le paramètre compact sur display-card et en ajouter un pour décider si elle a l'effet de tilt au hover (et faire en sorte que pack-opening.css ne modifie plus la carte.) 
+(card display doit être le seul à définir comment il ressemble / les cartes entre test-carte et l'opening dans packs sont différentes sur certains paddings etc)
+
+
 Rendre cohérent l'utilisation de tailwind à travers les fichiers
-Fix l'unpacking
-Avoir des pondération de probabilité de drop en BDD
+Avoir des pondération de probabilité de drop directement en BDD
+Fix le tearing/aliasing sur l'animation de hover
+
 Avoir une table profiles qui stocke les infos du profil
 Avoir une table inventory qui pointe vers un profil et une liste de cartes (Les doublons sont autorisés)
-Finir le design des cartes
-Fix le tearing sur l'animation de hover
-Fix le highlight sous le curseur pendant le hover
-Sécuriser le sign-up (uniquement des addresses en coda.school ou coda-student.school)
+
+
+Finir le design des cartes sur photoshop
+Faire un design de dos de carte
+
+Introduire la monnaie
+Nouvelles animations unpacking
+
 Comme Pokemon TCGP avoir des séries de cartes avec 30~50 cartes par séries.
 5 Packs gratuits par jour et dans chaque pack il y a 7 cartes.
-Introduire la monnaie
 
 
-https://www.figma.com/design/515axWmwNBPjsYilapq9tw/Codamon?node-id=0-1&t=ar40DjvZxUuVDdIc-1
-
-Pour le style se référencer à cette maquette (layout et couleurs/fonts uniquement tout n'est pas à prendre)
+Pour le style se référencer à la maquette de louis (layout et couleurs/fonts uniquement tout n'est pas à prendre)

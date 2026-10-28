@@ -37,6 +37,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'classement',
+    loadComponent: () =>
+      import('../features/classement/classement').then(
+        (page) => page.ClassementComponent
+      ),
+  },
+  {
     path: 'account',
     loadComponent: () =>
       import('../features/account/account').then(
