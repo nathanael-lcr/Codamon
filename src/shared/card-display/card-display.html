@@ -6,7 +6,7 @@
     [class.card-basic]="
       card().rarity === 'common' || card().rarity === 'rare' || card().rarity === 'epic'
     "
-    [class.card-full-art]="card().rarity === 'legendary' || card().rarity === 'mythic'"
+    [class.card-full-art]="card().rarity === 'legendary' || card().rarity === 'slegendary'"
     [class.card-flippable]="flippable()"
     [style.--tilt-x]="tiltX() + 'deg'"
     [style.--tilt-y]="tiltY() + 'deg'"
@@ -21,10 +21,10 @@
       [class.card-flip-inner-revealed]="flipped()"
     >
       @if (flippable()) {
-        <div class="card-back-face pull-back bg-[#2049CD] rounded-xl" aria-hidden="true"></div>
+        <div class="card-back-face pull-back bg-[#2049CD] rounded-2xl" aria-hidden="true"></div>
       }
 
-      <div class="card-front-face bg-white rounded-xl border-6 border-[#2049CD]">
+      <div class="card-front-face bg-white rounded-2xl border-6 border-[#2049CD]">
         @let basic =
           card().rarity === 'common' || card().rarity === 'rare' || card().rarity === 'epic';
         @let fullArt = card().rarity === 'legendary' || card().rarity === 'slegendary';
@@ -41,8 +41,16 @@
           <header class="relative z-10 flex flex-col gap-2">
             <div class="flex items-center justify-between gap-3"></div>
 
-            <div class="flex items-center gap-3">
-              <span class="shrink-0 text-2xl">
+            <div class="flex items-center gap-6">
+              <span
+                class="shrink-0 text-2xl font-black"
+                [class.text-slate-400]="card().rarity === 'common'"
+                [class.text-blue-500]="card().rarity === 'rare'"
+                [class.text-purple-500]="card().rarity === 'epic'"
+                [class.text-amber-400]="card().rarity === 'legendary'"
+                [class.text-red-500]="card().rarity === 'slegendary'"
+                [class.text-shadow-lg/20]="fullArt"
+              >
                 {{
                   card().rarity === 'slegendary'
                     ? card().rarity.slice(0, 2).toUpperCase()
@@ -50,12 +58,20 @@
                 }}
               </span>
               <div>
-                <h2 class="wrap-break-word text-2xl leading-tight">
+                <h2
+                  class="wrap-break-word text-2xl leading-tight"
+                  [class.text-black]="!fullArt"
+                  [class.font-semibold]="!fullArt"
+                  [class.text-shadow-none]="!fullArt"
+                  [class.text-white]="fullArt"
+                  [class.font-extrabold]="fullArt"
+                  [class.text-shadow-lg/20]="fullArt"
+                >
                   {{ card().name }}
                 </h2>
 
                 @if (card().subtitle) {
-                  <p class="mt-1 text-sm">
+                  <p class="mt-1 text-sm text-slate-500 italic">
                     {{ card().subtitle }}
                   </p>
                 }
@@ -159,12 +175,12 @@
             }
           </div>
 
-          <footer class="relative bottom-0 z-10">
+          <footer class="relative bottom-0 z-10 text-xs font-semibold text-slate-500">
             <div class="flex min-w-0 items-center justify-between gap-1">
-              <span class="text-xs"> N° {{ card().card_number || '—' }} </span>
+              <span> N° {{ card().card_number || '—' }} </span>
 
               @if (card().serie) {
-                <span class="text-xs">
+                <span>
                   {{ formatLabel(card().serie!) }}
                 </span>
               }

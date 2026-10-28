@@ -3,14 +3,14 @@
   <header class="hidden md:block border-b border-slate-200 bg-[#F6F6F4]">
     <div class="mx-auto flex h-20 max-w-[1700px] items-center justify-between px-12">
       <!-- LOGO -->
-      <a routerLink="/" class="" aria-label="Codamon accueil">
-        <span class="text-3xl font-medium tracking-tight text-[#2049CD]"> codamon </span>
+      <a routerLink="/dashboard" class="" aria-label="Codamon accueil">
+        <span class="text-3xl font-semibold tracking-tight text-[#2049CD]"> codamon </span>
       </a>
 
       <!-- MENU -->
       <nav class="flex items-center gap-10" aria-label="Navigation principale">
         <a
-          routerLink="/pack"
+          routerLink="/"
           routerLinkActive
           #packRla="routerLinkActive"
           [routerLinkActiveOptions]="{ exact: true }"
@@ -34,7 +34,7 @@
         </a>
 
         <a
-          routerLink="/"
+          routerLink="/collection"
           routerLinkActive
           #collectionRla="routerLinkActive"
           [routerLinkActiveOptions]="{ exact: true }"
@@ -148,7 +148,7 @@
         routerLink="/"
         routerLinkActive="bg-[#2049CD] text-white"
         [routerLinkActiveOptions]="{ exact: true }"
-        class="flex min-w-[64px] flex-col items-center rounded-2xl px-1 py-2 text-slate-500 transition"
+        class="flex min-w-16 flex-col items-center rounded-2xl px-1 py-2 text-slate-500 transition"
       >
         <span class="mt-1 text-[11px] font-medium"> Collection </span>
       </a>
@@ -157,7 +157,7 @@
         routerLink="/pack"
         routerLinkActive="bg-[#2049CD] text-white"
         [routerLinkActiveOptions]="{ exact: true }"
-        class="flex min-w-[64px] flex-col items-center rounded-2xl px-1 py-2 text-slate-500 transition"
+        class="flex min-w-16 flex-col items-center rounded-2xl px-1 py-2 text-slate-500 transition"
       >
         <span class="mt-1 text-[11px] font-medium"> Packs </span>
       </a>
@@ -166,7 +166,7 @@
         routerLink="/test-carte"
         routerLinkActive="bg-[#2049CD] text-white"
         [routerLinkActiveOptions]="{ exact: true }"
-        class="flex min-w-[64px] flex-col items-center rounded-2xl px-1 py-2 text-slate-500 transition"
+        class="flex min-w-16 flex-col items-center rounded-2xl px-1 py-2 text-slate-500 transition"
       >
         <span class="mt-1 text-[11px] font-medium"> Test </span>
       </a>
@@ -175,7 +175,7 @@
         routerLink="/echanges"
         routerLinkActive="bg-[#2049CD] text-white"
         [routerLinkActiveOptions]="{ exact: true }"
-        class="flex min-w-[64px] flex-col items-center rounded-2xl px-1 py-2 text-slate-500 transition"
+        class="flex min-w-16 flex-col items-center rounded-2xl px-1 py-2 text-slate-500 transition"
       >
         <span class="mt-1 text-[11px] font-medium"> Échanges </span>
       </a>
@@ -184,7 +184,7 @@
         routerLink="/marche"
         routerLinkActive="bg-[#2049CD] text-white"
         [routerLinkActiveOptions]="{ exact: true }"
-        class="flex min-w-[64px] flex-col items-center rounded-2xl px-1 py-2 text-slate-500 transition"
+        class="flex min-w-16 flex-col items-center rounded-2xl px-1 py-2 text-slate-500 transition"
       >
         <span class="mt-1 text-[11px] font-medium"> Marché </span>
       </a>

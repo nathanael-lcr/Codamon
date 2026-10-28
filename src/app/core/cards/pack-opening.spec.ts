@@ -1,7 +1,7 @@
 import { Card, CardRarity } from './card.model';
 import { createRandomPack, PACK_SIZE, RARITY_WEIGHTS } from './pack-opening';
 
-const rarities: CardRarity[] = ['common', 'rare', 'epic', 'legendary', 'mythic'];
+const rarities: CardRarity[] = ['common', 'rare', 'epic', 'legendary', 'slegendary'];
 
 function createCards(cardsPerRarity: number): Card[] {
   return rarities.flatMap((rarity) =>
@@ -63,7 +63,7 @@ describe('createRandomPack', () => {
     expect(RARITY_WEIGHTS.common).toBeGreaterThan(RARITY_WEIGHTS.rare);
     expect(RARITY_WEIGHTS.rare).toBeGreaterThan(RARITY_WEIGHTS.epic);
     expect(RARITY_WEIGHTS.epic).toBeGreaterThan(RARITY_WEIGHTS.legendary);
-    expect(RARITY_WEIGHTS.legendary).toBeGreaterThan(RARITY_WEIGHTS.mythic);
+    expect(RARITY_WEIGHTS.legendary).toBeGreaterThan(RARITY_WEIGHTS.slegendary);
   });
 
   it('does not create a partial pack if fewer than five cards are available', () => {
