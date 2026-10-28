@@ -1,13 +1,114 @@
 <section class="pack-page">
   @if (!phase() && !loading() && !error()) {
-    <section class="pack-room" aria-label="Booster prêt à ouvrir">
-      <p class="sealed-pack">Booster Codamon</p>
-      <div class="pack-intro">
-        <h2>Un booster t’attend</h2>
-        <p>Cinq cartes inédites, révélées une par une. Garde un œil sur les dernières…</p>
-        <button type="button" class="p-4 bg-[#2049CD] text-white hover:bg-[#2546b3] hover:cursor-pointer" (click)="getPack()">
-          Découvrir mon pack
-        </button>
+    <!-- La section ci dessous est purement une maquette est doit être faite de manière pratique et responsive --> 
+    <section
+      class="min-h-screen bg-[#F9F9F8] flex items-start justify-center py-8 px-6"
+      aria-label="Aperçu de la collection et ouverture"
+    >
+      <div class="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-16 lg:gap-32 items-stretch">
+        <div class="flex flex-col justify-between h-full min-h-137.5">
+          <div>
+            <span
+              class="text-[10px] tracking-[0.2em] text-slate-400 font-bold uppercase mb-8 block"
+            >
+              Collection Permanente / Coda Originals
+            </span>
+            <h1
+              class="text-5xl lg:text-6xl font-bold text-slate-900 tracking-tight leading-[1.1] mb-8"
+            >
+              La prochaine<br />pièce.
+            </h1>
+            <p class="text-slate-500 text-lg leading-relaxed font-light">
+              Un objet encore scellé.<br />
+              Cinq savoirs à découvrir.
+            </p>
+          </div>
+
+          <div class="mt-12 space-y-6">
+            <div class="border-t border-slate-200/80 pt-6">
+              <span
+                class="text-[10px] tracking-[0.15em] text-slate-400 font-bold uppercase block mb-1"
+              >
+                La collection
+              </span>
+              <span class="text-base font-semibold text-slate-800">
+                110 cartes à collectionner
+              </span>
+            </div>
+            <div class="border-t border-slate-200/80 pt-6">
+              <span
+                class="text-[10px] tracking-[0.15em] text-slate-400 font-bold uppercase block mb-1"
+              >
+                Dans chaque paquet
+              </span>
+              <span class="text-base font-semibold text-slate-800"> 5 cartes à découvrir </span>
+            </div>
+          </div>
+
+          <div class="border-t border-slate-200/80 pt-6 mt-12">
+            <span class="text-xs font-semibold tracking-wider text-[#2049CD] uppercase">
+              Objet 01 – Paquet scellé
+            </span>
+          </div>
+        </div>
+
+        <div
+          class="flex flex-col justify-between h-full min-h-137.5 border-t md:border-t-0 md:border-l border-slate-200/60 pt-12 md:pt-0 md:pl-16 lg:pl-24"
+        >
+          <!-- Bloc supérieur : Bouton et disponibilité -->
+          <div class="space-y-8">
+            <div class="flex items-center justify-between border-b border-slate-200/60 pb-4">
+              <span class="text-[10px] tracking-[0.15em] text-slate-400 font-bold uppercase">
+                Disponible à l'ouverture
+              </span>
+              <span class="h-2 w-2 rounded-full bg-[#2049CD] inline-block"></span>
+            </div>
+
+            <div>
+              <h2 class="text-3xl font-bold text-slate-950 mb-1">Coda Originals</h2>
+              <p class="text-slate-400 text-sm">5 cartes par paquet</p>
+            </div>
+
+            <!-- Bouton interactif -->
+            <button
+              type="button"
+              class="w-full p-5 bg-[#2049CD] text-white hover:bg-[#1a3da8] active:scale-[0.99] transition-all hover:cursor-pointer flex items-center justify-between font-medium tracking-wide shadow-sm"
+              (click)="getPack()"
+            >
+              <span>Ouvrir le paquet</span>
+              <svg lucideArrowUpRight class="w-5 h-5 ml-2"></svg>
+            </button>
+
+            <!-- Statut des paquets -->
+            <div class="space-y-1">
+              <div class="flex justify-between text-sm font-semibold text-slate-800">
+                <span>4 / 10 paquets disponibles</span>
+                <span class="text-[#2049CD]">4:52</span>
+              </div>
+              <p class="text-slate-400 text-xs">Prochain paquet dans 4:52</p>
+            </div>
+          </div>
+
+          <!-- Bloc inférieur : Barre de progression de la collection -->
+          <div class="border-t border-slate-200/80 pt-8 mt-12 space-y-4">
+            <div class="flex items-baseline justify-between">
+              <span class="text-slate-500 font-medium text-sm">Votre collection</span>
+              <span class="text-3xl font-bold text-slate-900">
+                47 <span class="text-slate-300 font-normal text-2xl">/</span> 110
+                <span class="text-slate-400 font-normal text-base">cartes</span>
+              </span>
+            </div>
+
+            <!-- Barre de progression -->
+            <div class="w-full h-1 bg-slate-200/80 rounded-full overflow-hidden">
+              <div class="h-full bg-[#2049CD] rounded-full" style="width: 42.7%"></div>
+            </div>
+
+            <p class="text-[10px] tracking-[0.15em] text-slate-400 font-bold uppercase">
+              42.7% de la collection complétée
+            </p>
+          </div>
+        </div>
       </div>
     </section>
   }
@@ -29,7 +130,11 @@
   @if (phase() === 'sealed') {
     <section class="pack-room" aria-label="Booster prêt à ouvrir">
       <p class="sealed-pack">Booster prêt</p>
-      <button type="button" class="p-4 bg-[#2049CD] text-white hover:bg-[#2546b3] hover:cursor-pointer" (click)="openBooster()">
+      <button
+        type="button"
+        class="p-4 bg-[#2049CD] text-white hover:bg-[#2546b3] hover:cursor-pointer"
+        (click)="openBooster()"
+      >
         Ouvrir le booster
       </button>
     </section>
@@ -131,7 +236,11 @@
         }
       </div>
 
-      <button type="button" class="p-4 bg-[#2049CD] text-white hover:bg-[#2546b3] hover:cursor-pointer" (click)="getPack()">
+      <button
+        type="button"
+        class="p-4 bg-[#2049CD] text-white hover:bg-[#2546b3] hover:cursor-pointer"
+        (click)="getPack()"
+      >
         Ouvrir un autre pack
       </button>
     </section>
