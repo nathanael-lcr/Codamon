@@ -1,10 +1,21 @@
-import { Component, computed, input, signal } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  ElementRef,
+  afterNextRender,
+  computed,
+  inject,
+  input,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { Card } from '../../app/core/cards/card.model';
 
 @Component({
   selector: 'app-card-display',
   standalone: true,
   templateUrl: './card-display.html',
+  styleUrl: './card-display.css',
 })
 export class CardDisplayComponent {
   readonly card = input.required<Card>();
@@ -20,6 +31,34 @@ export class CardDisplayComponent {
     if (this.imageFailed()) return null;
     return this.card().image_url || this.card().thumbnail_url;
   });
+  // Largeur de référence du dessin de la carte : 384 px.
+  private static readonly DESIGN_WIDTH = 384;
+
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly viewport = viewChild.required<ElementRef<HTMLElement>>('viewport');
+
+  // Largeur maximale affichée. La carte peut être plus petite
+  // si la grille lui laisse moins de place.
+  readonly width = input(384);
+
+  protected readonly scale = signal(1);
+
+  constructor() {
+    // S'exécute après le rendu, uniquement dans le navigateur.
+    afterNextRender(() => {
+      const element = this.viewport().nativeElement;
+
+      const observer = new ResizeObserver(([entry]) => {
+        if (!entry) return;
+
+        this.scale.set(entry.contentRect.width / CardDisplayComponent.DESIGN_WIDTH);
+      });
+
+      observer.observe(element);
+
+      this.destroyRef.onDestroy(() => observer.disconnect());
+    });
+  }
 
   protected onImageError(): void {
     this.imageFailed.set(true);
