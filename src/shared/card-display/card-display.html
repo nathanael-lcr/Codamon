@@ -24,7 +24,14 @@
         <div class="card-back-face pull-back bg-[#2049CD] rounded-2xl" aria-hidden="true"></div>
       }
 
-      <div class="card-front-face bg-white rounded-2xl border-6 border-[#2049CD]">
+      <div
+        class="card-front-face bg-white rounded-2xl border-6 border-[#2049CD]"
+        [class.border-slate-400]="card().rarity === 'common'"
+        [class.border-[#2049CD]]="card().rarity === 'rare'"
+        [class.border-purple-500]="card().rarity === 'epic'"
+        [class.border-amber-400]="card().rarity === 'legendary'"
+        [class.border-red-500]="card().rarity === 'slegendary'"
+      >
         @let basic =
           card().rarity === 'common' || card().rarity === 'rare' || card().rarity === 'epic';
         @let fullArt = card().rarity === 'legendary' || card().rarity === 'slegendary';
@@ -45,7 +52,7 @@
               <span
                 class="shrink-0 text-2xl font-black"
                 [class.text-slate-400]="card().rarity === 'common'"
-                [class.text-blue-500]="card().rarity === 'rare'"
+                [class.text-[#2049CD]]="card().rarity === 'rare'"
                 [class.text-purple-500]="card().rarity === 'epic'"
                 [class.text-amber-400]="card().rarity === 'legendary'"
                 [class.text-red-500]="card().rarity === 'slegendary'"
@@ -84,7 +91,7 @@
             [class.border]="!fullArt"
             [class.border-black]="!fullArt"
             [class.relative]="!fullArt"
-            [class.aspect-[1.38/1]]="basic"
+            [class.aspect-[1.58/1]]="basic"
             [class.aspect-[1.42/1]]="!basic && !fullArt"
             [class.absolute]="fullArt"
             [class.inset-0]="fullArt"

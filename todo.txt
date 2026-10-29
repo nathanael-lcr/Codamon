@@ -1,25 +1,20 @@
 Faire en sorte que les cartes soient toujours, toujours des mêmes dimensions/ratio (0,720:1)
 En général faire en sorte que partout dans le site ou s'affiche une carte cela soit card-display et que ca soit lisible
-Supprimer le paramètre compact sur display-card et en ajouter un pour décider si elle a l'effet de tilt au hover (et faire en sorte que pack-opening.css ne modifie plus la carte.) 
+Supprimer le paramètre compact sur display-card et en ajouter un pour décider si elle a l'effet de tilt au hover (et faire en sorte que pack-opening.css ne modifie plus le contenu de la carte.) 
 (card display doit être le seul à définir comment il ressemble)
-fix le fait que les cartes entre test-carte et l'opening dans packs sont différentes sur certains paddings etc
+Faire en sorte que card-display puisse scale comme une image, cad le contenu intérieur reste eux mêmes dimensions relatives
 Le recap après l'unpack doit utiliser card-display mais de manière lisible
 
-Implémenter la section de pack-opening.html
-Fix la navigation mobile
+Implémenter la section décrite comme maquette de pack-opening.html
+Vérifier l'implémentation de "collection"
 
 Rendre cohérent l'utilisation de tailwind à travers les fichiers
 Avoir des pondération de probabilité de drop directement en BDD
 Fix le tearing/aliasing sur l'animation de tilt de hover
 
-Avoir une table profiles qui stocke les infos du profil
-Avoir une table inventory qui pointe vers un profil et une liste de cartes (Les doublons sont autorisés)
-
-
 Finir le design des cartes sur photoshop
 Faire un design de dos de carte
 
-Introduire la monnaie
 Nouvelles animations unpacking
 Ajouter une animation parallax 3D hover sur les cartes SL
 

@@ -1,9 +1,4 @@
-<section class="mx-auto max-w-lg space-y-6">
-  <header class="space-y-2">
-    <h1 class="text-3xl font-semibold tracking-tight">Compte</h1>
-    <p class="text-slate-600">Gère ta connexion et tes informations de compte.</p>
-  </header>
-
+<section class="mx-auto max-w-lg my-6 space-y-6">
   @if (!initialized()) {
     <div
       class="border border-slate-200 bg-white p-6 text-sm text-slate-500 shadow-sm"
@@ -12,30 +7,102 @@
       Chargement de ton compte…
     </div>
   } @else if (user(); as currentUser) {
-    <div class="space-y-5border border-slate-200 bg-white p-6 shadow-sm">
-      <div>
-        <p class="text-sm font-medium text-slate-500">Connecté en tant que</p>
-        <p class="mt-1 break-all font-semibold">{{ currentUser.email }}</p>
+    <div class="space-y-6 border border-slate-200 bg-white p-6 shadow-sm">
+      <!-- Profil joueur -->
+      @if (playerService.loading()) {
+        <p class="text-sm text-slate-500" aria-live="polite">Chargement de ton profil…</p>
+      } @else if (playerService.error()) {
+        <div class="border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700" role="alert">
+          Impossible de charger ton profil pour le moment.
+        </div>
+      } @else if (playerService.player(); as player) {
+        <div class="flex items-center gap-4">
+          @if (player.avatar_url) {
+            <img
+              [src]="player.avatar_url"
+              alt=""
+              class="h-14 w-14 shrink-0 rounded-full border border-slate-200 object-cover"
+              referrerpolicy="no-referrer"
+            />
+          }
+
+          <div class="min-w-0 space-y-1">
+            <h2 class="wrap-break-word text-xl font-semibold tracking-tight">
+              {{ player.display_name || player.username || 'Mon profil' }}
+            </h2>
+
+            @if (player.username) {
+              <p class="break-all text-sm text-slate-500">
+                {{ '@' + player.username }}
+              </p>
+            }
+          </div>
+        </div>
+
+        <!-- Monnaie du jeu -->
+        <div class="border border-blue-200 bg-blue-50 p-4">
+          <p class="text-sm font-medium text-blue-800">Mon solde</p>
+
+          <p class="mt-1 text-3xl font-semibold tracking-tight text-blue-900">
+            {{ player.currency | number: '1.0-0' }}
+            <span class="text-sm font-medium">pièces</span>
+          </p>
+        </div>
+
+        <!-- Informations du profil -->
+        <dl class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+          <div class="space-y-1">
+            <dt class="text-sm font-medium text-slate-500">Nom</dt>
+            <dd class="wrap-break-word font-semibold text-slate-900">
+              {{ player.display_name || 'Non renseigné' }}
+            </dd>
+          </div>
+
+          <div class="space-y-1">
+            <dt class="text-sm font-medium text-slate-500">Pseudo</dt>
+            <dd class="break-all font-semibold text-slate-900">
+              {{ player.username || 'Non renseigné' }}
+            </dd>
+          </div>
+
+          <div class="space-y-1">
+            <dt class="text-sm font-medium text-slate-500">Membre depuis le</dt>
+            <dd class="font-semibold text-slate-900">
+              {{ player.created_at | date: 'dd/MM/yyyy' }}
+            </dd>
+          </div>
+
+        </dl>
+      } @else {
+        <p class="text-sm text-slate-500" aria-live="polite">Aucun profil joueur disponible.</p>
+      }
+
+      <!-- Informations de connexion : e-mail issu de Supabase Auth -->
+      <div class="space-y-1 border-t border-slate-200 pt-5">
+        <p class="text-sm font-medium text-slate-500">Adresse e-mail</p>
+        <p class="break-all font-semibold text-slate-900">
+          {{ currentUser.email }}
+        </p>
       </div>
 
-      @if (feedback) {
+      @if (feedback()) {
         <p
           aria-live="polite"
-          class="text-sm"
-          [class.text-rose-700]="hasError"
-          [class.text-emerald-700]="!hasError"
+          class="text-sm leading-5"
+          [class.text-rose-700]="hasError()"
+          [class.text-emerald-700]="!hasError()"
         >
-          {{ feedback }}
+          {{ feedback() }}
         </p>
       }
 
       <button
         type="button"
-        class="min-h-11 w-full border border-slate-300 px-4 text-sm font-semibold transition hover:bg-slate-50 disabled:opacity-50"
-        [disabled]="loading"
+        class="min-h-11 w-full border border-slate-300 px-4 text-sm font-semibold transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
+        [disabled]="loading()"
         (click)="signOut()"
       >
-        {{ loading ? 'Déconnexion…' : 'Se déconnecter' }}
+        {{ loading() ? 'Déconnexion…' : 'Se déconnecter' }}
       </button>
     </div>
   } @else {
@@ -47,7 +114,7 @@
           [class.bg-indigo-50]="mode === 'sign-in'"
           [class.text-indigo-700]="mode === 'sign-in'"
           [class.text-slate-600]="mode !== 'sign-in'"
-          [disabled]="loading"
+          [disabled]="loading()"
           [attr.aria-pressed]="mode === 'sign-in'"
           (click)="selectMode('sign-in')"
         >
@@ -59,7 +126,7 @@
           [class.bg-indigo-50]="mode === 'sign-up'"
           [class.text-indigo-700]="mode === 'sign-up'"
           [class.text-slate-600]="mode !== 'sign-up'"
-          [disabled]="loading"
+          [disabled]="loading()"
           [attr.aria-pressed]="mode === 'sign-up'"
           (click)="selectMode('sign-up')"
         >
@@ -68,6 +135,44 @@
       </div>
 
       <form class="space-y-5 p-6" (ngSubmit)="submit()">
+        @if (mode === 'sign-up') {
+          <div class="space-y-1.5">
+            <label for="account-display-name" class="text-sm font-medium">Nom</label>
+            <input
+              id="account-display-name"
+              name="displayName"
+              type="text"
+              autocomplete="name"
+              maxlength="50"
+              required
+              class="min-h-12 w-full border border-slate-300 px-4 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+              placeholder="Ton nom"
+              [(ngModel)]="displayName"
+            />
+          </div>
+
+          <div class="space-y-1.5">
+            <label for="account-username" class="text-sm font-medium">Pseudo</label>
+            <input
+              id="account-username"
+              name="username"
+              type="text"
+              autocomplete="nickname"
+              autocapitalize="none"
+              spellcheck="false"
+              maxlength="20"
+              required
+              class="min-h-12 w-full border border-slate-300 px-4 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+              [class.border-rose-400]="username && !usernameValid"
+              placeholder="ton_pseudo"
+              aria-describedby="account-username-hint"
+              [(ngModel)]="username"
+            />
+            <p id="account-username-hint" class="text-xs text-slate-500">
+              3 à 20 caractères : lettres, chiffres ou « _ ».
+            </p>
+          </div>
+        }
         <div class="space-y-1.5">
           <label for="account-email" class="text-sm font-medium">Adresse e-mail</label>
           <input
@@ -97,23 +202,23 @@
           />
         </div>
 
-        @if (feedback) {
+        @if (feedback()) {
           <p
             aria-live="polite"
             class="text-sm leading-5"
-            [class.text-rose-700]="hasError"
-            [class.text-emerald-700]="!hasError"
+            [class.text-rose-700]="hasError()"
+            [class.text-emerald-700]="!hasError()"
           >
-            {{ feedback }}
+            {{ feedback() }}
           </p>
         }
 
         <button
           type="submit"
           class="min-h-12 w-full bg-indigo-600 px-4 text-sm font-semibold text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"
-          [disabled]="loading || !email || password.length < 6"
+          [disabled]="!canSubmit"
         >
-          @if (loading) {
+          @if (loading()) {
             Opération en cours…
           } @else if (mode === 'sign-in') {
             Se connecter
