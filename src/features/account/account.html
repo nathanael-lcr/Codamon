@@ -18,24 +18,24 @@
         <p class="mt-1 break-all font-semibold">{{ currentUser.email }}</p>
       </div>
 
-      @if (feedback) {
+      @if (feedback()) {
         <p
           aria-live="polite"
           class="text-sm"
-          [class.text-rose-700]="hasError"
-          [class.text-emerald-700]="!hasError"
+          [class.text-rose-700]="hasError()"
+          [class.text-emerald-700]="!hasError()"
         >
-          {{ feedback }}
+          {{ feedback() }}
         </p>
       }
 
       <button
         type="button"
         class="min-h-11 w-full border border-slate-300 px-4 text-sm font-semibold transition hover:bg-slate-50 disabled:opacity-50"
-        [disabled]="loading"
+        [disabled]="loading()"
         (click)="signOut()"
       >
-        {{ loading ? 'Déconnexion…' : 'Se déconnecter' }}
+        {{ loading() ? 'Déconnexion…' : 'Se déconnecter' }}
       </button>
     </div>
   } @else {
@@ -47,7 +47,7 @@
           [class.bg-indigo-50]="mode === 'sign-in'"
           [class.text-indigo-700]="mode === 'sign-in'"
           [class.text-slate-600]="mode !== 'sign-in'"
-          [disabled]="loading"
+          [disabled]="loading()"
           [attr.aria-pressed]="mode === 'sign-in'"
           (click)="selectMode('sign-in')"
         >
@@ -59,7 +59,7 @@
           [class.bg-indigo-50]="mode === 'sign-up'"
           [class.text-indigo-700]="mode === 'sign-up'"
           [class.text-slate-600]="mode !== 'sign-up'"
-          [disabled]="loading"
+          [disabled]="loading()"
           [attr.aria-pressed]="mode === 'sign-up'"
           (click)="selectMode('sign-up')"
         >
@@ -68,6 +68,44 @@
       </div>
 
       <form class="space-y-5 p-6" (ngSubmit)="submit()">
+        @if (mode === 'sign-up') {
+          <div class="space-y-1.5">
+            <label for="account-display-name" class="text-sm font-medium">Nom</label>
+            <input
+              id="account-display-name"
+              name="displayName"
+              type="text"
+              autocomplete="name"
+              maxlength="50"
+              required
+              class="min-h-12 w-full border border-slate-300 px-4 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+              placeholder="Ton nom"
+              [(ngModel)]="displayName"
+            />
+          </div>
+
+          <div class="space-y-1.5">
+            <label for="account-username" class="text-sm font-medium">Pseudo</label>
+            <input
+              id="account-username"
+              name="username"
+              type="text"
+              autocomplete="nickname"
+              autocapitalize="none"
+              spellcheck="false"
+              maxlength="20"
+              required
+              class="min-h-12 w-full border border-slate-300 px-4 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+              [class.border-rose-400]="username && !usernameValid"
+              placeholder="ton_pseudo"
+              aria-describedby="account-username-hint"
+              [(ngModel)]="username"
+            />
+            <p id="account-username-hint" class="text-xs text-slate-500">
+              3 à 20 caractères : lettres, chiffres ou « _ ».
+            </p>
+          </div>
+        }
         <div class="space-y-1.5">
           <label for="account-email" class="text-sm font-medium">Adresse e-mail</label>
           <input
@@ -97,23 +135,23 @@
           />
         </div>
 
-        @if (feedback) {
+        @if (feedback()) {
           <p
             aria-live="polite"
             class="text-sm leading-5"
-            [class.text-rose-700]="hasError"
-            [class.text-emerald-700]="!hasError"
+            [class.text-rose-700]="hasError()"
+            [class.text-emerald-700]="!hasError()"
           >
-            {{ feedback }}
+            {{ feedback() }}
           </p>
         }
 
         <button
           type="submit"
           class="min-h-12 w-full bg-indigo-600 px-4 text-sm font-semibold text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"
-          [disabled]="loading || !email || password.length < 6"
+          [disabled]="!canSubmit"
         >
-          @if (loading) {
+          @if (loading()) {
             Opération en cours…
           } @else if (mode === 'sign-in') {
             Se connecter

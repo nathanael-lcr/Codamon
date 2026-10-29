@@ -127,10 +127,29 @@
         </a>
       </nav>
 
-      <!-- ACCOUNT -->
-      <a routerLink="/account" class="text-sm font-semibold text-slate-600 hover:text-slate-900">
-        {{ initialized() ? (user()?.email ?? 'Mon compte') : 'Chargement...' }}
-      </a>
+      <div class="flex gap-8 items-center">
+        <div class="flex text-sm p-1 px-2 items-start text-white font-semibold bg-[#2049CD]">
+          @if (playerService.loading()) {
+            <span class="text-sm text-slate-500">...</span>
+          } @else if (playerService.player(); as player) {
+            <span> {{ player.currency }} </span>
+          }
+          <svg lucideTorus class="w-5 h-5 ml-1"></svg>
+        </div>
+
+        <!-- ACCOUNT -->
+        <a
+          routerLink="/account"
+          class="flex flex-col justify-center items-center text-sm font-semibold text-slate-700 hover:text-slate-900"
+        >
+          <svg lucideUser></svg>
+          @if (playerService.loading()) {
+            <span class="text-sm text-slate-500">...</span>
+          } @else if (playerService.player(); as player) {
+            <span> {{ player.username }} </span>
+          }
+        </a>
+      </div>
     </div>
   </header>
 
@@ -140,53 +159,51 @@
   </main>
 
   <!-- NAVIGATION MOBILE -->
-  <nav class="fixed bottom-0 z-50 md:hidden" aria-label="Navigation mobile">
-    <div
-      class="flex items-center justify-around border-t border-slate-200 bg-white/95 p-4 px-6"
-    >
+  <nav class="fixed bottom-0 z-50 md:hidden w-full" aria-label="Navigation mobile">
+    <div class="flex items-center justify-around border-t border-slate-200 bg-white p-4 px-6">
       <a
         routerLink="/"
         routerLinkActive="bg-[#2049CD] text-white"
         [routerLinkActiveOptions]="{ exact: true }"
-        class="flex min-w-16 flex-col items-center rounded-2xl px-1 py-2 text-slate-500 transition"
+        class="flex min-w-16 flex-col items-center px-1 py-2 text-slate-500 transition"
       >
-        <span class="mt-1 text-[11px] font-medium"> Collection </span>
+        <span class="mt-1 text-[11px] font-medium"><svg lucidePlayingCardsFan></svg></span>
       </a>
 
       <a
-        routerLink="/pack"
+        routerLink="/dashboard"
         routerLinkActive="bg-[#2049CD] text-white"
         [routerLinkActiveOptions]="{ exact: true }"
-        class="flex min-w-16 flex-col items-center rounded-2xl px-1 py-2 text-slate-500 transition"
+        class="flex min-w-16 flex-col items-center px-1 py-2 text-slate-500 transition"
       >
-        <span class="mt-1 text-[11px] font-medium"> Packs </span>
-      </a>
-
-      <a
-        routerLink="/test-carte"
-        routerLinkActive="bg-[#2049CD] text-white"
-        [routerLinkActiveOptions]="{ exact: true }"
-        class="flex min-w-16 flex-col items-center rounded-2xl px-1 py-2 text-slate-500 transition"
-      >
-        <span class="mt-1 text-[11px] font-medium"> Test </span>
-      </a>
-
-      <a
-        routerLink="/echanges"
-        routerLinkActive="bg-[#2049CD] text-white"
-        [routerLinkActiveOptions]="{ exact: true }"
-        class="flex min-w-16 flex-col items-center rounded-2xl px-1 py-2 text-slate-500 transition"
-      >
-        <span class="mt-1 text-[11px] font-medium"> Échanges </span>
+        <span class="mt-1 text-[11px] font-medium"><svg lucideBookOpen></svg></span>
       </a>
 
       <a
         routerLink="/marche"
         routerLinkActive="bg-[#2049CD] text-white"
         [routerLinkActiveOptions]="{ exact: true }"
-        class="flex min-w-16 flex-col items-center rounded-2xl px-1 py-2 text-slate-500 transition"
+        class="flex min-w-16 flex-col items-center px-1 py-2 text-slate-500 transition"
       >
-        <span class="mt-1 text-[11px] font-medium"> Marché </span>
+        <span class="mt-1 text-[11px] font-medium"><svg lucideStore></svg></span>
+      </a>
+
+      <a
+        routerLink="/echanges"
+        routerLinkActive="bg-[#2049CD] text-white"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="flex min-w-16 flex-col items-center px-1 py-2 text-slate-500 transition"
+      >
+        <span class="mt-1 text-[11px] font-medium"><svg lucideHandshake></svg></span>
+      </a>
+
+      <a
+        routerLink="/classement"
+        routerLinkActive="bg-[#2049CD] text-white"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="flex min-w-16 flex-col items-center px-1 py-2 text-slate-500 transition"
+      >
+        <span class="mt-1 text-[11px] font-medium"><svg lucideTrophy></svg></span>
       </a>
     </div>
   </nav>

@@ -1,6 +1,6 @@
 <section class="pack-page">
   @if (!phase() && !loading() && !error()) {
-    <!-- La section ci dessous est purement une maquette est doit être faite de manière pratique et responsive --> 
+    <!-- La section ci dessous est purement une maquette est doit être faite de manière pratique et responsive -->
     <section
       class="min-h-screen bg-[#F9F9F8] flex items-start justify-center py-8 px-6"
       aria-label="Aperçu de la collection et ouverture"
@@ -129,14 +129,17 @@
 
   @if (phase() === 'sealed') {
     <section class="pack-room" aria-label="Booster prêt à ouvrir">
-      <p class="sealed-pack">Booster prêt</p>
-      <button
-        type="button"
-        class="p-4 bg-[#2049CD] text-white hover:bg-[#2546b3] hover:cursor-pointer"
-        (click)="openBooster()"
-      >
-        Ouvrir le booster
-      </button>
+      <div class="w-xs">
+        <p class="sealed-pack">Booster prêt</p>
+        <button
+          type="button"
+          class="w-full p-5 bg-[#2049CD] text-white hover:bg-[#1a3da8] active:scale-[0.99] transition-all hover:cursor-pointer flex items-center justify-between font-medium tracking-wide shadow-sm"
+          (click)="openBooster()"
+        >
+          <span>Ouvrir le booster</span>
+          <svg lucideArrowUpRight class="w-5 h-5 ml-2"></svg>
+        </button>
+      </div>
     </section>
   }
 
