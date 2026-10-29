@@ -4,25 +4,63 @@ export const routes: Routes = [
   {
     path: '',
     loadComponent: () =>
-      import('../features/dashboard/dashboard').then((page) => page.DashboardComponent),
+      import('../features/pack-opening/pack-opening').then(
+        (page) => page.PackOpeningComponent
+      ),
   },
   {
-    path: 'account',
+    path: 'collection',
     loadComponent: () =>
-      import('../features/account/account').then((page) => page.AccountComponent),
+      import('../features/collection/collection').then(
+        (page) => page.CollectionComponent
+      ),
+  },
+  {
+    path: 'dashboard',
+    loadComponent: () =>
+      import('../features/dashboard/dashboard').then(
+        (page) => page.DashboardComponent
+      ),
   },
   {
     path: 'test-carte',
     loadComponent: () =>
-      import('../features/test-card/test-card').then((page) => page.TestCardComponent),
+      import('../features/test-card/test-card').then(
+        (page) => page.TestCardComponent
+      ),
   },
   {
-    path: 'pack',
-    loadComponent: () => import('../features/pack-opening/pack-opening').then((page) => page.PackOpeningComponent),
+    path: 'echanges',
+    loadComponent: () =>
+      import('../features/exchanges/exchanges').then(
+        (page) => page.ExchangesComponent
+      ),
+  },
+  {
+    path: 'marche',
+    loadComponent: () =>
+      import('../features/market/market').then(
+        (page) => page.MarketComponent
+      ),
+  },
+  {
+    path: 'classement',
+    loadComponent: () =>
+      import('../features/classement/classement').then(
+        (page) => page.ClassementComponent
+      ),
+  },
+  {
+    path: 'account',
+    loadComponent: () =>
+      import('../features/account/account').then(
+        (page) => page.AccountComponent
+      ),
   },
   {
     path: 'auth-test',
     redirectTo: 'account',
+    pathMatch: 'full',
   },
   {
     path: '**',

@@ -3,9 +3,10 @@
     class="trading-card"
     [attr.data-rarity]="card().rarity"
     [attr.aria-label]="'Carte ' + card().name"
-    [class.card-basic]="card().rarity === 'common' || card().rarity === 'rare'"
-    [class.card-full-art]="card().rarity === 'epic' || card().rarity === 'legendary'"
-    [class.card-mythic]="card().rarity === 'mythic'"
+    [class.card-basic]="
+      card().rarity === 'common' || card().rarity === 'rare' || card().rarity === 'epic'
+    "
+    [class.card-full-art]="card().rarity === 'legendary' || card().rarity === 'slegendary'"
     [class.card-flippable]="flippable()"
     [style.--tilt-x]="tiltX() + 'deg'"
     [style.--tilt-y]="tiltY() + 'deg'"
@@ -20,109 +21,177 @@
       [class.card-flip-inner-revealed]="flipped()"
     >
       @if (flippable()) {
-        <div class="card-back-face pull-back" aria-hidden="true">
-          <div class="pull-back-inner">
-            <span class="pull-back-mark">C</span>
-            <span class="pull-back-label">CODAMON</span>
-          </div>
-        </div>
+        <div class="card-back-face pull-back bg-[#2049CD] rounded-2xl" aria-hidden="true"></div>
       }
-      <div class="card-front-face">
-        <div class="card-content">
-          <header class="card-heading">
-            <div class="card-heading-top">
-              <span class="card-number">N° {{ card().card_number || '—' }}</span>
-              <span class="card-rarity">{{ formatLabel(card().rarity) }}</span>
-            </div>
-            <div class="card-title-row">
-              <div class="card-title">
-                <h2>{{ card().name }}</h2>
+
+      <div
+        class="card-front-face bg-white rounded-2xl border-6 border-[#2049CD]"
+        [class.border-slate-400]="card().rarity === 'common'"
+        [class.border-[#2049CD]]="card().rarity === 'rare'"
+        [class.border-purple-500]="card().rarity === 'epic'"
+        [class.border-amber-400]="card().rarity === 'legendary'"
+        [class.border-red-500]="card().rarity === 'slegendary'"
+      >
+        @let basic =
+          card().rarity === 'common' || card().rarity === 'rare' || card().rarity === 'epic';
+        @let fullArt = card().rarity === 'legendary' || card().rarity === 'slegendary';
+
+        <div
+          class="relative flex flex-col justify-between"
+          [class.p-6]="compact()"
+          [class.p-4]="!compact()"
+          [class.min-h-[27rem]]="fullArt && compact()"
+          [class.min-h-[34rem]]="fullArt && !compact()"
+          [class.h-full]="compact() && flippable()"
+          [class.min-h-0]="compact() && flippable()"
+        >
+          <header class="relative z-10 flex flex-col gap-2">
+            <div class="flex items-center justify-between gap-3"></div>
+
+            <div class="flex items-center gap-6">
+              <span
+                class="shrink-0 text-2xl font-black"
+                [class.text-slate-400]="card().rarity === 'common'"
+                [class.text-[#2049CD]]="card().rarity === 'rare'"
+                [class.text-purple-500]="card().rarity === 'epic'"
+                [class.text-amber-400]="card().rarity === 'legendary'"
+                [class.text-red-500]="card().rarity === 'slegendary'"
+                [class.text-shadow-lg/20]="fullArt"
+              >
+                {{
+                  card().rarity === 'slegendary'
+                    ? card().rarity.slice(0, 2).toUpperCase()
+                    : card().rarity.slice(0, 1).toUpperCase()
+                }}
+              </span>
+              <div>
+                <h2
+                  class="wrap-break-word text-2xl leading-tight"
+                  [class.text-black]="!fullArt"
+                  [class.font-semibold]="!fullArt"
+                  [class.text-shadow-none]="!fullArt"
+                  [class.text-white]="fullArt"
+                  [class.font-extrabold]="fullArt"
+                  [class.text-shadow-lg/20]="fullArt"
+                >
+                  {{ card().name }}
+                </h2>
+
                 @if (card().subtitle) {
-                  <p>{{ card().subtitle }}</p>
+                  <p class="mt-1 text-sm text-slate-500 italic">
+                    {{ card().subtitle }}
+                  </p>
                 }
               </div>
             </div>
           </header>
 
-          <figure class="card-art">
+          <figure
+            class="overflow-hidden"
+            [class.border]="!fullArt"
+            [class.border-black]="!fullArt"
+            [class.relative]="!fullArt"
+            [class.aspect-[1.58/1]]="basic"
+            [class.aspect-[1.42/1]]="!basic && !fullArt"
+            [class.absolute]="fullArt"
+            [class.inset-0]="fullArt"
+            [class.z-0]="fullArt"
+          >
             @if (displayImage(); as imageUrl) {
-              <img [src]="imageUrl" [alt]="card().name" (error)="onImageError()" />
+              <img
+                class="block h-full w-full object-cover object-center"
+                [class.absolute]="fullArt"
+                [class.inset-0]="fullArt"
+                [src]="imageUrl"
+                [alt]="card().name"
+                (error)="onImageError()"
+              />
             } @else {
-              <div class="card-art-fallback">
-                <span aria-hidden="true">{{ card().name.charAt(0).toUpperCase() }}</span>
-                <p>Illustration indisponible</p>
+              <div class="grid h-full w-full content-center justify-items-center gap-2">
+                <span aria-hidden="true" class="text-5xl leading-none">
+                  {{ card().name.charAt(0).toUpperCase() }}
+                </span>
+                <p class="text-xs">Illustration indisponible</p>
               </div>
-            }
-            @if (card().category) {
-              <figcaption>{{ formatLabel(card().category!) }}</figcaption>
             }
           </figure>
 
-          <div class="card-details">
-            @if (
-              card().attack !== null ||
-              card().defense !== null ||
-              card().hp !== null ||
-              card().speed !== null
-            ) {
-              <dl class="card-stats" aria-label="Statistiques de combat">
+          @if (fullArt) {
+            <div aria-hidden="true" class="aspect-[1.38/1] w-full shrink-0"></div>
+          }
+
+          @if (card().description) {
+            <p class="relative z-10 text-sm leading-relaxed">
+              {{ card().description }}
+            </p>
+          }
+
+          <div class="flex z-10 mb-4 gap-2 py-2 justify-end" [class.mt-auto]="fullArt">
+            @if (card().attack !== null || card().defense !== null || card().hp !== null) {
+              <dl class="flex" aria-label="Statistiques de combat">
                 @if (card().hp !== null) {
-                  <div class="card-stat card-stat-hp">
-                    <dt>PV</dt>
-                    <dd>{{ card().hp }}</dd>
+                  <div class="flex gap-1 p-1">
+                    <dt class="text-xs">Vie</dt>
+                    <dd class="text-base">{{ card().hp }}</dd>
                   </div>
                 }
+
                 @if (card().attack !== null) {
-                  <div class="card-stat card-stat-attack">
-                    <dt>Attaque</dt>
-                    <dd>{{ card().attack }}</dd>
+                  <div class="flex gap-1 p-1">
+                    <dt class="text-xs">Attaque</dt>
+                    <dd class="text-base">{{ card().attack }}</dd>
                   </div>
                 }
+
                 @if (card().defense !== null) {
-                  <div class="card-stat card-stat-defense">
-                    <dt>Défense</dt>
-                    <dd>{{ card().defense }}</dd>
-                  </div>
-                }
-                @if (card().speed !== null) {
-                  <div class="card-stat card-stat-speed">
-                    <dt>Vitesse</dt>
-                    <dd>{{ card().speed }}</dd>
+                  <div class="flex gap-1 p-1">
+                    <dt class="text-xs">Défense</dt>
+                    <dd class="text-base">{{ card().defense }}</dd>
                   </div>
                 }
               </dl>
             }
 
-            @if (card().description) {
-              <p class="card-description">{{ card().description }}</p>
-            }
-
-            @if (card().ability_name || card().ability_description) {
-              <section class="card-ability">
-                <h3>
+            <!--             @if (card().ability_name || card().ability_description) {
+              <section class="grid gap-1" [class.hidden]="basic">
+                <h3 class="flex items-center gap-1 text-sm">
                   <span aria-hidden="true">✦</span>
                   {{ card().ability_name || 'Capacité spéciale' }}
                 </h3>
+
                 @if (card().ability_description) {
-                  <p>{{ card().ability_description }}</p>
+                  <p class="text-sm leading-relaxed">
+                    {{ card().ability_description }}
+                  </p>
                 }
               </section>
-            }
+            } -->
 
             @if (card().quote || card().flavor_text) {
-              <blockquote class="card-quote">
+              <blockquote class="grid gap-1" [class.hidden]="basic">
                 @if (card().quote) {
-                  <p>« {{ card().quote }} »</p>
+                  <p class="text-sm leading-relaxed">« {{ card().quote }} »</p>
                 }
+
                 @if (card().flavor_text) {
-                  <cite>{{ card().flavor_text }}</cite>
+                  <cite class="block text-xs not-italic leading-relaxed">
+                    {{ card().flavor_text }}
+                  </cite>
                 }
               </blockquote>
             }
           </div>
 
-          <footer class="card-footer">
-            <span>{{ card().slug }}</span>
+          <footer class="relative bottom-0 z-10 text-xs font-semibold text-slate-500">
+            <div class="flex min-w-0 items-center justify-between gap-1">
+              <span> N° {{ card().card_number || '—' }} </span>
+
+              @if (card().serie) {
+                <span>
+                  {{ formatLabel(card().serie!) }}
+                </span>
+              }
+            </div>
           </footer>
         </div>
       </div>

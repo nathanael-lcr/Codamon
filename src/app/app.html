@@ -1,95 +1,210 @@
-<div class="min-h-screen bg-slate-50 pb-20 text-slate-900 md:pb-0">
-  <header class="border-b border-slate-200 bg-white">
-    <div class="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
-      <a
-        routerLink="/"
-        class="flex items-center gap-2 font-semibold tracking-tight"
-        aria-label="Codamon, accueil"
-      >
-        <span
-          class="grid size-9 place-items-center rounded-xl bg-indigo-600 text-sm font-bold text-white"
-          >C</span
-        >
-        <span>Codamon</span>
+<div class="min-h-screen bg-[#F6F6F4] text-slate-900 pb-28 md:pb-0">
+  <!-- HEADER DESKTOP -->
+  <header class="hidden md:block border-b border-slate-200 bg-white">
+    <div class="mx-auto flex h-20 max-w-[1700px] items-center justify-between px-12">
+      <!-- LOGO -->
+      <a routerLink="/dashboard" class="" aria-label="Codamon accueil">
+        <span class="text-3xl font-semibold tracking-tight text-[#2049CD]"> codamon </span>
       </a>
 
-      <nav class="hidden items-center gap-2 md:flex" aria-label="Navigation principale">
+      <!-- MENU -->
+      <nav class="flex items-center gap-10" aria-label="Navigation principale">
         <a
           routerLink="/"
-          routerLinkActive="bg-slate-100 text-slate-950"
+          routerLinkActive
+          #packRla="routerLinkActive"
           [routerLinkActiveOptions]="{ exact: true }"
-          ariaCurrentWhenActive="page"
-          class="rounded-lg px-4 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100"
+          [class.text-[#2049CD]]="packRla.isActive"
+          [class.text-slate-600]="!packRla.isActive"
+          class="relative text-sm font-semibold transition-colors duration-200 hover:text-[#2049CD]"
         >
-          Dashboard
+          <span
+            [class.-translate-y-1]="packRla.isActive"
+            class="inline-block transition-transform duration-200"
+          >
+            Paquets
+          </span>
+
+          <span
+            aria-hidden="true"
+            [class.opacity-100]="packRla.isActive"
+            [class.opacity-0]="!packRla.isActive"
+            class="absolute inset-x-0 bottom-0 h-0.5 bg-[#2049CD] transition-opacity duration-200"
+          ></span>
         </a>
+
         <a
-          routerLink="/pack"
-          routerLinkActive="bg-slate-100 text-slate-950"
-          ariaCurrentWhenActive="page"
-          class="rounded-lg px-4 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100"
+          routerLink="/collection"
+          routerLinkActive
+          #collectionRla="routerLinkActive"
+          [routerLinkActiveOptions]="{ exact: true }"
+          [class.text-[#2049CD]]="collectionRla.isActive"
+          [class.text-slate-600]="!collectionRla.isActive"
+          class="relative text-sm font-semibold transition-colors duration-200 hover:text-[#2049CD]"
         >
-          Packs
+          <span
+            [class.-translate-y-1]="collectionRla.isActive"
+            class="inline-block transition-transform duration-200"
+          >
+            Collection
+          </span>
+
+          <span
+            aria-hidden="true"
+            [class.opacity-100]="collectionRla.isActive"
+            [class.opacity-0]="!collectionRla.isActive"
+            class="absolute inset-x-0 bottom-0 h-0.5 bg-[#2049CD] transition-opacity duration-200"
+          ></span>
         </a>
+
         <a
-          routerLink="/test-carte"
-          routerLinkActive="bg-slate-100 text-slate-950"
-          ariaCurrentWhenActive="page"
-          class="rounded-lg px-4 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100"
+          routerLink="/marche"
+          routerLinkActive
+          #marcheRla="routerLinkActive"
+          [class.text-[#2049CD]]="marcheRla.isActive"
+          [class.text-slate-600]="!marcheRla.isActive"
+          class="relative text-sm font-semibold transition-colors duration-200 hover:text-[#2049CD]"
         >
-          Test carte
+          <span
+            [class.-translate-y-1]="marcheRla.isActive"
+            class="inline-block transition-transform duration-200"
+          >
+            Marché
+          </span>
+
+          <span
+            aria-hidden="true"
+            [class.opacity-100]="marcheRla.isActive"
+            [class.opacity-0]="!marcheRla.isActive"
+            class="absolute inset-x-0 bottom-0 h-0.5 bg-[#2049CD] transition-opacity duration-200"
+          ></span>
+        </a>
+
+        <a
+          routerLink="/echanges"
+          routerLinkActive
+          #echangesRla="routerLinkActive"
+          [class.text-[#2049CD]]="echangesRla.isActive"
+          [class.text-slate-600]="!echangesRla.isActive"
+          class="relative text-sm font-semibold transition-colors duration-200 hover:text-[#2049CD]"
+        >
+          <span
+            [class.-translate-y-1]="echangesRla.isActive"
+            class="inline-block transition-transform duration-200"
+          >
+            Échanges
+          </span>
+
+          <span
+            aria-hidden="true"
+            [class.opacity-100]="echangesRla.isActive"
+            [class.opacity-0]="!echangesRla.isActive"
+            class="absolute inset-x-0 bottom-0 h-0.5 bg-[#2049CD] transition-opacity duration-200"
+          ></span>
+        </a>
+
+        <a
+          routerLink="/classement"
+          routerLinkActive
+          #classementRla="routerLinkActive"
+          [class.text-[#2049CD]]="classementRla.isActive"
+          [class.text-slate-600]="!classementRla.isActive"
+          class="relative text-sm font-semibold transition-colors duration-200 hover:text-[#2049CD]"
+        >
+          <span
+            [class.-translate-y-1]="classementRla.isActive"
+            class="inline-block transition-transform duration-200"
+          >
+            Classement
+          </span>
+
+          <span
+            aria-hidden="true"
+            [class.opacity-100]="classementRla.isActive"
+            [class.opacity-0]="!classementRla.isActive"
+            class="absolute inset-x-0 bottom-0 h-0.5 bg-[#2049CD] transition-opacity duration-200"
+          ></span>
         </a>
       </nav>
 
-      <a
-        routerLink="/account"
-        class="max-w-36 truncate rounded-full bg-slate-100 px-3 py-1.5 text-xs font-medium text-slate-600 sm:max-w-56"
-      >
-        {{ initialized() ? (user()?.email ?? 'Mon compte') : 'Chargement…' }}
-      </a>
+      <div class="flex gap-8 items-center">
+        <div class="flex text-sm p-1 px-2 items-start text-white font-semibold bg-[#2049CD]">
+          @if (playerService.loading()) {
+            <span class="text-sm text-slate-500">...</span>
+          } @else if (playerService.player(); as player) {
+            <span> {{ player.currency }} </span>
+          }
+          <svg lucideTorus class="w-5 h-5 ml-1"></svg>
+        </div>
+
+        <!-- ACCOUNT -->
+        <a
+          routerLink="/account"
+          class="flex flex-col justify-center items-center text-sm font-semibold text-slate-700 hover:text-slate-900"
+        >
+          <svg lucideUser></svg>
+          @if (playerService.loading()) {
+            <span class="text-sm text-slate-500">...</span>
+          } @else if (playerService.player(); as player) {
+            <span> {{ player.username }} </span>
+          }
+        </a>
+      </div>
     </div>
   </header>
 
+  <!-- CONTENU -->
   <main>
     <router-outlet />
   </main>
 
-  <nav
-    class="fixed inset-x-0 bottom-0 z-10 grid grid-cols-4 border-t border-slate-200 bg-white/95 p-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] backdrop-blur md:hidden"
-    aria-label="Navigation mobile"
-  >
-    <a
-      routerLink="/"
-      routerLinkActive="bg-indigo-50 text-indigo-700"
-      [routerLinkActiveOptions]="{ exact: true }"
-      ariaCurrentWhenActive="page"
-      class="flex min-h-12 items-center justify-center rounded-xl text-sm font-medium text-slate-600"
-    >
-      Dashboard
-    </a>
-    <a
-      routerLink="/account"
-      routerLinkActive="bg-indigo-50 text-indigo-700"
-      ariaCurrentWhenActive="page"
-      class="flex min-h-12 items-center justify-center rounded-xl text-sm font-medium text-slate-600"
-    >
-      Compte
-    </a>
-    <a
-      routerLink="/pack"
-      routerLinkActive="bg-indigo-50 text-indigo-700"
-      ariaCurrentWhenActive="page"
-      class="flex min-h-12 items-center justify-center rounded-xl text-sm font-medium text-slate-600"
-    >
-      Packs
-    </a>
-    <a
-      routerLink="/test-carte"
-      routerLinkActive="bg-indigo-50 text-indigo-700"
-      ariaCurrentWhenActive="page"
-      class="flex min-h-12 items-center justify-center rounded-xl text-sm font-medium text-slate-600"
-    >
-      Test carte
-    </a>
+  <!-- NAVIGATION MOBILE -->
+  <nav class="fixed bottom-0 z-50 md:hidden w-full" aria-label="Navigation mobile">
+    <div class="flex items-center justify-around border-t border-slate-200 bg-white p-4 px-6">
+      <a
+        routerLink="/"
+        routerLinkActive="bg-[#2049CD] text-white"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="flex min-w-16 flex-col items-center px-1 py-2 text-slate-500 transition"
+      >
+        <span class="mt-1 text-[11px] font-medium"><svg lucidePlayingCardsFan></svg></span>
+      </a>
+
+      <a
+        routerLink="/dashboard"
+        routerLinkActive="bg-[#2049CD] text-white"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="flex min-w-16 flex-col items-center px-1 py-2 text-slate-500 transition"
+      >
+        <span class="mt-1 text-[11px] font-medium"><svg lucideBookOpen></svg></span>
+      </a>
+
+      <a
+        routerLink="/marche"
+        routerLinkActive="bg-[#2049CD] text-white"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="flex min-w-16 flex-col items-center px-1 py-2 text-slate-500 transition"
+      >
+        <span class="mt-1 text-[11px] font-medium"><svg lucideStore></svg></span>
+      </a>
+
+      <a
+        routerLink="/echanges"
+        routerLinkActive="bg-[#2049CD] text-white"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="flex min-w-16 flex-col items-center px-1 py-2 text-slate-500 transition"
+      >
+        <span class="mt-1 text-[11px] font-medium"><svg lucideHandshake></svg></span>
+      </a>
+
+      <a
+        routerLink="/classement"
+        routerLinkActive="bg-[#2049CD] text-white"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="flex min-w-16 flex-col items-center px-1 py-2 text-slate-500 transition"
+      >
+        <span class="mt-1 text-[11px] font-medium"><svg lucideTrophy></svg></span>
+      </a>
+    </div>
   </nav>
 </div>

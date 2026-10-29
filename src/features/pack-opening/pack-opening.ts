@@ -3,14 +3,15 @@ import { Card } from '../../app/core/cards/card.model';
 import { CardsService } from '../../app/core/cards/cards.service';
 import { PACK_SIZE } from '../../app/core/cards/pack-opening';
 import { CardDisplayComponent } from '../../shared/card-display/card-display';
+import { LucideArrowUpRight } from '@lucide/angular';
 
 type PackPhase = 'sealed' | 'revealing' | 'summary';
-const CARD_EXIT_DURATION_MS = 420;
+const CARD_EXIT_DURATION_MS = 720;
 
 @Component({
   selector: 'app-pack-opening',
   standalone: true,
-  imports: [CardDisplayComponent],
+  imports: [CardDisplayComponent, LucideArrowUpRight],
   templateUrl: './pack-opening.html',
   styleUrl: './pack-summary.css',
 })
