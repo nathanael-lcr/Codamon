@@ -7,6 +7,7 @@ Le recap après l'unpack doit utiliser card-display mais de manière lisible
 
 Implémenter la section décrite comme maquette de pack-opening.html
 Vérifier l'implémentation de "collection"
+Modifier le gitignore pour ignorer les fichiers d'environnement et .vscode
 
 Rendre cohérent l'utilisation de tailwind à travers les fichiers
 Avoir des pondération de probabilité de drop directement en BDD
