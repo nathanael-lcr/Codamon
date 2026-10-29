@@ -2,10 +2,12 @@ Faire en sorte que les cartes soient toujours, toujours des mêmes dimensions/ra
 En général faire en sorte que partout dans le site ou s'affiche une carte cela soit card-display et que ca soit lisible
 Supprimer le paramètre compact sur display-card et en ajouter un pour décider si elle a l'effet de tilt au hover (et faire en sorte que pack-opening.css ne modifie plus la carte.) 
 (card display doit être le seul à définir comment il ressemble)
+Faire en sorte que card-display puisse scale comme une image, cad le contenu intérieur reste eux mêmes dimensions relatives
 fix le fait que les cartes entre test-carte et l'opening dans packs sont différentes sur certains paddings etc
 Le recap après l'unpack doit utiliser card-display mais de manière lisible
 
 Implémenter la section de pack-opening.html
+Vérifier l'implémentation de "collection"
 
 Rendre cohérent l'utilisation de tailwind à travers les fichiers
 Avoir des pondération de probabilité de drop directement en BDD

@@ -1,1 +1,86 @@
-<p>collection works!</p>
+<section class="mx-auto max-w-6xl space-y-6">
+  <header class="flex flex-wrap items-end justify-between gap-4">
+    <div class="space-y-2">
+      <h1 class="text-3xl font-semibold tracking-tight">Ma collection</h1>
+      <p class="text-slate-600">Retrouve ici toutes les cartes que tu possèdes.</p>
+    </div>
+
+    @if (auth.user(); as currentUser) {
+      <div class="text-sm text-slate-500">
+        <span class="font-medium text-slate-700">
+          {{ collection.distinctCount() }}
+        </span>
+        cartes différentes
+        <span aria-hidden="true">·</span>
+        <span class="font-medium text-slate-700">
+          {{ collection.totalCount() }}
+        </span>
+        exemplaires
+      </div>
+    }
+  </header>
+
+  @if (!auth.initialized()) {
+    <div
+      class="border border-slate-200 bg-white p-6 text-sm text-slate-500 shadow-sm"
+      aria-live="polite"
+    >
+      Chargement de ton compte…
+    </div>
+  } @else if (!auth.user()) {
+    <div class="border border-slate-200 bg-white p-6 shadow-sm">
+      <p class="text-slate-700">Connecte-toi pour consulter ta collection.</p>
+      <a
+        routerLink="/account"
+        class="mt-4 inline-flex min-h-11 items-center bg-indigo-600 px-4 text-sm font-semibold text-white transition hover:bg-indigo-700"
+      >
+        Se connecter
+      </a>
+    </div>
+  } @else if (collection.loading()) {
+    <div
+      class="border border-slate-200 bg-white p-6 text-sm text-slate-500 shadow-sm"
+      aria-live="polite"
+    >
+      Chargement de ta collection…
+    </div>
+  } @else if (collection.error()) {
+    <div class="border border-rose-200 bg-rose-50 p-6 text-sm text-rose-700" role="alert">
+      Impossible de charger ta collection pour le moment.
+      <button
+        type="button"
+        class="ml-2 font-semibold underline underline-offset-2"
+        (click)="collection.reload()"
+      >
+        Réessayer
+      </button>
+    </div>
+  } @else if (collection.items().length === 0) {
+    <div class="border border-slate-200 bg-white p-8 text-center shadow-sm">
+      <h2 class="text-lg font-semibold text-slate-900">Ta collection est vide</h2>
+      <p class="mt-2 text-sm text-slate-600">Les cartes que tu obtiendras apparaîtront ici.</p>
+    </div>
+  } @else {
+    <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+      @for (item of collection.items(); track item.card.id) {
+        <article class="min-w-0 space-y-2">
+          <app-card-display [card]="item.card" />
+
+          <div class="flex items-start justify-between gap-2">
+            <p class="min-w-0 truncate text-sm font-medium text-slate-800">
+              {{ item.card.name }}
+            </p>
+
+            <span
+              class="shrink-0 border border-slate-200 bg-white px-2 py-0.5 text-xs font-semibold text-slate-600"
+              [attr.aria-label]="item.quantity + ' exemplaires'"
+              title="Nombre d'exemplaires"
+            >
+              ×{{ item.quantity }}
+            </span>
+          </div>
+        </article>
+      }
+    </div>
+  }
+</section>
