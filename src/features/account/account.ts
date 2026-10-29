@@ -1,17 +1,20 @@
 import { Component, inject, signal } from '@angular/core';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../app/core/auth/auth.service';
+import { PlayerService } from '../../app/core/player/player.service';
 
 @Component({
   selector: 'app-account',
   standalone: true,
-  imports: [FormsModule, RouterLink],
+  imports: [FormsModule, RouterLink, DatePipe, DecimalPipe],
   templateUrl: './account.html',
 })
 export class AccountComponent {
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
+  protected readonly playerService = inject(PlayerService);
 
   protected readonly user = this.auth.user;
   protected readonly initialized = this.auth.initialized;
