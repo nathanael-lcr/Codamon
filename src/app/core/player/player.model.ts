@@ -3,7 +3,6 @@ export interface Player {
     username: string | null;
     display_name: string | null;
     avatar_url: string | null;
-    currency: string;
-    balance: number;
+    currency: number;
     created_at: string;
   }

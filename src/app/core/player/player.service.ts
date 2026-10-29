@@ -18,7 +18,7 @@ export class PlayerService {
   readonly loading = this._loading.asReadonly();
   readonly error = this._error.asReadonly();
 
-  readonly balance = computed(() => this.player()?.balance ?? 0);
+  readonly balance = computed(() => this.player()?.currency ?? 0);
 
   constructor() {
     effect((onCleanup) => {
