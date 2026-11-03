@@ -19,39 +19,46 @@ import { Card } from '../../app/core/cards/card.model';
 })
 export class CardDisplayComponent {
   readonly card = input.required<Card>();
-  readonly compact = input(false);
+  readonly tilt = input(true);
   readonly flippable = input(false);
   readonly flipped = input(false);
+  readonly width = input(384);
   protected readonly imageFailed = signal(false);
   protected readonly tiltX = signal(0);
   protected readonly tiltY = signal(0);
   protected readonly pointerX = signal(50);
   protected readonly pointerY = signal(50);
+  protected readonly scale = signal(1);
   protected readonly displayImage = computed(() => {
     if (this.imageFailed()) return null;
     return this.card().image_url || this.card().thumbnail_url;
   });
-  // Largeur de référence du dessin de la carte : 384 px.
   private static readonly DESIGN_WIDTH = 384;
 
   private readonly destroyRef = inject(DestroyRef);
-  private readonly viewport = viewChild.required<ElementRef<HTMLElement>>('viewport');
-
-  // Largeur maximale affichée. La carte peut être plus petite
-  // si la grille lui laisse moins de place.
-  readonly width = input(384);
-
-  protected readonly scale = signal(1);
+  private readonly cardElement = viewChild.required<ElementRef<HTMLElement>>('cardElement');
 
   constructor() {
-    // S'exécute après le rendu, uniquement dans le navigateur.
     afterNextRender(() => {
-      const element = this.viewport().nativeElement;
+      const element = this.cardElement().nativeElement;
+      const updateScale = (width: number) => {
+        if (width > 0) {
+          this.scale.set(width / CardDisplayComponent.DESIGN_WIDTH);
+        }
+      };
+
+      if (typeof ResizeObserver === 'undefined') {
+        const updateFromLayout = () => updateScale(element.getBoundingClientRect().width);
+        updateFromLayout();
+        window.addEventListener('resize', updateFromLayout);
+        this.destroyRef.onDestroy(() => window.removeEventListener('resize', updateFromLayout));
+        return;
+      }
 
       const observer = new ResizeObserver(([entry]) => {
         if (!entry) return;
 
-        this.scale.set(entry.contentRect.width / CardDisplayComponent.DESIGN_WIDTH);
+        updateScale(entry.contentRect.width);
       });
 
       observer.observe(element);
@@ -66,6 +73,7 @@ export class CardDisplayComponent {
 
   protected onPointerMove(event: PointerEvent): void {
     if (
+      !this.tilt() ||
       event.pointerType !== 'mouse' ||
       typeof window === 'undefined' ||
       !window.matchMedia(

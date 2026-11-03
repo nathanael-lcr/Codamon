@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { signal } from '@angular/core';
 import { Card } from '../../app/core/cards/card.model';
 import { CardsService } from '../../app/core/cards/cards.service';
+import { CollectionService } from '../../app/core/collection/collection.service';
 import { PackOpeningComponent } from './pack-opening';
 
 const pack: Card[] = Array.from({ length: 5 }, (_, index) => ({
@@ -33,16 +35,27 @@ const pack: Card[] = Array.from({ length: 5 }, (_, index) => ({
 describe('PackOpeningComponent', () => {
   let fixture: ComponentFixture<PackOpeningComponent>;
   let openRandomPack: ReturnType<typeof vi.fn>;
+  let getActiveCardCount: ReturnType<typeof vi.fn>;
 
   beforeEach(async () => {
     openRandomPack = vi.fn().mockResolvedValue(pack);
+    getActiveCardCount = vi.fn().mockResolvedValue(110);
 
     await TestBed.configureTestingModule({
       imports: [PackOpeningComponent],
       providers: [
         {
           provide: CardsService,
-          useValue: { openRandomPack },
+          useValue: { openRandomPack, getActiveCardCount },
+        },
+        {
+          provide: CollectionService,
+          useValue: {
+            distinctCount: signal(47),
+            totalCount: signal(52),
+            loading: signal(false),
+            error: signal(null),
+          },
         },
       ],
     }).compileComponents();
@@ -64,18 +77,23 @@ describe('PackOpeningComponent', () => {
     fixture.detectChanges();
   }
 
-  it('shows a simple booster prompt before opening', () => {
-    expect(fixture.nativeElement.querySelector('.sealed-pack')).not.toBeNull();
-    expect(fixture.nativeElement.textContent).toContain('Découvrir mon pack');
+  it('shows the collection overview with live catalogue and collection counts', async () => {
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.textContent).toContain('110 cartes à collectionner');
+    expect(fixture.nativeElement.textContent).toContain('47');
+    expect(fixture.nativeElement.textContent).toContain('Ouvrir le paquet');
+    expect(fixture.nativeElement.textContent).not.toContain('4 / 10 paquets disponibles');
   });
 
   it('reveals cards one at a time and ends with a five-card recap', async () => {
-    clickButton('Découvrir mon pack');
+    clickButton('Ouvrir le paquet');
     await fixture.whenStable();
     fixture.detectChanges();
 
     expect(openRandomPack).toHaveBeenCalledOnce();
-    expect(fixture.nativeElement.querySelector('.sealed-pack-button')).not.toBeNull();
+    expect(fixture.nativeElement.querySelector('.sealed-pack')).not.toBeNull();
 
     clickButton('Ouvrir le booster');
     expect(fixture.nativeElement.textContent).toContain('Carte 1 sur 5');
@@ -100,12 +118,13 @@ describe('PackOpeningComponent', () => {
 
     clickButton('Voir le récapitulatif');
     expect(fixture.nativeElement.querySelectorAll('.summary-card')).toHaveLength(5);
+    expect(fixture.nativeElement.querySelectorAll('.summary-card .trading-card')).toHaveLength(5);
     expect(fixture.nativeElement.textContent).toContain('Voici ton tirage');
     expect(fixture.nativeElement.textContent).toContain('Pack Card 5');
   });
 
   it('shows the first card without waiting for an animation event', async () => {
-    clickButton('Découvrir mon pack');
+    clickButton('Ouvrir le paquet');
     await fixture.whenStable();
     fixture.detectChanges();
     clickButton('Ouvrir le booster');
@@ -118,7 +137,7 @@ describe('PackOpeningComponent', () => {
   it('displays a retry action when pack creation fails', async () => {
     openRandomPack.mockRejectedValueOnce(new Error('Catalogue indisponible'));
 
-    clickButton('Découvrir mon pack');
+    clickButton('Ouvrir le paquet');
     await fixture.whenStable();
     fixture.detectChanges();
 

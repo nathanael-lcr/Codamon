@@ -61,7 +61,7 @@
       <p class="mt-2 text-sm text-slate-600">Les cartes que tu obtiendras apparaîtront ici.</p>
     </div>
   } @else {
-    <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
       @for (item of collection.items(); track item.card.id) {
         <article class="min-w-0 space-y-2">
           <app-card-display [card]="item.card" />

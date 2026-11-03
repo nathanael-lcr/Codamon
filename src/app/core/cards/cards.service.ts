@@ -25,6 +25,23 @@ export class CardsService {
     return data as Card | null;
   }
 
+  async getActiveCardCount(): Promise<number> {
+    const { count, error } = await this.supabase
+      .from('cards')
+      .select('id', { count: 'exact', head: true })
+      .eq('is_active', true);
+
+    if (error) {
+      throw error;
+    }
+
+    if (count === null) {
+      throw new Error('Impossible de compter les cartes actives du catalogue.');
+    }
+
+    return count;
+  }
+
   async openRandomPack(): Promise<Card[]> {
     const pageSize = 500;
     const cards: Card[] = [];

@@ -32,7 +32,11 @@
                 La collection
               </span>
               <span class="text-base font-semibold text-slate-800">
-                110 cartes à collectionner
+                @if (catalogCount() !== null) {
+                  {{ catalogCount() }} cartes à collectionner
+                } @else {
+                  Catalogue Coda Originals
+                }
               </span>
             </div>
             <div class="border-t border-slate-200/80 pt-6">
@@ -41,7 +45,9 @@
               >
                 Dans chaque paquet
               </span>
-              <span class="text-base font-semibold text-slate-800"> 5 cartes à découvrir </span>
+              <span class="text-base font-semibold text-slate-800">
+                {{ packSize }} cartes à découvrir
+              </span>
             </div>
           </div>
 
@@ -59,34 +65,29 @@
           <div class="space-y-8">
             <div class="flex items-center justify-between border-b border-slate-200/60 pb-4">
               <span class="text-[10px] tracking-[0.15em] text-slate-400 font-bold uppercase">
-                Disponible à l'ouverture
+                Disponible à l’ouverture
               </span>
-              <span class="h-2 w-2 rounded-full bg-[#2049CD] inline-block"></span>
+              <span class="inline-flex items-center gap-2 text-xs font-semibold text-[#2049CD]">
+                <span class="h-2 w-2 rounded-full bg-[#2049CD]" aria-hidden="true"></span>
+                Disponible
+              </span>
             </div>
 
             <div>
               <h2 class="text-3xl font-bold text-slate-950 mb-1">Coda Originals</h2>
-              <p class="text-slate-400 text-sm">5 cartes par paquet</p>
+              <p class="text-slate-400 text-sm">{{ packSize }} cartes par paquet</p>
             </div>
 
             <!-- Bouton interactif -->
             <button
               type="button"
-              class="w-full p-5 bg-[#2049CD] text-white hover:bg-[#1a3da8] active:scale-[0.99] transition-all hover:cursor-pointer flex items-center justify-between font-medium tracking-wide shadow-sm"
+              class="w-full p-5 bg-[#2049CD] text-white hover:bg-[#1a3da8] active:scale-[0.99] transition-all hover:cursor-pointer flex items-center justify-between font-medium tracking-wide shadow-sm disabled:cursor-wait disabled:opacity-70"
+              [disabled]="loading()"
               (click)="getPack()"
             >
-              <span>Ouvrir le paquet</span>
+              <span>{{ loading() ? 'Préparation du paquet…' : 'Ouvrir le paquet' }}</span>
               <svg lucideArrowUpRight class="w-5 h-5 ml-2"></svg>
             </button>
-
-            <!-- Statut des paquets -->
-            <div class="space-y-1">
-              <div class="flex justify-between text-sm font-semibold text-slate-800">
-                <span>4 / 10 paquets disponibles</span>
-                <span class="text-[#2049CD]">4:52</span>
-              </div>
-              <p class="text-slate-400 text-xs">Prochain paquet dans 4:52</p>
-            </div>
           </div>
 
           <!-- Bloc inférieur : Barre de progression de la collection -->
@@ -94,19 +95,43 @@
             <div class="flex items-baseline justify-between">
               <span class="text-slate-500 font-medium text-sm">Votre collection</span>
               <span class="text-3xl font-bold text-slate-900">
-                47 <span class="text-slate-300 font-normal text-2xl">/</span> 110
+                {{ collection.distinctCount() }}
+                <span class="text-slate-300 font-normal text-2xl">/</span>
+                {{ catalogCount() ?? '—' }}
                 <span class="text-slate-400 font-normal text-base">cartes</span>
               </span>
             </div>
 
             <!-- Barre de progression -->
-            <div class="w-full h-1 bg-slate-200/80 rounded-full overflow-hidden">
-              <div class="h-full bg-[#2049CD] rounded-full" style="width: 42.7%"></div>
+            <div
+              class="w-full h-1 bg-slate-200/80 rounded-full overflow-hidden"
+              role="progressbar"
+              aria-label="Progression de la collection"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              [attr.aria-valuenow]="collectionProgress()"
+            >
+              <div
+                class="h-full bg-[#2049CD] rounded-full"
+                [style.width.%]="collectionProgress()"
+              ></div>
             </div>
 
-            <p class="text-[10px] tracking-[0.15em] text-slate-400 font-bold uppercase">
-              42.7% de la collection complétée
-            </p>
+            @if (catalogError()) {
+              <p class="text-xs text-rose-700" role="status">{{ catalogError() }}</p>
+            } @else if (collection.error()) {
+              <p class="text-xs text-rose-700" role="status">
+                La progression de ta collection n’a pas pu être chargée.
+              </p>
+            } @else if (catalogCount() !== null) {
+              <p class="text-[10px] tracking-[0.15em] text-slate-400 font-bold uppercase">
+                {{ collectionProgressLabel() }}% de la collection complétée
+              </p>
+            } @else {
+              <p class="text-xs text-slate-400" aria-live="polite">
+                Chargement de la progression…
+              </p>
+            }
           </div>
         </div>
       </div>
@@ -162,7 +187,7 @@
           class="pull-card"
           [class.pull-card-leaving]="cardLeaving()"
           [card]="card"
-          [compact]="true"
+          [tilt]="true"
           [flippable]="true"
           [flipped]="currentCardRevealed()"
           (click)="revealOrContinue()"
@@ -203,46 +228,18 @@
 
       <div class="summary-grid">
         @for (card of cards(); track card.id; let index = $index) {
-          <article
+          <div
             class="summary-card"
-            [attr.data-rarity]="card.rarity"
             [style.animation-delay.ms]="index * 70"
           >
-            <div class="summary-card-art">
-              @if (card.image_url || card.thumbnail_url) {
-                <img [src]="card.image_url || card.thumbnail_url" [alt]="card.name" />
-              } @else {
-                <span aria-hidden="true">{{ card.name.charAt(0).toUpperCase() }}</span>
-              }
-              <span class="summary-card-index">{{ index + 1 }}</span>
-            </div>
-            <div class="summary-card-info">
-              <p class="summary-card-rarity">{{ card.rarity }}</p>
-              <h3>{{ card.name }}</h3>
-              @if (card.subtitle) {
-                <p class="summary-card-subtitle">{{ card.subtitle }}</p>
-              }
-              @if (card.attack !== null || card.defense !== null || card.hp !== null) {
-                <p class="summary-card-stats">
-                  @if (card.hp !== null) {
-                    <span>PV {{ card.hp }}</span>
-                  }
-                  @if (card.attack !== null) {
-                    <span>ATQ {{ card.attack }}</span>
-                  }
-                  @if (card.defense !== null) {
-                    <span>DEF {{ card.defense }}</span>
-                  }
-                </p>
-              }
-            </div>
-          </article>
+            <app-card-display [card]="card" [tilt]="false" />
+          </div>
         }
       </div>
 
       <button
         type="button"
-        class="p-4 bg-[#2049CD] text-white hover:bg-[#2546b3] hover:cursor-pointer"
+        class="summary-restart p-4 bg-[#2049CD] text-white hover:bg-[#2546b3] hover:cursor-pointer"
         (click)="getPack()"
       >
         Ouvrir un autre pack

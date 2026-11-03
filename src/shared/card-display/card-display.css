@@ -1,79 +1,86 @@
 :host {
   display: block;
+  width: 100%;
 }
 
-/* Perspective et espacement extérieur */
 .card-stage {
+  width: 100%;
   perspective: 1100px;
-  padding: 0.75rem 0.25rem 1.5rem;
 }
 
-.card-stage-compact {
-  padding: 0;
-}
-
-/* Enveloppe neutre et inclinaison au curseur */
 .trading-card {
   position: relative;
-  width: min(100%, 24rem);
+  width: min(100%, var(--card-max-width, 24rem));
   aspect-ratio: 0.72 / 1;
   margin-inline: auto;
-
-  transform: rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
-
   transform-style: preserve-3d;
+}
+
+.card-tilt-enabled {
+  transform: rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
   transition: transform 420ms cubic-bezier(0.2, 0.75, 0.25, 1);
 }
 
-/* Les éléments restent dans le flux pour donner une hauteur à la carte */
 .card-flip-inner {
   position: absolute;
   inset: 0;
 }
 
-.card-front-face {
+.card-front-face,
+.card-back-face {
   position: absolute;
   inset: 0;
   overflow: hidden;
+  border: calc(6px * var(--card-scale, 1)) solid #2049cd;
+  border-radius: calc(24px * var(--card-scale, 1));
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
-/* Retournement optionnel */
+.card-front-face {
+  background: white;
+}
+
+.card-back-face {
+  display: grid;
+  place-items: center;
+  background: #2049cd;
+}
+
+.card-content {
+  position: absolute;
+  top: calc(6px * var(--card-scale, 1));
+  left: calc(6px * var(--card-scale, 1));
+  width: 372px;
+  height: 521.333px;
+  transform: scale(var(--card-scale, 1));
+  transform-origin: top left;
+}
+
 .card-flip-inner-active {
   transform-style: preserve-3d;
   transition: transform 780ms cubic-bezier(0.2, 0.72, 0.2, 1);
 }
 
-/* Avant révélation : dos visible */
 .card-flippable .card-front-face {
   transform: rotateY(180deg);
 }
 
 .card-flippable .card-back-face {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
+  transform: rotateY(0);
 }
 
-.card-flippable .card-front-face,
-.card-flippable .card-back-face {
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-}
-
-/* Après révélation : face avant visible */
 .card-flip-inner-active.card-flip-inner-revealed {
   transform: rotateY(180deg);
 }
 
-/* Respect des préférences d’accessibilité */
 @media (prefers-reduced-motion: reduce) {
-  .trading-card {
-    transform: none;
+  .card-tilt-enabled,
+  .card-flip-inner-active {
     transition: none;
   }
 
-  .card-flip-inner-active {
-    transition: none;
+  .card-tilt-enabled {
+    transform: none;
   }
 }

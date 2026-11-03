@@ -83,23 +83,7 @@
 
 .pull-card {
   display: block;
-  position: relative;
   width: 100%;
-  aspect-ratio: 5 / 7;
-}
-
-.pull-card .card-stage {
-  width: 100%;
-  height: 100%;
-  padding: 0;
-}
-
-.pull-card .trading-card {
-  width: 100%;
-  height: 100%;
-  max-width: none;
-  margin: 0;
-  border-radius: 1.5rem;
 }
 
 .pull-card-leaving {

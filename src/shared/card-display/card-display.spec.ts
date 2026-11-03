@@ -61,7 +61,7 @@ describe('CardDisplayComponent', () => {
     expect(element.textContent).toContain('Attaque');
     expect(element.textContent).toContain('Kindle');
     expect(element.textContent).toContain('The flame remembers.');
-    expect(element.textContent).toContain('fire');
+    expect(element.textContent).toContain('forest spirit');
     expect(element.querySelector('.card-debug')).toBeNull();
     expect(element.textContent).not.toContain('creator-id');
   });
@@ -80,11 +80,11 @@ describe('CardDisplayComponent', () => {
 
     fixture.componentRef.setInput('card', { ...card, rarity: 'epic' });
     fixture.detectChanges();
-    expect(article.classList.contains('card-full-art')).toBe(true);
+    expect(article.classList.contains('card-basic')).toBe(true);
 
-    fixture.componentRef.setInput('card', { ...card, rarity: 'mythic' });
+    fixture.componentRef.setInput('card', { ...card, rarity: 'slegendary' });
     fixture.detectChanges();
-    expect(article.classList.contains('card-mythic')).toBe(true);
+    expect(article.classList.contains('card-full-art')).toBe(true);
   });
 
   it('shows a visual fallback when the illustration cannot load', () => {
@@ -119,6 +119,31 @@ describe('CardDisplayComponent', () => {
     expect(cardElement.style.getPropertyValue('--tilt-y')).toBe('7deg');
 
     cardElement.dispatchEvent(new Event('pointerleave'));
+    fixture.detectChanges();
+
+    expect(cardElement.style.getPropertyValue('--tilt-x')).toBe('0deg');
+    expect(cardElement.style.getPropertyValue('--tilt-y')).toBe('0deg');
+  });
+
+  it('does not tilt when tilt is disabled', () => {
+    Object.defineProperty(window, 'matchMedia', {
+      configurable: true,
+      value: vi.fn().mockReturnValue({ matches: true }),
+    });
+    vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockReturnValue(
+      new DOMRect(0, 0, 200, 300),
+    );
+    fixture.componentRef.setInput('tilt', false);
+    fixture.detectChanges();
+
+    const cardElement = fixture.nativeElement.querySelector('.trading-card') as HTMLElement;
+    const pointerMove = new Event('pointermove', { bubbles: true });
+    Object.defineProperties(pointerMove, {
+      pointerType: { value: 'mouse' },
+      clientX: { value: 200 },
+      clientY: { value: 0 },
+    });
+    cardElement.dispatchEvent(pointerMove);
     fixture.detectChanges();
 
     expect(cardElement.style.getPropertyValue('--tilt-x')).toBe('0deg');
