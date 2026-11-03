@@ -14,6 +14,7 @@
           routerLinkActive
           #packRla="routerLinkActive"
           [routerLinkActiveOptions]="{ exact: true }"
+          (click)="returnToPackHome()"
           [class.text-[#2049CD]]="packRla.isActive"
           [class.text-slate-600]="!packRla.isActive"
           class="relative text-sm font-semibold transition-colors duration-200 hover:text-[#2049CD]"
@@ -165,6 +166,7 @@
         routerLink="/"
         routerLinkActive="bg-[#2049CD] text-white"
         [routerLinkActiveOptions]="{ exact: true }"
+        (click)="returnToPackHome()"
         class="flex min-w-16 flex-col items-center px-1 py-2 text-slate-500 transition"
       >
         <span class="mt-1 text-[11px] font-medium"><svg lucidePlayingCardsFan></svg></span>

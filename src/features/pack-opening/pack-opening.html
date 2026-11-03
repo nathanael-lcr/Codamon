@@ -20,7 +20,7 @@
             </h1>
             <p class="text-slate-500 text-lg leading-relaxed font-light">
               Un objet encore scellé.<br />
-              Cinq savoirs à découvrir.
+              {{ packSize }} savoirs à découvrir.
             </p>
           </div>
 
@@ -61,16 +61,27 @@
         <div
           class="flex flex-col justify-between h-full min-h-137.5 border-t md:border-t-0 md:border-l border-slate-200/60 pt-12 md:pt-0 md:pl-16 lg:pl-24"
         >
-          <!-- Bloc supérieur : Bouton et disponibilité -->
+          <!-- Bloc supérieur : disponibilité et ouverture -->
           <div class="space-y-8">
             <div class="flex items-center justify-between border-b border-slate-200/60 pb-4">
               <span class="text-[10px] tracking-[0.15em] text-slate-400 font-bold uppercase">
                 Disponible à l’ouverture
               </span>
-              <span class="inline-flex items-center gap-2 text-xs font-semibold text-[#2049CD]">
-                <span class="h-2 w-2 rounded-full bg-[#2049CD]" aria-hidden="true"></span>
-                Disponible
-              </span>
+              @if (packEnergy(); as energy) {
+                <span
+                  class="inline-flex items-center gap-2 text-xs font-semibold"
+                  [class.text-[#2049CD]]="energy.availablePacks > 0"
+                  [class.text-slate-400]="energy.availablePacks === 0"
+                >
+                  <span
+                    class="h-2 w-2 rounded-full"
+                    [class.bg-[#2049CD]]="energy.availablePacks > 0"
+                    [class.bg-slate-300]="energy.availablePacks === 0"
+                    aria-hidden="true"
+                  ></span>
+                  {{ energy.availablePacks > 0 ? 'Disponible' : 'Recharge en cours' }}
+                </span>
+              }
             </div>
 
             <div>
@@ -82,12 +93,58 @@
             <button
               type="button"
               class="w-full p-5 bg-[#2049CD] text-white hover:bg-[#1a3da8] active:scale-[0.99] transition-all hover:cursor-pointer flex items-center justify-between font-medium tracking-wide shadow-sm disabled:cursor-wait disabled:opacity-70"
-              [disabled]="loading()"
+              [disabled]="loading() || energyLoading() || !packEnergy() || packEnergy()?.availablePacks === 0 || !auth.user()"
               (click)="getPack()"
             >
-              <span>{{ loading() ? 'Préparation du paquet…' : 'Ouvrir le paquet' }}</span>
+              <span>
+                @if (loading()) {
+                  Préparation du paquet…
+                } @else if (packEnergy()?.availablePacks === 0) {
+                  Aucun paquet disponible
+                } @else {
+                  Ouvrir le paquet
+                }
+              </span>
               <svg lucideArrowUpRight class="w-5 h-5 ml-2"></svg>
             </button>
+
+            @if (!auth.initialized() || energyLoading()) {
+              <p class="text-slate-400 text-xs" aria-live="polite">
+                Chargement des paquets disponibles…
+              </p>
+            } @else if (!auth.user()) {
+              <p class="text-slate-500 text-xs">
+                <a routerLink="/account" class="font-semibold text-[#2049CD] underline">
+                  Connecte-toi
+                </a>
+                pour récupérer tes paquets gratuits.
+              </p>
+            } @else if (energyError()) {
+              <div class="space-y-2 text-xs text-rose-700" role="alert">
+                <p>Impossible de charger tes paquets : {{ energyError() }}</p>
+                <button
+                  type="button"
+                  class="font-semibold underline"
+                  (click)="retryPackEnergy()"
+                >
+                  Réessayer
+                </button>
+              </div>
+            } @else if (packEnergy(); as energy) {
+              <div class="space-y-1">
+                <div class="flex justify-between text-sm font-semibold text-slate-800">
+                  <span>{{ energy.availablePacks }} / 5 paquets disponibles</span>
+                  @if (refillCountdown(); as countdown) {
+                    <span class="text-[#2049CD]">{{ countdown }}</span>
+                  }
+                </div>
+                @if (refillCountdown(); as countdown) {
+                  <p class="text-slate-400 text-xs">Prochain paquet dans {{ countdown }}</p>
+                } @else {
+                  <p class="text-slate-400 text-xs">Tes 5 paquets sont disponibles.</p>
+                }
+              </div>
+            }
           </div>
 
           <!-- Bloc inférieur : Barre de progression de la collection -->
@@ -156,6 +213,14 @@
     <section class="pack-room" aria-label="Booster prêt à ouvrir">
       <div class="w-xs">
         <p class="sealed-pack">Booster prêt</p>
+        @if (packEnergy(); as energy) {
+          <p class="pack-status">
+            {{ energy.availablePacks }} / 5 paquets disponibles
+            @if (refillCountdown(); as countdown) {
+              · prochaine recharge dans {{ countdown }}
+            }
+          </p>
+        }
         <button
           type="button"
           class="w-full p-5 bg-[#2049CD] text-white hover:bg-[#1a3da8] active:scale-[0.99] transition-all hover:cursor-pointer flex items-center justify-between font-medium tracking-wide shadow-sm"
@@ -224,6 +289,14 @@
         <p class="pack-eyebrow">Ouverture terminée</p>
         <h2>Voici ton tirage</h2>
         <p>Les {{ cards().length }} cartes de ton pack, de la plus commune à la plus rare.</p>
+        @if (packEnergy(); as energy) {
+          <p class="pack-status">
+            {{ energy.availablePacks }} / 5 paquets disponibles
+            @if (refillCountdown(); as countdown) {
+              · prochaine recharge dans {{ countdown }}
+            }
+          </p>
+        }
       </div>
 
       <div class="summary-grid">

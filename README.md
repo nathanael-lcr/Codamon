@@ -97,7 +97,12 @@ Le collaborateur pourra ensuite accéder au projet depuis son propre compte Supa
 
 Récupérer l'URL du projet Supabase et sa clé publique depuis le tableau de bord Supabase.
 
-Renseigner ces valeurs dans le fichier d'environnement attendu par l'application.
+Copier le modèle puis renseigner ces valeurs dans les fichiers locaux :
+
+```powershell
+Copy-Item src\environments\environment.example.ts src\environments\environment.ts
+Copy-Item src\environments\environment.example.ts src\environments\environment.development.ts
+```
 
 Exemple de configuration :
 
@@ -105,13 +110,12 @@ Exemple de configuration :
 export const environment = {
   production: false,
   supabaseUrl: 'URL_DU_PROJET',
-  supabaseKey: 'CLE_PUBLIQUE'
+  supabasePublishableKey: 'CLE_PUBLIQUE'
 };
 ```
 
-Cet exemple est indicatif : conserver les noms de propriétés et la structure réellement utilisés par Codamon.
-
-Vérifier les fichiers d'environnement existants dans `src/environments/` et le remplacement configuré dans `angular.json`.
+Les fichiers locaux `src/environments/environment.ts` et `environment.development.ts`, les fichiers `.env` ainsi que `.vscode/` sont ignorés par Git.
+Après la copie, conserver `production: false` dans `environment.development.ts` et définir `production: true` dans `environment.ts`.
 
 **Sécurité :**
 - Ne jamais commiter de secrets ou de clés privées.
@@ -120,6 +124,10 @@ Vérifier les fichiers d'environnement existants dans `src/environments/` et le 
 - Ne pas commiter les fichiers de configuration locaux contenant des informations qui doivent rester privées.
 
 Si le projet utilise des fichiers locaux ignorés par Git, transmettre les instructions pour les créer sans partager de secrets dans le dépôt.
+
+### Base de données
+
+Appliquer le script `supabase/migrations/20261103000000_pack_energy.sql` au projet Supabase (par exemple depuis le SQL Editor) avant d'ouvrir des paquets. Il crée le compteur persistant, limite les ouvertures à cinq paquets en stock, recharge un paquet toutes les quatre heures et ajoute les cartes gagnées à `player_card`.
 
 ## 4. Lancer l'application
 
@@ -266,4 +274,3 @@ Vérifier :
 - Tailwind CSS : https://tailwindcss.com/docs
 - Supabase : https://supabase.com/docs
 - Git : https://git-scm.com/doc
-

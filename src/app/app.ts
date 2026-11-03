@@ -3,6 +3,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from './core/auth/auth.service';
 import { LucideBookOpen, LucideHandshake, LucidePlayingCardsFan, LucideStore, LucideTorus, LucideTrophy, LucideUser } from '@lucide/angular';
 import { PlayerService } from './core/player/player.service';
+import { PackOpeningNavigationService } from './core/cards/pack-opening-navigation.service';
 
 
 @Component({
@@ -16,6 +17,7 @@ import { PlayerService } from './core/player/player.service';
 export class App {
   private readonly auth = inject(AuthService);
   private readonly playerService = inject(PlayerService);
+  private readonly packOpeningNavigation = inject(PackOpeningNavigationService);
 
   protected readonly user = this.auth.user;
   protected readonly initialized = this.auth.initialized;
@@ -25,5 +27,9 @@ export class App {
   protected onActiveChange(isActive: boolean, el: HTMLElement) {
     if (!isActive) return;
     this.pill.set({ left: el.offsetLeft, width: el.offsetWidth, ready: true });
+  }
+
+  protected returnToPackHome(): void {
+    this.packOpeningNavigation.returnHome();
   }
 }
