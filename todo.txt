@@ -1,13 +1,6 @@
-Implémenter la section décrite comme maquette de pack-opening.html
-Vérifier l'implémentation de "collection"
-Modifier le gitignore pour ignorer les fichiers d'environnement et .vscode
-Implémenter le timer (possiblement en bdd), chaque utilisateur à le droit à 5 packs max et récupère 1 pack toutes les 4h
-
 Implémenter les échanges entre joueurs
-
 Rendre cohérent l'utilisation de tailwind à travers les fichiers
 Avoir des pondération de probabilité de drop directement en BDD
-Fix le tearing/aliasing sur l'animation de tilt de hover
 
 Finir le design des cartes sur photoshop
 Faire un design de dos de carte
