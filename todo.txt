@@ -1,6 +1,7 @@
-Implémenter les échanges entre joueurs
-Rendre cohérent l'utilisation de tailwind à travers les fichiers
-Avoir des pondération de probabilité de drop directement en BDD
+Implémenter le marché (type enchères)
+Harmoniser le style (pas de rounded, bleu et blanc...) à travers l'app
+Faire en sorte que peut importe la taille d'écran, le site soit 0 scroll (excepté pour les zones de collection, échanges et marché)
+Avoir un deuxième classement pour les gens avec le plus de cartes l ou sl
 
 Finir le design des cartes sur photoshop
 Faire un design de dos de carte

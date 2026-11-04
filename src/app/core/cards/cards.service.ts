@@ -34,6 +34,27 @@ export class CardsService {
     return data as Card | null;
   }
 
+  async getActiveCards(): Promise<Card[]> {
+    const cards: Card[] = [];
+    const pageSize = 1000;
+
+    for (let from = 0; ; from += pageSize) {
+      const { data, error } = await this.supabase
+        .from('cards')
+        .select('*')
+        .eq('is_active', true)
+        .order('card_number', { ascending: true, nullsFirst: false })
+        .range(from, from + pageSize - 1);
+
+      if (error) throw error;
+
+      cards.push(...((data ?? []) as Card[]));
+      if ((data ?? []).length < pageSize) break;
+    }
+
+    return cards;
+  }
+
   async getActiveCardCount(): Promise<number> {
     const { count, error } = await this.supabase
       .from('cards')
@@ -121,7 +142,7 @@ function parsePackEnergy(value: unknown): PackEnergy & { cards?: Card[] } {
   };
 }
 
-function normalizeCard(value: unknown): Card {
+export function normalizeCard(value: unknown): Card {
   if (!value || typeof value !== 'object' || Array.isArray(value)) {
     throw new Error('Le serveur a retourné une carte invalide dans le paquet.');
   }

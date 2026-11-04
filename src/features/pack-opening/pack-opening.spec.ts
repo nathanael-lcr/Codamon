@@ -118,7 +118,9 @@ describe('PackOpeningComponent', () => {
 
     await vi.waitFor(() => {
       fixture.detectChanges();
-      expect(fixture.nativeElement.querySelector('.sealed-pack')).not.toBeNull();
+      expect(
+        fixture.nativeElement.querySelector('[aria-label="Booster prêt à ouvrir"]'),
+      ).not.toBeNull();
     });
     expect(openRandomPack).toHaveBeenCalledOnce();
     expect(collectionReload).toHaveBeenCalledOnce();
@@ -154,9 +156,10 @@ describe('PackOpeningComponent', () => {
     TestBed.inject(PackOpeningNavigationService).returnHome();
     fixture.detectChanges();
 
-    expect(fixture.nativeElement.querySelector('.summary-grid')).toBeNull();
-    expect(fixture.nativeElement.querySelector('[aria-label="Aperçu de la collection et ouverture"]'))
-      .not.toBeNull();
+    expect(fixture.nativeElement.textContent).not.toContain('Voici ton tirage');
+    expect(
+      fixture.nativeElement.querySelector('[aria-label="Aperçu de la collection et ouverture"]'),
+    ).not.toBeNull();
   });
 
   it('shows the first card without waiting for an animation event', async () => {
@@ -165,7 +168,9 @@ describe('PackOpeningComponent', () => {
     fixture.detectChanges();
     await vi.waitFor(() => {
       fixture.detectChanges();
-      expect(fixture.nativeElement.querySelector('.sealed-pack')).not.toBeNull();
+      expect(
+        fixture.nativeElement.querySelector('[aria-label="Booster prêt à ouvrir"]'),
+      ).not.toBeNull();
     });
     clickButton('Ouvrir le booster');
 
