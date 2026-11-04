@@ -1,3 +1,7 @@
+.reveal-card {
+  width: min(100%, 22rem, 39dvh);
+}
+
 .pull-card-leaving {
   animation: pull-card-dismiss 420ms cubic-bezier(0.4, 0, 1, 1) forwards;
   pointer-events: none;

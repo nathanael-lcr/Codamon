@@ -1,84 +1,150 @@
-<section class="mx-auto max-w-3xl p-6">
-  <header class="mb-6 flex items-center justify-between gap-4">
+<section class="mx-auto h-full max-w-6xl px-4 py-4 text-slate-900 sm:px-6 sm:py-6">
+  <header class="mb-4 flex flex-wrap items-end justify-between gap-3">
     <div>
-      <h1 class="text-2xl font-bold text-slate-900">Classement</h1>
+      <p class="text-xs font-bold uppercase tracking-[0.18em] text-[#2049CD]">Communauté</p>
+      <h1 class="mt-1 text-2xl font-bold tracking-tight sm:text-3xl">Classements</h1>
       @if (board.myRank(); as rank) {
         <p class="mt-1 text-sm text-slate-500">
-          Ta position : <span class="font-semibold text-blue-800">#{{ rank }}</span>
+          Ton rang par pièces : <span class="font-semibold text-blue-800">#{{ rank }}</span>
         </p>
       }
     </div>
   </header>
 
-  @if (board.error(); as error) {
-    <p role="alert" class="mb-4 bg-red-50 p-4 text-red-700">{{ error }}</p>
-  }
+  <div class="grid gap-4 lg:grid-cols-2">
+    <section class="border border-slate-200 bg-white" aria-labelledby="currency-board-heading">
+      <header class="border-b border-slate-200 bg-slate-50 px-4 py-3">
+        <h2 id="currency-board-heading" class="font-bold">Joueurs les plus riches</h2>
+        <p class="text-xs text-slate-500">Classement par pièces</p>
+      </header>
 
-  @if (board.loading() && board.entries().length === 0) {
-    <p role="status" class="text-slate-500">Chargement du classement…</p>
-  } @else {
-    <div class="overflow-x-auto border border-slate-200 bg-white">
-      <table class="w-full text-left">
-        <thead class="bg-slate-50 text-sm text-slate-500">
-          <tr>
-            <th scope="col" class="px-5 py-4">Rang</th>
-            <th scope="col" class="px-5 py-4">Joueur</th>
-            <th scope="col" class="px-5 py-4 text-right">Argent</th>
-          </tr>
-        </thead>
-
-        <tbody class="divide-y divide-slate-100">
-          @for (entry of board.entries(); track entry.id; let i = $index) {
-            <tr
-              class="hover:bg-slate-200/50"
-              [class.bg-blue-50]="entry.id === board.currentPlayerId()"
-            >
-              <td class="flex gap-2 px-5 py-4 font-semibold text-blue-800">
-                @if (i == 0) {
-                  <svg lucideMedal></svg> {{ i + 1}}
-                }
-              </td>
-
-              <td class="px-5 py-4">
-                <div class="flex items-center gap-3">
-                  @if (entry.avatar_url) {
-                    <img
-                      [src]="entry.avatar_url"
-                      [alt]="'Avatar de ' + (entry.display_name || entry.username)"
-                      class="h-9 w-9 object-cover"
-                    />
-                  } @else {
-                    <div
-                      aria-hidden="true"
-                      class="flex h-9 w-9 items-center justify-center bg-slate-100 font-semibold text-slate-500"
-                    >
-                      {{ (entry.display_name || entry.username || '?').slice(0, 1) }}
-                    </div>
-                  }
-
-                  <span class="font-medium text-slate-900">
-                    {{ entry.display_name || entry.username || 'Joueur' }}
-                  </span>
-                </div>
-              </td>
-
-              <td class="px-5 py-4 text-right font-bold tabular-nums text-blue-800">
-                @if (entry.currency !== null) {
-                  {{ entry.currency | number: '1.0-2' }}
-                } @else {
-                  —
-                }
-              </td>
-            </tr>
-          } @empty {
+      @if (board.error(); as error) {
+        <p role="alert" class="p-4 text-sm text-rose-700">{{ error }}</p>
+      } @else if (board.loading() && board.entries().length === 0) {
+        <p role="status" class="p-4 text-sm text-slate-500">Chargement…</p>
+      } @else {
+        <table class="w-full text-left text-sm">
+          <thead class="sr-only">
             <tr>
-              <td colspan="3" class="px-5 py-8 text-center text-slate-500">
-                Aucun joueur à afficher.
-              </td>
+              <th>Rang</th>
+              <th>Joueur</th>
+              <th>Pièces</th>
             </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-  }
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            @for (entry of board.entries().slice(0, 5); track entry.id; let i = $index) {
+              <tr [class.bg-blue-50]="entry.id === board.currentPlayerId()">
+                <td class="w-12 px-3 py-2 font-semibold text-blue-800">
+                  @if (i === 0) {
+                    <svg lucideMedal class="inline h-4 w-4"></svg>
+                  }
+                  {{ i + 1 }}
+                </td>
+                <td class="px-2 py-2">
+                  <div class="flex items-center gap-2">
+                    @if (entry.avatar_url) {
+                      <img
+                        [src]="entry.avatar_url"
+                        [alt]="'Avatar de ' + (entry.display_name || entry.username)"
+                        class="h-7 w-7 border border-slate-200 object-cover"
+                      />
+                    } @else {
+                      <span
+                        aria-hidden="true"
+                        class="grid h-7 w-7 place-items-center bg-slate-100 text-xs font-semibold text-slate-600"
+                      >
+                        {{ (entry.display_name || entry.username || '?').slice(0, 1) }}
+                      </span>
+                    }
+                    <span class="truncate font-medium">{{
+                      entry.display_name || entry.username || 'Joueur'
+                    }}</span>
+                  </div>
+                </td>
+                <td
+                  class="whitespace-nowrap px-3 py-2 text-right font-bold tabular-nums text-blue-800"
+                >
+                  {{ entry.currency | number: '1.0-0' }}
+                  <span class="text-xs font-normal">pièces</span>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="3" class="px-4 py-5 text-center text-slate-500">
+                  Aucun joueur à afficher.
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    </section>
+
+    <section class="border border-slate-200 bg-white" aria-labelledby="legendary-board-heading">
+      <header class="border-b border-slate-200 bg-slate-50 px-4 py-3">
+        <h2 id="legendary-board-heading" class="font-bold">Collectionneurs légendaires</h2>
+        <p class="text-xs text-slate-500">Exemplaires de cartes L et SL possédés</p>
+      </header>
+
+      @if (board.legendaryError(); as error) {
+        <p role="alert" class="p-4 text-sm text-rose-700">{{ error }}</p>
+      } @else if (board.legendaryLoading() && board.legendaryEntries().length === 0) {
+        <p role="status" class="p-4 text-sm text-slate-500">Chargement…</p>
+      } @else {
+        <table class="w-full text-left text-sm">
+          <thead class="sr-only">
+            <tr>
+              <th>Rang</th>
+              <th>Joueur</th>
+              <th>Cartes L et SL</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            @for (entry of board.legendaryEntries().slice(0, 5); track entry.id; let i = $index) {
+              <tr [class.bg-blue-50]="entry.id === board.currentPlayerId()">
+                <td class="w-12 px-3 py-2 font-semibold text-blue-800">
+                  @if (i === 0) {
+                    <svg lucideMedal class="inline h-4 w-4"></svg>
+                  }
+                  {{ i + 1 }}
+                </td>
+                <td class="px-2 py-2">
+                  <div class="flex items-center gap-2">
+                    @if (entry.avatar_url) {
+                      <img
+                        [src]="entry.avatar_url"
+                        [alt]="'Avatar de ' + (entry.display_name || entry.username)"
+                        class="h-7 w-7 border border-slate-200 object-cover"
+                      />
+                    } @else {
+                      <span
+                        aria-hidden="true"
+                        class="grid h-7 w-7 place-items-center bg-slate-100 text-xs font-semibold text-slate-600"
+                      >
+                        {{ (entry.display_name || entry.username || '?').slice(0, 1) }}
+                      </span>
+                    }
+                    <span class="truncate font-medium">{{
+                      entry.display_name || entry.username || 'Joueur'
+                    }}</span>
+                  </div>
+                </td>
+                <td
+                  class="whitespace-nowrap px-3 py-2 text-right font-bold tabular-nums text-blue-800"
+                >
+                  {{ entry.legendaryCount }} <span class="text-xs font-normal">cartes</span>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="3" class="px-4 py-5 text-center text-slate-500">
+                  Aucune carte légendaire possédée.
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    </section>
+  </div>
 </section>

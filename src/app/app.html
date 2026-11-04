@@ -1,6 +1,6 @@
-<div class="min-h-screen bg-[#F6F6F4] text-slate-900 pb-28 md:pb-0">
+<div class="app-shell bg-white text-slate-900">
   <!-- HEADER DESKTOP -->
-  <header class="hidden md:block border-b border-slate-200 bg-white">
+  <header class="hidden shrink-0 border-b border-slate-200 bg-white md:block">
     <div class="mx-auto flex h-20 max-w-[1700px] items-center justify-between px-12">
       <!-- LOGO -->
       <a routerLink="/dashboard" class="" aria-label="Codamon accueil">
@@ -155,7 +155,7 @@
   </header>
 
   <!-- CONTENU -->
-  <main>
+  <main class="app-main">
     <router-outlet />
   </main>
 
@@ -167,7 +167,7 @@
         routerLinkActive="bg-[#2049CD] text-white"
         [routerLinkActiveOptions]="{ exact: true }"
         (click)="returnToPackHome()"
-        class="flex min-w-16 flex-col items-center px-1 py-2 text-slate-500 transition"
+        class="flex min-w-12 flex-col items-center px-1 py-2 text-slate-500 transition"
       >
         <span class="mt-1 text-[11px] font-medium"><svg lucidePlayingCardsFan></svg></span>
       </a>
@@ -176,7 +176,7 @@
         routerLink="/dashboard"
         routerLinkActive="bg-[#2049CD] text-white"
         [routerLinkActiveOptions]="{ exact: true }"
-        class="flex min-w-16 flex-col items-center px-1 py-2 text-slate-500 transition"
+        class="flex min-w-12 flex-col items-center px-1 py-2 text-slate-500 transition"
       >
         <span class="mt-1 text-[11px] font-medium"><svg lucideBookOpen></svg></span>
       </a>
@@ -185,7 +185,7 @@
         routerLink="/marche"
         routerLinkActive="bg-[#2049CD] text-white"
         [routerLinkActiveOptions]="{ exact: true }"
-        class="flex min-w-16 flex-col items-center px-1 py-2 text-slate-500 transition"
+        class="flex min-w-12 flex-col items-center px-1 py-2 text-slate-500 transition"
       >
         <span class="mt-1 text-[11px] font-medium"><svg lucideStore></svg></span>
       </a>
@@ -194,7 +194,7 @@
         routerLink="/echanges"
         routerLinkActive="bg-[#2049CD] text-white"
         [routerLinkActiveOptions]="{ exact: true }"
-        class="flex min-w-16 flex-col items-center px-1 py-2 text-slate-500 transition"
+        class="flex min-w-12 flex-col items-center px-1 py-2 text-slate-500 transition"
       >
         <span class="mt-1 text-[11px] font-medium"><svg lucideHandshake></svg></span>
       </a>
@@ -203,7 +203,7 @@
         routerLink="/classement"
         routerLinkActive="bg-[#2049CD] text-white"
         [routerLinkActiveOptions]="{ exact: true }"
-        class="flex min-w-16 flex-col items-center px-1 py-2 text-slate-500 transition"
+        class="flex min-w-12 flex-col items-center px-1 py-2 text-slate-500 transition"
       >
         <span class="mt-1 text-[11px] font-medium"><svg lucideTrophy></svg></span>
       </a>

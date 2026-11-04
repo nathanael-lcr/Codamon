@@ -32,7 +32,6 @@
   inset: 0;
   overflow: hidden;
   border: calc(6px * var(--card-scale, 1)) solid #2049cd;
-  border-radius: calc(24px * var(--card-scale, 1));
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
 }

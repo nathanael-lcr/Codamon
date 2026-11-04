@@ -1,12 +1,12 @@
-<section class="pb-8">
+<section class="h-full overflow-hidden">
   @if (!phase() && !loading() && !error()) {
     <!-- La section ci dessous est purement une maquette est doit être faite de manière pratique et responsive -->
     <section
-      class="min-h-screen bg-[#F9F9F8] flex items-start justify-center py-8 px-6"
+      class="min-h-full bg-white flex items-center justify-center px-4 py-3 sm:px-6"
       aria-label="Aperçu de la collection et ouverture"
     >
-      <div class="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-16 lg:gap-32 items-stretch">
-        <div class="flex flex-col justify-between h-full min-h-137.5">
+      <div class="grid h-full w-full max-w-6xl grid-cols-1 items-stretch gap-4 md:grid-cols-2 md:gap-16 lg:gap-32">
+        <div class="hidden h-full min-h-137.5 flex-col justify-between md:flex">
           <div>
             <span
               class="text-[10px] tracking-[0.2em] text-slate-400 font-bold uppercase mb-8 block"
@@ -59,10 +59,10 @@
         </div>
 
         <div
-          class="flex flex-col justify-between h-full min-h-137.5 border-t md:border-t-0 md:border-l border-slate-200/60 pt-12 md:pt-0 md:pl-16 lg:pl-24"
+          class="flex h-full flex-col justify-center border-t border-slate-200/60 pt-4 md:min-h-137.5 md:justify-between md:border-l md:border-t-0 md:pl-16 md:pt-0 lg:pl-24"
         >
           <!-- Bloc supérieur : disponibilité et ouverture -->
-          <div class="space-y-8">
+          <div class="space-y-4 md:space-y-8">
             <div class="flex items-center justify-between border-b border-slate-200/60 pb-4">
               <span class="text-[10px] tracking-[0.15em] text-slate-400 font-bold uppercase">
                 Disponible à l’ouverture
@@ -74,7 +74,7 @@
                   [class.text-slate-400]="energy.availablePacks === 0"
                 >
                   <span
-                    class="h-2 w-2 rounded-full"
+                    class="h-2 w-2"
                     [class.bg-[#2049CD]]="energy.availablePacks > 0"
                     [class.bg-slate-300]="energy.availablePacks === 0"
                     aria-hidden="true"
@@ -85,6 +85,9 @@
             </div>
 
             <div>
+              <p class="mb-1 text-xs font-bold uppercase tracking-[0.15em] text-[#2049CD] md:hidden">
+                La prochaine pièce
+              </p>
               <h2 class="text-3xl font-bold text-slate-950 mb-1">Coda Originals</h2>
               <p class="text-slate-400 text-sm">{{ packSize }} cartes par paquet</p>
             </div>
@@ -150,7 +153,7 @@
           </div>
 
           <!-- Bloc inférieur : Barre de progression de la collection -->
-          <div class="border-t border-slate-200/80 pt-8 mt-12 space-y-4">
+          <div class="mt-4 space-y-3 border-t border-slate-200/80 pt-4 md:mt-12 md:space-y-4 md:pt-8">
             <div class="flex items-baseline justify-between">
               <span class="text-slate-500 font-medium text-sm">Votre collection</span>
               <span class="text-3xl font-bold text-slate-900">
@@ -163,7 +166,7 @@
 
             <!-- Barre de progression -->
             <div
-              class="w-full h-1 bg-slate-200/80 rounded-full overflow-hidden"
+              class="w-full h-1 bg-slate-200/80 overflow-hidden"
               role="progressbar"
               aria-label="Progression de la collection"
               aria-valuemin="0"
@@ -171,7 +174,7 @@
               [attr.aria-valuenow]="collectionProgress()"
             >
               <div
-                class="h-full bg-[#2049CD] rounded-full"
+                class="h-full bg-[#2049CD]"
                 [style.width.%]="collectionProgress()"
               ></div>
             </div>
@@ -203,14 +206,14 @@
 
   @if (error()) {
     <section
-      class="mx-auto my-16 grid w-full max-w-136 justify-items-center gap-3 rounded-3xl border border-rose-200 bg-rose-50 p-8 text-center text-rose-800"
+      class="mx-auto my-8 grid w-full max-w-136 justify-items-center gap-3 border border-rose-200 bg-rose-50 p-8 text-center text-rose-800"
       role="alert"
     >
       <h2 class="m-0 text-xl font-bold">Le booster n’a pas pu être préparé</h2>
       <p class="m-0 text-sm leading-6 text-rose-700">{{ error() }}</p>
       <button
         type="button"
-        class="rounded-xl border border-rose-300 bg-white px-4 py-2 font-semibold text-rose-800 hover:bg-rose-100"
+        class="border border-rose-300 bg-white px-4 py-2 font-semibold text-rose-800 hover:bg-rose-100"
         (click)="retry()"
       >
         Réessayer
@@ -263,7 +266,7 @@
         </p>
       </div>
 
-      <div class="grid w-full max-w-108 place-items-center perspective-[1400px]">
+      <div class="reveal-card grid place-items-center perspective-[1400px]">
         <app-card-display
           class="block w-full"
           [class.pull-card-leaving]="cardLeaving()"
@@ -300,8 +303,8 @@
   }
 
   @if (phase() === 'summary') {
-    <section class="mx-auto w-full max-w-7xl px-4 pb-12 pt-8">
-      <div class="mb-8 text-center">
+    <section class="mx-auto flex h-full w-full max-w-7xl flex-col px-3 py-3">
+      <div class="mb-3 text-center">
         <p class="text-sm font-bold uppercase tracking-wide text-slate-600">Ouverture terminée</p>
         <h2 class="my-1 text-2xl font-bold">Voici ton tirage</h2>
         <p class="m-0 text-sm text-slate-600">
@@ -317,7 +320,7 @@
         }
       </div>
 
-      <div class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,16rem),1fr))] items-start gap-6">
+      <div class="grid min-h-0 flex-1 grid-cols-4 items-center gap-2 lg:grid-cols-7 lg:gap-3">
         @for (card of cards(); track card.id; let index = $index) {
           <div class="summary-card min-w-0" [style.animation-delay.ms]="index * 70">
             <app-card-display [card]="card" [tilt]="false" />
@@ -327,7 +330,7 @@
 
       <button
         type="button"
-        class="mx-auto mt-6 block w-full max-w-96 bg-[#2049CD] p-4 text-white transition hover:bg-[#2546b3] hover:cursor-pointer"
+        class="mx-auto mt-3 block w-full max-w-96 bg-[#2049CD] p-3 text-white transition hover:bg-[#2546b3] hover:cursor-pointer"
         (click)="getPack()"
       >
         Ouvrir un autre pack

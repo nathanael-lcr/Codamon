@@ -21,7 +21,7 @@
             <img
               [src]="player.avatar_url"
               alt=""
-              class="h-14 w-14 shrink-0 rounded-full border border-slate-200 object-cover"
+              class="h-14 w-14 shrink-0 border border-slate-200 object-cover"
               referrerpolicy="no-referrer"
             />
           }
@@ -111,8 +111,8 @@
         <button
           type="button"
           class="min-h-11 text-sm font-semibold transition"
-          [class.bg-indigo-50]="mode === 'sign-in'"
-          [class.text-indigo-700]="mode === 'sign-in'"
+          [class.bg-blue-50]="mode === 'sign-in'"
+          [class.text-blue-700]="mode === 'sign-in'"
           [class.text-slate-600]="mode !== 'sign-in'"
           [disabled]="loading()"
           [attr.aria-pressed]="mode === 'sign-in'"
@@ -123,8 +123,8 @@
         <button
           type="button"
           class="min-h-11 text-sm font-semibold transition"
-          [class.bg-indigo-50]="mode === 'sign-up'"
-          [class.text-indigo-700]="mode === 'sign-up'"
+          [class.bg-blue-50]="mode === 'sign-up'"
+          [class.text-blue-700]="mode === 'sign-up'"
           [class.text-slate-600]="mode !== 'sign-up'"
           [disabled]="loading()"
           [attr.aria-pressed]="mode === 'sign-up'"
@@ -145,7 +145,7 @@
               autocomplete="name"
               maxlength="50"
               required
-              class="min-h-12 w-full border border-slate-300 px-4 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+              class="min-h-12 w-full border border-slate-300 px-4 outline-none transition focus:border-[#2049CD] focus:ring-2 focus:ring-blue-100"
               placeholder="Ton nom"
               [(ngModel)]="displayName"
             />
@@ -162,7 +162,7 @@
               spellcheck="false"
               maxlength="20"
               required
-              class="min-h-12 w-full border border-slate-300 px-4 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+              class="min-h-12 w-full border border-slate-300 px-4 outline-none transition focus:border-[#2049CD] focus:ring-2 focus:ring-blue-100"
               [class.border-rose-400]="username && !usernameValid"
               placeholder="ton_pseudo"
               aria-describedby="account-username-hint"
@@ -181,7 +181,7 @@
             type="email"
             autocomplete="email"
             required
-            class="min-h-12 w-full border border-slate-300 px-4 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+            class="min-h-12 w-full border border-slate-300 px-4 outline-none transition focus:border-[#2049CD] focus:ring-2 focus:ring-blue-100"
             placeholder="toi@exemple.fr"
             [(ngModel)]="email"
           />
@@ -196,7 +196,7 @@
             [autocomplete]="mode === 'sign-in' ? 'current-password' : 'new-password'"
             minlength="6"
             required
-            class="min-h-12 w-full border border-slate-300 px-4 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+            class="min-h-12 w-full border border-slate-300 px-4 outline-none transition focus:border-[#2049CD] focus:ring-2 focus:ring-blue-100"
             placeholder="6 caractères minimum"
             [(ngModel)]="password"
           />
@@ -215,7 +215,7 @@
 
         <button
           type="submit"
-          class="min-h-12 w-full bg-indigo-600 px-4 text-sm font-semibold text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"
+          class="min-h-12 w-full bg-[#2049CD] px-4 text-sm font-semibold text-white transition hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-50"
           [disabled]="!canSubmit"
         >
           @if (loading()) {
@@ -229,7 +229,7 @@
 
         <p class="text-center text-sm text-slate-500">
           Retour au
-          <a routerLink="/" class="font-medium text-indigo-700 hover:underline">dashboard</a>
+          <a routerLink="/" class="font-medium text-blue-800 hover:underline">dashboard</a>
         </p>
       </form>
     </div>
