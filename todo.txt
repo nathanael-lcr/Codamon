@@ -1,10 +1,13 @@
+[x] Fix le layout qui est bien wonky sa grande race maintenant doit être un layout moderne responsive
+[x] Nouvelles animations unpacking (style pokemon tcpg, effets cartes empilées etc)
+[x] Faire en sorte de bloquer la navigation du site si pas connecté (rediriger vers le login/signup)
+
+Ajouter une animation parallax 3D hover sur les cartes SL
+Voir pourquoi la page marché fait charger les infos de la navbar mais pas les autre pages
+Fix le layout de la carte et l'image pas cadrée
+
 Finir le design des cartes sur photoshop
 Faire un design de dos de carte
-
-Fix le layout qui est bien wonky sa grande race mtn
-Nouvelles animations unpacking
-Ajouter une animation parallax 3D hover sur les cartes SL
-Faire en sorte de bloquer la navigation du site si pas connecté
 
 Comme Pokemon TCGP avoir des séries de cartes avec 30~50 cartes par séries.
 5 Packs gratuits par jour et dans chaque pack il y a 7 cartes.

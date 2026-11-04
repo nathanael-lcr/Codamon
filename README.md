@@ -14,6 +14,11 @@ La page Classement affiche séparément le solde de pièces et le nombre de cart
 Les zones de collection, d'échanges et de marché défilent indépendamment ; les autres pages restent
 contenues dans la hauteur de l'écran.
 
+Les pages de collection, de marché, d'échanges, de classement et d'ouverture des paquets nécessitent
+une session active. Un visiteur non connecté est redirigé vers le formulaire de compte, puis revient
+à la page demandée après une connexion réussie. L'ouverture de paquet comprend une mise en scène
+animée du paquet, des cartes empilées et une arrivée animée de chaque carte.
+
 ## Contribution au projet
 
 Ce projet est ouvert à la collaboration et a pour objectif de permettre aux élèves de **CODA_** de s'exercer au travail sur un projet **Open Source**.

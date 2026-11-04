@@ -1,10 +1,12 @@
-<section class="space-y-8">
+<section class="mx-auto w-full max-w-7xl space-y-8 px-4 py-6 sm:px-6 lg:py-10">
   @if (!initialized()) {
     <p aria-live="polite" class="text-sm text-slate-500">Chargement de ton espace…</p>
   } @else {
     <header class="space-y-3">
       @if (user(); as currentUser) {
-        <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">Bienvenue sur ton dashboard.</h1>
+        <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">
+          Bienvenue sur ton dashboard.
+        </h1>
         <p class="max-w-xl text-slate-600">Tu es connecté avec {{ currentUser.email }}.</p>
       } @else {
         <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">Bienvenue sur Codamon.</h1>
@@ -42,7 +44,7 @@
         }
       </article>
 
-      <article class=" border border-slate-200 bg-white p-6 shadow-sm">
+      <article class="border border-slate-200 bg-white p-6 shadow-sm">
         <p class="text-sm font-medium text-slate-500">Sécurité</p>
         <h2 class="mt-2 text-xl font-semibold">Tes données restent protégées</h2>
         <p class="mt-2 text-sm leading-6 text-slate-600">

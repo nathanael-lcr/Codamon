@@ -18,6 +18,18 @@
     margin: 0;
   }
 
+  app-root {
+    display: block;
+    height: 100dvh;
+  }
+
+  .app-main > :not(router-outlet) {
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 0;
+    width: 100%;
+  }
+
   ::selection {
     background: #2049cd;
     color: #fff;

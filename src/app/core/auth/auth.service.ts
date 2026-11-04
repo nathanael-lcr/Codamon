@@ -30,9 +30,7 @@ export class AuthService {
     const domain = normalizedEmail.split('@')[1];
 
     if (!domain || !AuthService.ALLOWED_DOMAINS.includes(domain)) {
-      throw new Error(
-        'Seules les adresses @coda.school et @coda-student.school sont autorisées.'
-      );
+      throw new Error('Seules les adresses @coda.school et @coda-student.school sont autorisées.');
     }
 
     const { data, error } = await this.supabase.auth.signUp({
@@ -101,6 +99,8 @@ export class AuthService {
       throw error;
     }
 
+    this.user.set(data.session?.user ?? null);
+    this.initialized.set(true);
     return data.session;
   }
 

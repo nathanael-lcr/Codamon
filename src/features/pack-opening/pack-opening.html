@@ -5,7 +5,9 @@
       class="min-h-full bg-white flex items-center justify-center px-4 py-3 sm:px-6"
       aria-label="Aperçu de la collection et ouverture"
     >
-      <div class="grid h-full w-full max-w-6xl grid-cols-1 items-stretch gap-4 md:grid-cols-2 md:gap-16 lg:gap-32">
+      <div
+        class="grid h-full w-full max-w-6xl grid-cols-1 items-stretch gap-4 md:grid-cols-2 md:gap-16 lg:gap-32"
+      >
         <div class="hidden h-full min-h-137.5 flex-col justify-between md:flex">
           <div>
             <span
@@ -85,7 +87,9 @@
             </div>
 
             <div>
-              <p class="mb-1 text-xs font-bold uppercase tracking-[0.15em] text-[#2049CD] md:hidden">
+              <p
+                class="mb-1 text-xs font-bold uppercase tracking-[0.15em] text-[#2049CD] md:hidden"
+              >
                 La prochaine pièce
               </p>
               <h2 class="text-3xl font-bold text-slate-950 mb-1">Coda Originals</h2>
@@ -143,17 +147,14 @@
                     <span class="text-[#2049CD]">{{ countdown }}</span>
                   }
                 </div>
-                @if (refillCountdown(); as countdown) {
-                  <p class="text-slate-400 text-xs">Prochain paquet dans {{ countdown }}</p>
-                } @else {
-                  <p class="text-slate-400 text-xs">Tes 5 paquets sont disponibles.</p>
-                }
               </div>
             }
           </div>
 
           <!-- Bloc inférieur : Barre de progression de la collection -->
-          <div class="mt-4 space-y-3 border-t border-slate-200/80 pt-4 md:mt-12 md:space-y-4 md:pt-8">
+          <div
+            class="mt-4 space-y-3 border-t border-slate-200/80 pt-4 md:mt-12 md:space-y-4 md:pt-8"
+          >
             <div class="flex items-baseline justify-between">
               <span class="text-slate-500 font-medium text-sm">Votre collection</span>
               <span class="text-3xl font-bold text-slate-900">
@@ -173,10 +174,7 @@
               aria-valuemax="100"
               [attr.aria-valuenow]="collectionProgress()"
             >
-              <div
-                class="h-full bg-[#2049CD]"
-                [style.width.%]="collectionProgress()"
-              ></div>
+              <div class="h-full bg-[#2049CD]" [style.width.%]="collectionProgress()"></div>
             </div>
 
             @if (catalogError()) {
@@ -223,10 +221,18 @@
 
   @if (phase() === 'sealed') {
     <section
-      class="grid justify-items-center gap-4 px-4 py-8 text-center"
+      class="sealed-pack grid justify-items-center gap-2 px-4 py-4 text-center sm:gap-4 sm:py-8"
       aria-label="Booster prêt à ouvrir"
     >
-      <div class="w-xs">
+      <div class="pack-opening-stage" aria-hidden="true">
+        <div class="pack-stack pack-stack-back"></div>
+        <div class="pack-stack pack-stack-middle"></div>
+        <div class="pack-sleeve">
+          <span class="pack-sleeve-mark">CODAMON</span>
+          <span class="pack-sleeve-count">{{ packSize }} CARTES</span>
+        </div>
+      </div>
+      <div class="w-xs pack-opening-controls">
         <p class="m-0 font-semibold">Booster prêt</p>
         @if (packEnergy(); as energy) {
           <p class="m-0">
@@ -249,8 +255,11 @@
   }
 
   @if (phase() === 'revealing' && currentCard(); as card) {
-    <section class="grid justify-items-center gap-4" aria-label="Révélation du pack">
-      <div class="text-center">
+    <section
+      class="grid justify-items-center gap-2 px-3 py-2 sm:gap-3"
+      aria-label="Révélation du pack"
+    >
+      <div class="reveal-heading text-center">
         <p class="text-sm font-bold uppercase tracking-wide text-slate-600">
           Le booster est ouvert
         </p>
@@ -266,19 +275,25 @@
         </p>
       </div>
 
-      <div class="reveal-card grid place-items-center perspective-[1400px]">
-        <app-card-display
-          class="block w-full"
-          [class.pull-card-leaving]="cardLeaving()"
-          [card]="card"
-          [tilt]="true"
-          [flippable]="true"
-          [flipped]="currentCardRevealed()"
-          (click)="revealOrContinue()"
-        />
+      <div class="card-reveal-stage grid place-items-center perspective-[1400px]">
+        <div class="card-stack" aria-hidden="true">
+          <span class="stack-card stack-card-back"></span>
+          <span class="stack-card stack-card-middle"></span>
+        </div>
+        <div class="reveal-card grid place-items-center perspective-[1400px]">
+          <app-card-display
+            class="block w-full"
+            [class.pull-card-leaving]="cardLeaving()"
+            [card]="card"
+            [tilt]="true"
+            [flippable]="true"
+            [flipped]="currentCardRevealed()"
+            (click)="revealOrContinue()"
+          />
+        </div>
       </div>
 
-      <div class="grid justify-items-center gap-2">
+      <div class="reveal-controls grid justify-items-center gap-2">
         <p class="m-0">
           {{ remainingCards() }} carte{{ remainingCards() === 1 ? '' : 's' }} à découvrir
         </p>

@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../app/core/auth/auth.service';
 import { PlayerService } from '../../app/core/player/player.service';
 
@@ -14,6 +14,7 @@ import { PlayerService } from '../../app/core/player/player.service';
 export class AccountComponent {
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   protected readonly playerService = inject(PlayerService);
 
   protected readonly user = this.auth.user;
@@ -89,7 +90,10 @@ export class AccountComponent {
         await this.auth.signIn(this.email, this.password);
       }
 
-      await this.router.navigateByUrl('/');
+      const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+      const destination =
+        returnUrl?.startsWith('/') && !returnUrl.startsWith('//') ? returnUrl : '/';
+      await this.router.navigateByUrl(destination);
     } catch (error: unknown) {
       this.hasError.set(true);
       this.feedback.set(

@@ -1,215 +1,217 @@
 <main class="h-full overflow-y-auto px-4 py-6 text-slate-900 sm:px-6 lg:py-8">
-  <header class="mb-8">
-    <p class="text-sm font-bold uppercase tracking-[0.18em] text-[#2049CD]">Communauté</p>
-    <h1 class="mt-2 text-5xl lg:text-6xl font-bold sm:text-4xl">Échanges</h1>
-    <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
-      Propose une carte de ta collection contre une carte du catalogue. Les échanges sont finalisés
-      uniquement quand un autre joueur accepte ton offre.
-    </p>
-  </header>
+  <div class="mx-auto w-full max-w-7xl">
+    <header class="mb-8">
+      <p class="text-sm font-bold uppercase tracking-[0.18em] text-[#2049CD]">Communauté</p>
+      <h1 class="mt-2 text-3xl font-semibold tracking-tight">Échanges</h1>
+      <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
+        Propose une carte de ta collection contre une carte du catalogue. Les échanges sont
+        finalisés uniquement quand un autre joueur accepte ton offre.
+      </p>
+    </header>
 
-  @if (!authInitialized()) {
-    <section class="border border-slate-200 bg-slate-50 p-5 text-slate-600" aria-live="polite">
-      Chargement de ton compte…
-    </section>
-  } @else if (!authUser()) {
-    <section class="border border-amber-200 bg-amber-50 p-5 text-amber-900">
-      Connecte-toi pour consulter et proposer des échanges.
-    </section>
-  } @else {
-    @if (error()) {
-      <div role="alert" class="mb-5 border border-rose-200 bg-rose-50 p-4 text-sm text-rose-800">
-        {{ error() }}
-      </div>
-    }
-    @if (notice()) {
-      <div
-        role="status"
-        class="mb-5 border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-800"
-      >
-        {{ notice() }}
-      </div>
-    }
-
-    <section class="mb-10 border border-slate-200 bg-white p-5 shadow-sm sm:p-7">
-      <div class="mb-5">
-        <h2 class="text-xl font-extrabold">Créer une offre</h2>
-        <p class="mt-1 text-sm text-slate-600">
-          La carte proposée reste dans ta collection jusqu’à l’acceptation.
-        </p>
-      </div>
-
-      @if (inventory().length === 0) {
-        <p class="l bg-slate-50 p-4 text-sm text-slate-600">
-          Ta collection est vide. Ouvre un paquet pour obtenir des cartes à échanger.
-        </p>
-      } @else {
-        <form
-          class="grid gap-5 lg:grid-cols-[1fr_auto_1fr_auto] lg:items-end"
-          (ngSubmit)="createOffer()"
-        >
-          <label class="grid gap-2 text-sm font-semibold text-slate-700">
-            Tu proposes
-            <select
-              name="offerCardId"
-              required
-              [(ngModel)]="offerCardId"
-              class="min-h-11 border border-slate-300 bg-white px-3 outline-none focus:border-[#2049CD] focus:ring-2 focus:ring-blue-100"
-            >
-              <option value="" disabled>Choisir une carte</option>
-              @for (item of inventory(); track item.card.id) {
-                <option [value]="item.card.id">
-                  {{ item.card.name }} · {{ item.card.rarity }} (x{{ item.quantity }})
-                </option>
-              }
-            </select>
-            <span class="flex items-center gap-2">
-              <span class="text-xs font-medium text-slate-500">Quantité</span>
-              <input
-                type="number"
-                name="offerQuantity"
-                min="1"
-                [max]="ownedQuantity(offerCardId)"
-                required
-                [(ngModel)]="offerQuantity"
-                class="w-24 border border-slate-300 px-3 py-2 outline-none focus:border-[#2049CD]"
-              />
-              <span class="text-xs font-medium text-slate-500">
-                / {{ ownedQuantity(offerCardId) }} possédée(s)
-              </span>
-            </span>
-          </label>
-
-          <span aria-hidden="true" class="hidden pb-2 text-2xl text-[#2049CD] lg:block">⇄</span>
-
-          <label class="grid gap-2 text-sm font-semibold text-slate-700">
-            Tu demandes
-            <select
-              name="wantCardId"
-              required
-              [(ngModel)]="wantCardId"
-              class="min-h-11 border border-slate-300 bg-white px-3 outline-none focus:border-[#2049CD] focus:ring-2 focus:ring-blue-100"
-            >
-              <option value="" disabled>Choisir une carte du catalogue</option>
-              @for (card of cards(); track card.id) {
-                <option [value]="card.id">{{ card.name }} · {{ card.rarity }}</option>
-              }
-            </select>
-            <span class="flex items-center gap-2">
-              <span class="text-xs font-medium text-slate-500">Quantité</span>
-              <input
-                type="number"
-                name="wantQuantity"
-                min="1"
-                required
-                [(ngModel)]="wantQuantity"
-                class="w-24 border border-slate-300 px-3 py-2 outline-none focus:border-[#2049CD]"
-              />
-            </span>
-          </label>
-
-          <button
-            type="submit"
-            [disabled]="!canCreateOffer() || busyOfferId() === 'create'"
-            class="min-h-11 bg-[#2049CD] px-5 font-bold text-white transition hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            {{ busyOfferId() === 'create' ? 'Publication…' : 'Publier l’offre' }}
-          </button>
-        </form>
+    @if (!authInitialized()) {
+      <section class="border border-slate-200 bg-slate-50 p-5 text-slate-600" aria-live="polite">
+        Chargement de ton compte…
+      </section>
+    } @else if (!authUser()) {
+      <section class="border border-amber-200 bg-amber-50 p-5 text-amber-900">
+        Connecte-toi pour consulter et proposer des échanges.
+      </section>
+    } @else {
+      @if (error()) {
+        <div role="alert" class="mb-5 border border-rose-200 bg-rose-50 p-4 text-sm text-rose-800">
+          {{ error() }}
+        </div>
       }
-    </section>
+      @if (notice()) {
+        <div
+          role="status"
+          class="mb-5 border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-800"
+        >
+          {{ notice() }}
+        </div>
+      }
 
-    <section>
-      <div class="mb-4 flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h2 class="text-xl font-extrabold">Offres en cours</h2>
+      <section class="mb-10 border border-slate-200 bg-white p-5 shadow-sm sm:p-7">
+        <div class="mb-5">
+          <h2 class="text-xl font-extrabold">Créer une offre</h2>
           <p class="mt-1 text-sm text-slate-600">
-            Les offres disparaissent après acceptation ou annulation.
+            La carte proposée reste dans ta collection jusqu’à l’acceptation.
           </p>
         </div>
-        <button
-          type="button"
-          (click)="load()"
-          [disabled]="loading()"
-          class="border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-50"
-        >
-          Actualiser
-        </button>
-      </div>
 
-      @if (loading() || loadingOffers()) {
-        <p class="bg-slate-50 p-6 text-center text-sm text-slate-600">Chargement des offres…</p>
-      } @else if (offers().length === 0) {
-        <p class="border border-dashed border-slate-300 p-8 text-center text-sm text-slate-600">
-          Aucune offre pour le moment. Tu peux être le premier à en publier une.
-        </p>
-      } @else {
-        <div class="grid gap-4">
-          @for (offer of offers(); track offer.id) {
-            <article
-              class="grid gap-4 border border-slate-200 bg-white p-4 shadow-sm sm:grid-cols-[1fr_auto_1fr_auto] sm:items-center sm:p-5"
+        @if (inventory().length === 0) {
+          <p class="l bg-slate-50 p-4 text-sm text-slate-600">
+            Ta collection est vide. Ouvre un paquet pour obtenir des cartes à échanger.
+          </p>
+        } @else {
+          <form
+            class="grid gap-5 lg:grid-cols-[1fr_auto_1fr_auto] lg:items-end"
+            (ngSubmit)="createOffer()"
+          >
+            <label class="grid gap-2 text-sm font-semibold text-slate-700">
+              Tu proposes
+              <select
+                name="offerCardId"
+                required
+                [(ngModel)]="offerCardId"
+                class="min-h-11 border border-slate-300 bg-white px-3 outline-none focus:border-[#2049CD] focus:ring-2 focus:ring-blue-100"
+              >
+                <option value="" disabled>Choisir une carte</option>
+                @for (item of inventory(); track item.card.id) {
+                  <option [value]="item.card.id">
+                    {{ item.card.name }} · {{ item.card.rarity }} (x{{ item.quantity }})
+                  </option>
+                }
+              </select>
+              <span class="flex items-center gap-2">
+                <span class="text-xs font-medium text-slate-500">Quantité</span>
+                <input
+                  type="number"
+                  name="offerQuantity"
+                  min="1"
+                  [max]="ownedQuantity(offerCardId)"
+                  required
+                  [(ngModel)]="offerQuantity"
+                  class="w-24 border border-slate-300 px-3 py-2 outline-none focus:border-[#2049CD]"
+                />
+                <span class="text-xs font-medium text-slate-500">
+                  / {{ ownedQuantity(offerCardId) }} possédée(s)
+                </span>
+              </span>
+            </label>
+
+            <span aria-hidden="true" class="hidden pb-2 text-2xl text-[#2049CD] lg:block">⇄</span>
+
+            <label class="grid gap-2 text-sm font-semibold text-slate-700">
+              Tu demandes
+              <select
+                name="wantCardId"
+                required
+                [(ngModel)]="wantCardId"
+                class="min-h-11 border border-slate-300 bg-white px-3 outline-none focus:border-[#2049CD] focus:ring-2 focus:ring-blue-100"
+              >
+                <option value="" disabled>Choisir une carte du catalogue</option>
+                @for (card of cards(); track card.id) {
+                  <option [value]="card.id">{{ card.name }} · {{ card.rarity }}</option>
+                }
+              </select>
+              <span class="flex items-center gap-2">
+                <span class="text-xs font-medium text-slate-500">Quantité</span>
+                <input
+                  type="number"
+                  name="wantQuantity"
+                  min="1"
+                  required
+                  [(ngModel)]="wantQuantity"
+                  class="w-24 border border-slate-300 px-3 py-2 outline-none focus:border-[#2049CD]"
+                />
+              </span>
+            </label>
+
+            <button
+              type="submit"
+              [disabled]="!canCreateOffer() || busyOfferId() === 'create'"
+              class="min-h-11 bg-[#2049CD] px-5 font-bold text-white transition hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              <div class="flex min-w-0 items-center gap-3">
-                @if (cardImage(offer.offerCard)) {
-                  <img
-                    [src]="cardImage(offer.offerCard)"
-                    [alt]="offer.offerCard.name"
-                    class="h-20 w-14 object-cover"
-                  />
-                }
-                <div class="min-w-0">
-                  <p class="text-xs font-bold uppercase tracking-wide text-slate-500">
-                    {{ offer.creatorName }} propose
-                  </p>
-                  <p class="truncate font-bold">{{ offer.offerCard.name }}</p>
-                  <p class="text-sm text-slate-600">
-                    {{ offer.offerCard.rarity }} · quantité {{ offer.offerQuantity }}
-                  </p>
-                </div>
-              </div>
+              {{ busyOfferId() === 'create' ? 'Publication…' : 'Publier l’offre' }}
+            </button>
+          </form>
+        }
+      </section>
 
-              <span aria-hidden="true" class="hidden text-xl text-[#2049CD] sm:block">⇄</span>
-
-              <div class="flex min-w-0 items-center gap-3">
-                @if (cardImage(offer.wantCard)) {
-                  <img
-                    [src]="cardImage(offer.wantCard)"
-                    [alt]="offer.wantCard.name"
-                    class="h-20 w-14 object-cover"
-                  />
-                }
-                <div class="min-w-0">
-                  <p class="text-xs font-bold uppercase tracking-wide text-slate-500">Demande</p>
-                  <p class="truncate font-bold">{{ offer.wantCard.name }}</p>
-                  <p class="text-sm text-slate-600">
-                    {{ offer.wantCard.rarity }} · quantité {{ offer.wantQuantity }}
-                  </p>
-                </div>
-              </div>
-
-              @if (offer.creatorId === authUser()?.id) {
-                <button
-                  type="button"
-                  (click)="cancel(offer)"
-                  [disabled]="busyOfferId() === offer.id"
-                  class="border border-rose-200 px-4 py-2.5 text-sm font-bold text-rose-700 hover:bg-rose-50 disabled:opacity-50"
-                >
-                  {{ busyOfferId() === offer.id ? 'Patiente…' : 'Annuler' }}
-                </button>
-              } @else {
-                <button
-                  type="button"
-                  (click)="accept(offer)"
-                  [disabled]="busyOfferId() !== null"
-                  class="bg-emerald-600 px-4 py-2.5 text-sm font-bold text-white hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  {{ busyOfferId() === offer.id ? 'Échange…' : 'Accepter' }}
-                </button>
-              }
-            </article>
-          }
+      <section>
+        <div class="mb-4 flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <h2 class="text-xl font-extrabold">Offres en cours</h2>
+            <p class="mt-1 text-sm text-slate-600">
+              Les offres disparaissent après acceptation ou annulation.
+            </p>
+          </div>
+          <button
+            type="button"
+            (click)="load()"
+            [disabled]="loading()"
+            class="border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+          >
+            Actualiser
+          </button>
         </div>
-      }
-    </section>
-  }
+
+        @if (loading() || loadingOffers()) {
+          <p class="bg-slate-50 p-6 text-center text-sm text-slate-600">Chargement des offres…</p>
+        } @else if (offers().length === 0) {
+          <p class="border border-dashed border-slate-300 p-8 text-center text-sm text-slate-600">
+            Aucune offre pour le moment. Tu peux être le premier à en publier une.
+          </p>
+        } @else {
+          <div class="grid gap-4">
+            @for (offer of offers(); track offer.id) {
+              <article
+                class="grid gap-4 border border-slate-200 bg-white p-4 shadow-sm sm:grid-cols-[1fr_auto_1fr_auto] sm:items-center sm:p-5"
+              >
+                <div class="flex min-w-0 items-center gap-3">
+                  @if (cardImage(offer.offerCard)) {
+                    <img
+                      [src]="cardImage(offer.offerCard)"
+                      [alt]="offer.offerCard.name"
+                      class="h-20 w-14 object-cover"
+                    />
+                  }
+                  <div class="min-w-0">
+                    <p class="text-xs font-bold uppercase tracking-wide text-slate-500">
+                      {{ offer.creatorName }} propose
+                    </p>
+                    <p class="truncate font-bold">{{ offer.offerCard.name }}</p>
+                    <p class="text-sm text-slate-600">
+                      {{ offer.offerCard.rarity }} · quantité {{ offer.offerQuantity }}
+                    </p>
+                  </div>
+                </div>
+
+                <span aria-hidden="true" class="hidden text-xl text-[#2049CD] sm:block">⇄</span>
+
+                <div class="flex min-w-0 items-center gap-3">
+                  @if (cardImage(offer.wantCard)) {
+                    <img
+                      [src]="cardImage(offer.wantCard)"
+                      [alt]="offer.wantCard.name"
+                      class="h-20 w-14 object-cover"
+                    />
+                  }
+                  <div class="min-w-0">
+                    <p class="text-xs font-bold uppercase tracking-wide text-slate-500">Demande</p>
+                    <p class="truncate font-bold">{{ offer.wantCard.name }}</p>
+                    <p class="text-sm text-slate-600">
+                      {{ offer.wantCard.rarity }} · quantité {{ offer.wantQuantity }}
+                    </p>
+                  </div>
+                </div>
+
+                @if (offer.creatorId === authUser()?.id) {
+                  <button
+                    type="button"
+                    (click)="cancel(offer)"
+                    [disabled]="busyOfferId() === offer.id"
+                    class="border border-rose-200 px-4 py-2.5 text-sm font-bold text-rose-700 hover:bg-rose-50 disabled:opacity-50"
+                  >
+                    {{ busyOfferId() === offer.id ? 'Patiente…' : 'Annuler' }}
+                  </button>
+                } @else {
+                  <button
+                    type="button"
+                    (click)="accept(offer)"
+                    [disabled]="busyOfferId() !== null"
+                    class="bg-emerald-600 px-4 py-2.5 text-sm font-bold text-white hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    {{ busyOfferId() === offer.id ? 'Échange…' : 'Accepter' }}
+                  </button>
+                }
+              </article>
+            }
+          </div>
+        }
+      </section>
+    }
+  </div>
 </main>
