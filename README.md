@@ -123,12 +123,6 @@ Après la copie, conserver `production: false` dans `environment.development.ts`
 - La clé publique peut être utilisée côté client si les permissions et politiques RLS sont correctement configurées.
 - Ne pas commiter les fichiers de configuration locaux contenant des informations qui doivent rester privées.
 
-Si le projet utilise des fichiers locaux ignorés par Git, transmettre les instructions pour les créer sans partager de secrets dans le dépôt.
-
-### Base de données
-
-Appliquer le script `supabase/migrations/20261103000000_pack_energy.sql` au projet Supabase (par exemple depuis le SQL Editor) avant d'ouvrir des paquets. Il crée le compteur persistant, limite les ouvertures à cinq paquets en stock, recharge un paquet toutes les quatre heures et ajoute les cartes gagnées à `player_card`.
-
 ## 4. Lancer l'application
 
 Depuis la racine du projet :
