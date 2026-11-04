@@ -1,105 +1,128 @@
-:host {
-  display: block;
+.pack-opening-stage {
+  position: relative;
+  width: min(11rem, 23vw);
+  aspect-ratio: 0.68;
+  perspective: 900px;
+  animation: pack-arrive 520ms ease-out both;
 }
 
-.pack-page {
-  padding-bottom: 2rem;
+.pack-stack,
+.pack-sleeve {
+  position: absolute;
+  inset: 0;
+  border: 2px solid #2049cd;
+  background: #fff;
+  box-shadow: 0 0.75rem 1.5rem rgb(15 23 42 / 12%);
 }
 
-.pack-eyebrow {
-  color: #475569;
+.pack-stack-back {
+  transform: translate(-0.65rem, 0.45rem) rotate(-10deg);
+  animation: stack-fan-left 650ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
 }
 
-.pack-room {
-  display: grid;
-  justify-items: center;
-  gap: 1rem;
-  padding: 2rem 1rem;
-  text-align: center;
+.pack-stack-middle {
+  transform: translate(0.65rem, 0.35rem) rotate(9deg);
+  animation: stack-fan-right 650ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
 }
 
-.sealed-pack {
-  margin: 0;
-  font-weight: 600;
-}
-
-.pack-intro {
-  display: grid;
-  justify-items: center;
-  gap: 0.5rem;
-}
-
-.pack-intro p {
-  margin-bottom: 0.5rem;
-}
-
-.pack-status {
-  margin: 0;
-}
-
-.pack-primary-button:disabled {
-  cursor: wait;
-}
-
-.pack-message {
-  display: grid;
-  justify-items: center;
+.pack-sleeve {
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   gap: 0.75rem;
-  padding: 2rem 1rem;
-  text-align: center;
+  background:
+    linear-gradient(135deg, transparent 48%, rgb(32 73 205 / 8%) 49% 51%, transparent 52%), #fff;
+  animation: sleeve-settle 560ms 80ms ease-out both;
 }
 
-.pack-message h2,
-.pack-message p {
-  margin: 0;
+.pack-sleeve::before,
+.pack-sleeve::after {
+  position: absolute;
+  inset-inline: 0;
+  height: 0.5rem;
+  background: #2049cd;
+  content: '';
 }
 
-.pack-error {
-  color: #9f1239;
+.pack-sleeve::before {
+  top: 0;
 }
 
-.reveal-room {
-  display: grid;
-  justify-items: center;
-  gap: 1rem;
+.pack-sleeve::after {
+  bottom: 0;
+}
+
+.pack-sleeve-mark {
+  color: #2049cd;
+  font-size: clamp(0.75rem, 2vw, 1.15rem);
+  font-weight: 900;
+  letter-spacing: 0.14em;
+}
+
+.pack-sleeve-count {
+  padding: 0.25rem 0.5rem;
+  background: #2049cd;
+  color: #fff;
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+.pack-opening-controls {
+  animation: controls-arrive 450ms 180ms ease-out both;
+}
+
+.card-reveal-stage {
+  position: relative;
+  width: min(22rem, 100%, 39dvh);
+  isolation: isolate;
+}
+
+.card-stack {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.stack-card {
+  position: absolute;
+  inset: 0;
+  border: 2px solid #2049cd;
+  background: repeating-linear-gradient(135deg, #fff 0 0.75rem, #eff4ff 0.75rem 1.5rem);
+  box-shadow: 0 0.75rem 1.5rem rgb(15 23 42 / 14%);
+  transform-origin: center bottom;
+}
+
+.stack-card-back {
+  animation: deal-back 360ms 80ms ease-out both;
+}
+
+.stack-card-middle {
+  animation: deal-middle 360ms 40ms ease-out both;
+}
+
+.stack-card-front {
+  animation: deal-front 360ms ease-out both;
 }
 
 .reveal-heading,
-.summary-heading {
-  text-align: center;
+.reveal-controls {
+  animation: controls-arrive 350ms ease-out both;
 }
 
-.reveal-heading h2,
-.summary-heading h2 {
-  margin: 0.35rem 0;
-}
-
-.pull-stage {
-  display: grid;
-  width: min(100%, 27rem);
-  perspective: 1400px;
-  place-items: center;
-}
-
-.pull-card {
-  display: block;
-  position: relative;
+.reveal-card {
   width: 100%;
-  aspect-ratio: 5 / 7;
 }
 
-.pull-card .card-stage {
-  width: 100%;
-  height: 100%;
-  padding: 0;
+.reveal-card app-card-display {
+  animation: card-deal 420ms ease-out both;
 }
 
-.pull-card .trading-card {
-  width: 100%;
-  height: 100%;
-  max-width: none;
-  margin: 0;
-  border-radius: 1.5rem;
+.reveal-card app-card-display.pull-card-leaving {
+  animation: pull-card-dismiss 420ms cubic-bezier(0.4, 0, 1, 1) forwards;
 }
 
 .pull-card-leaving {
@@ -110,18 +133,107 @@
 @keyframes pull-card-dismiss {
   to {
     opacity: 0;
-    transform: translateY(-3rem) scale(0.82) rotate(8deg);
+    transform: translateY(-2rem) rotate(5deg);
   }
 }
 
-.reveal-controls {
-  display: grid;
-  justify-items: center;
-  gap: 0.55rem;
+@keyframes pack-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.reveal-counter {
-  margin: 0;
+@keyframes stack-fan-left {
+  from {
+    opacity: 0;
+    transform: translate(0, 0) rotate(0);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-0.65rem, 0.45rem) rotate(-10deg);
+  }
+}
+
+@keyframes stack-fan-right {
+  from {
+    opacity: 0;
+    transform: translate(0, 0) rotate(0);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0.65rem, 0.35rem) rotate(9deg);
+  }
+}
+
+@keyframes sleeve-settle {
+  0% {
+    opacity: 0;
+    transform: translateY(-1.25rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes controls-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes deal-back {
+  from {
+    opacity: 0;
+    transform: translate(-2rem, -0.5rem) rotate(-15deg);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-0.7rem, 0.5rem) rotate(-8deg);
+  }
+}
+
+@keyframes deal-middle {
+  from {
+    opacity: 0;
+    transform: translate(2rem, -0.75rem) rotate(13deg);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0.7rem, 0.35rem) rotate(8deg);
+  }
+}
+
+@keyframes deal-front {
+  from {
+    opacity: 0;
+    transform: translateY(-1.5rem) rotate(4deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(0);
+  }
+}
+
+@keyframes card-deal {
+  from {
+    opacity: 0;
+    transform: translateY(1.25rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -132,5 +244,16 @@
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .pack-opening-stage,
+  .pack-stack,
+  .pack-sleeve,
+  .pack-opening-controls,
+  .stack-card,
+  .reveal-heading,
+  .reveal-controls,
+  .reveal-card app-card-display {
+    animation: none;
   }
 }

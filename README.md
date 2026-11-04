@@ -3,6 +3,22 @@
 Application web développée avec **Angular, Tailwind CSS et Supabase**.
 Collectionnez des cartes dans le thème de l'école **CODA_** et échangez-les!
 
+## Marché et classements
+
+Le marché propose des enchères de 6, 12, 24 ou 48 heures. La carte mise en vente est réservée
+pendant l'enchère ; les offres sont débitées immédiatement, les surenchères remboursent l'offre
+précédente, puis le gagnant reçoit la carte et le vendeur les pièces à la clôture. Les enchères
+expirées sont clôturées lors du chargement ou de l'actualisation du marché.
+
+La page Classement affiche séparément le solde de pièces et le nombre de cartes L et SL possédées.
+Les zones de collection, d'échanges et de marché défilent indépendamment ; les autres pages restent
+contenues dans la hauteur de l'écran.
+
+Les pages de collection, de marché, d'échanges, de classement et d'ouverture des paquets nécessitent
+une session active. Un visiteur non connecté est redirigé vers le formulaire de compte, puis revient
+à la page demandée après une connexion réussie. L'ouverture de paquet comprend une mise en scène
+animée du paquet, des cartes empilées et une arrivée animée de chaque carte.
+
 ## Contribution au projet
 
 Ce projet est ouvert à la collaboration et a pour objectif de permettre aux élèves de **CODA_** de s'exercer au travail sur un projet **Open Source**.
@@ -97,7 +113,12 @@ Le collaborateur pourra ensuite accéder au projet depuis son propre compte Supa
 
 Récupérer l'URL du projet Supabase et sa clé publique depuis le tableau de bord Supabase.
 
-Renseigner ces valeurs dans le fichier d'environnement attendu par l'application.
+Copier le modèle puis renseigner ces valeurs dans les fichiers locaux :
+
+```powershell
+Copy-Item src\environments\environment.example.ts src\environments\environment.ts
+Copy-Item src\environments\environment.example.ts src\environments\environment.development.ts
+```
 
 Exemple de configuration :
 
@@ -105,21 +126,18 @@ Exemple de configuration :
 export const environment = {
   production: false,
   supabaseUrl: 'URL_DU_PROJET',
-  supabaseKey: 'CLE_PUBLIQUE'
+  supabasePublishableKey: 'CLE_PUBLIQUE'
 };
 ```
 
-Cet exemple est indicatif : conserver les noms de propriétés et la structure réellement utilisés par Codamon.
-
-Vérifier les fichiers d'environnement existants dans `src/environments/` et le remplacement configuré dans `angular.json`.
+Les fichiers locaux `src/environments/environment.ts` et `environment.development.ts`, les fichiers `.env` ainsi que `.vscode/` sont ignorés par Git.
+Après la copie, conserver `production: false` dans `environment.development.ts` et définir `production: true` dans `environment.ts`.
 
 **Sécurité :**
 - Ne jamais commiter de secrets ou de clés privées.
 - Ne jamais exposer une clé `service_role` ou `sb_secret_...` dans Angular.
 - La clé publique peut être utilisée côté client si les permissions et politiques RLS sont correctement configurées.
 - Ne pas commiter les fichiers de configuration locaux contenant des informations qui doivent rester privées.
-
-Si le projet utilise des fichiers locaux ignorés par Git, transmettre les instructions pour les créer sans partager de secrets dans le dépôt.
 
 ## 4. Lancer l'application
 
@@ -266,4 +284,3 @@ Vérifier :
 - Tailwind CSS : https://tailwindcss.com/docs
 - Supabase : https://supabase.com/docs
 - Git : https://git-scm.com/doc
-

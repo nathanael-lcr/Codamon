@@ -1,7 +1,37 @@
 @import 'tailwindcss';
-@import './shared/card-display/card-display.css';
-@import './features/pack-opening/pack-opening.css';
 
-html, body {
-    font-family: 'Inter';
+@layer base {
+  html,
+  body {
+    height: 100%;
+    overflow: hidden;
+    background: #fff;
+    color: #0f172a;
+  }
+
+  html,
+  body {
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  }
+
+  body {
+    margin: 0;
+  }
+
+  app-root {
+    display: block;
+    height: 100dvh;
+  }
+
+  .app-main > :not(router-outlet) {
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 0;
+    width: 100%;
+  }
+
+  ::selection {
+    background: #2049cd;
+    color: #fff;
+  }
 }

@@ -18,7 +18,7 @@ export class PlayerService {
   readonly loading = this._loading.asReadonly();
   readonly error = this._error.asReadonly();
 
-  readonly balance = computed(() => this.player()?.balance ?? 0);
+  readonly balance = computed(() => this.player()?.currency ?? 0);
 
   constructor() {
     effect((onCleanup) => {
@@ -48,9 +48,7 @@ export class PlayerService {
         .catch((error: unknown) => {
           if (active) {
             this._error.set(
-              error instanceof Error
-                ? error.message
-                : 'Impossible de charger le profil.'
+              error instanceof Error ? error.message : 'Impossible de charger le profil.',
             );
           }
         })
@@ -62,12 +60,37 @@ export class PlayerService {
     });
   }
 
+  async refresh(): Promise<void> {
+    const user = this.auth.user();
+    if (!user) {
+      this._player.set(null);
+      this._error.set(null);
+      this._loading.set(false);
+      return;
+    }
+
+    this._loading.set(true);
+    this._error.set(null);
+
+    try {
+      const player = await this.fetchPlayer(user.id);
+      if (this.auth.user()?.id === user.id) this._player.set(player);
+    } catch (error: unknown) {
+      if (this.auth.user()?.id === user.id) {
+        this._error.set(
+          error instanceof Error ? error.message : 'Impossible de charger le profil.',
+        );
+      }
+      throw error;
+    } finally {
+      if (this.auth.user()?.id === user.id) this._loading.set(false);
+    }
+  }
+
   private async fetchPlayer(userId: string): Promise<Player> {
     const { data, error } = await this.supabase
       .from('player')
-      .select(
-        'id, username, display_name, avatar_url, currency, created_at'
-      )
+      .select('id, username, display_name, avatar_url, currency, created_at')
       .eq('id', userId)
       .single();
 

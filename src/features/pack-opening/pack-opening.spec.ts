@@ -1,6 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { signal } from '@angular/core';
+import { AuthService } from '../../app/core/auth/auth.service';
 import { Card } from '../../app/core/cards/card.model';
 import { CardsService } from '../../app/core/cards/cards.service';
+import { PackOpeningNavigationService } from '../../app/core/cards/pack-opening-navigation.service';
+import { CollectionService } from '../../app/core/collection/collection.service';
 import { PackOpeningComponent } from './pack-opening';
 
 const pack: Card[] = Array.from({ length: 5 }, (_, index) => ({
@@ -33,21 +37,53 @@ const pack: Card[] = Array.from({ length: 5 }, (_, index) => ({
 describe('PackOpeningComponent', () => {
   let fixture: ComponentFixture<PackOpeningComponent>;
   let openRandomPack: ReturnType<typeof vi.fn>;
+  let getPackEnergy: ReturnType<typeof vi.fn>;
+  let getActiveCardCount: ReturnType<typeof vi.fn>;
+  let collectionReload: ReturnType<typeof vi.fn>;
 
   beforeEach(async () => {
-    openRandomPack = vi.fn().mockResolvedValue(pack);
+    openRandomPack = vi.fn().mockResolvedValue({
+      cards: pack,
+      availablePacks: 4,
+      nextRefillAt: new Date(Date.now() + 4 * 60 * 60 * 1000).toISOString(),
+    });
+    getPackEnergy = vi.fn().mockResolvedValue({
+      availablePacks: 5,
+      nextRefillAt: null,
+    });
+    getActiveCardCount = vi.fn().mockResolvedValue(110);
+    collectionReload = vi.fn().mockResolvedValue(undefined);
 
     await TestBed.configureTestingModule({
       imports: [PackOpeningComponent],
       providers: [
         {
           provide: CardsService,
-          useValue: { openRandomPack },
+          useValue: { openRandomPack, getPackEnergy, getActiveCardCount },
+        },
+        {
+          provide: CollectionService,
+          useValue: {
+            distinctCount: signal(47),
+            totalCount: signal(52),
+            loading: signal(false),
+            error: signal(null),
+            reload: collectionReload,
+          },
+        },
+        {
+          provide: AuthService,
+          useValue: {
+            user: signal({ id: 'player-id' }),
+            initialized: signal(true),
+          },
         },
       ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(PackOpeningComponent);
+    fixture.detectChanges();
+    await fixture.whenStable();
     fixture.detectChanges();
   });
 
@@ -64,18 +100,31 @@ describe('PackOpeningComponent', () => {
     fixture.detectChanges();
   }
 
-  it('shows a simple booster prompt before opening', () => {
-    expect(fixture.nativeElement.querySelector('.sealed-pack')).not.toBeNull();
-    expect(fixture.nativeElement.textContent).toContain('Découvrir mon pack');
-  });
-
-  it('reveals cards one at a time and ends with a five-card recap', async () => {
-    clickButton('Découvrir mon pack');
+  it('shows the collection overview with live catalogue and collection counts', async () => {
     await fixture.whenStable();
     fixture.detectChanges();
 
+    expect(fixture.nativeElement.textContent).toContain('110 cartes à collectionner');
+    expect(fixture.nativeElement.textContent).toContain('47');
+    expect(fixture.nativeElement.textContent).toContain('Ouvrir le paquet');
+    expect(fixture.nativeElement.textContent).not.toContain('4 / 10 paquets disponibles');
+    expect(fixture.nativeElement.textContent).toContain('5 / 5 paquets disponibles');
+  });
+
+  it('reveals cards one at a time and ends with a five-card recap', async () => {
+    clickButton('Ouvrir le paquet');
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    await vi.waitFor(() => {
+      fixture.detectChanges();
+      expect(
+        fixture.nativeElement.querySelector('[aria-label="Booster prêt à ouvrir"]'),
+      ).not.toBeNull();
+    });
     expect(openRandomPack).toHaveBeenCalledOnce();
-    expect(fixture.nativeElement.querySelector('.sealed-pack-button')).not.toBeNull();
+    expect(collectionReload).toHaveBeenCalledOnce();
+    expect(fixture.nativeElement.textContent).toContain('4 / 5 paquets disponibles');
 
     clickButton('Ouvrir le booster');
     expect(fixture.nativeElement.textContent).toContain('Carte 1 sur 5');
@@ -100,14 +149,29 @@ describe('PackOpeningComponent', () => {
 
     clickButton('Voir le récapitulatif');
     expect(fixture.nativeElement.querySelectorAll('.summary-card')).toHaveLength(5);
+    expect(fixture.nativeElement.querySelectorAll('.summary-card .trading-card')).toHaveLength(5);
     expect(fixture.nativeElement.textContent).toContain('Voici ton tirage');
     expect(fixture.nativeElement.textContent).toContain('Pack Card 5');
+
+    TestBed.inject(PackOpeningNavigationService).returnHome();
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.textContent).not.toContain('Voici ton tirage');
+    expect(
+      fixture.nativeElement.querySelector('[aria-label="Aperçu de la collection et ouverture"]'),
+    ).not.toBeNull();
   });
 
   it('shows the first card without waiting for an animation event', async () => {
-    clickButton('Découvrir mon pack');
+    clickButton('Ouvrir le paquet');
     await fixture.whenStable();
     fixture.detectChanges();
+    await vi.waitFor(() => {
+      fixture.detectChanges();
+      expect(
+        fixture.nativeElement.querySelector('[aria-label="Booster prêt à ouvrir"]'),
+      ).not.toBeNull();
+    });
     clickButton('Ouvrir le booster');
 
     expect(fixture.nativeElement.textContent).toContain('Carte 1 sur 5');
@@ -118,11 +182,30 @@ describe('PackOpeningComponent', () => {
   it('displays a retry action when pack creation fails', async () => {
     openRandomPack.mockRejectedValueOnce(new Error('Catalogue indisponible'));
 
-    clickButton('Découvrir mon pack');
+    clickButton('Ouvrir le paquet');
     await fixture.whenStable();
     fixture.detectChanges();
 
     expect(fixture.nativeElement.textContent).toContain('Catalogue indisponible');
     expect(fixture.nativeElement.textContent).toContain('Réessayer');
+  });
+
+  it('disables pack opening when the player has no packs left', async () => {
+    getPackEnergy.mockResolvedValueOnce({
+      availablePacks: 0,
+      nextRefillAt: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
+    });
+    fixture.destroy();
+    fixture = TestBed.createComponent(PackOpeningComponent);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const button = [...fixture.nativeElement.querySelectorAll('button')].find((candidate) =>
+      candidate.textContent.includes('Aucun paquet disponible'),
+    ) as HTMLButtonElement | undefined;
+
+    expect(button?.disabled).toBe(true);
+    expect(fixture.nativeElement.textContent).toContain('Prochain paquet dans');
   });
 });

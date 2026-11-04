@@ -1,12 +1,14 @@
-<section class="pack-page">
+<section class="h-full overflow-hidden">
   @if (!phase() && !loading() && !error()) {
     <!-- La section ci dessous est purement une maquette est doit être faite de manière pratique et responsive -->
     <section
-      class="min-h-screen bg-[#F9F9F8] flex items-start justify-center py-8 px-6"
+      class="min-h-full bg-white flex items-center justify-center px-4 py-3 sm:px-6"
       aria-label="Aperçu de la collection et ouverture"
     >
-      <div class="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-16 lg:gap-32 items-stretch">
-        <div class="flex flex-col justify-between h-full min-h-137.5">
+      <div
+        class="grid h-full w-full max-w-6xl grid-cols-1 items-stretch gap-4 md:grid-cols-2 md:gap-16 lg:gap-32"
+      >
+        <div class="hidden h-full min-h-137.5 flex-col justify-between md:flex">
           <div>
             <span
               class="text-[10px] tracking-[0.2em] text-slate-400 font-bold uppercase mb-8 block"
@@ -20,7 +22,7 @@
             </h1>
             <p class="text-slate-500 text-lg leading-relaxed font-light">
               Un objet encore scellé.<br />
-              Cinq savoirs à découvrir.
+              {{ packSize }} savoirs à découvrir.
             </p>
           </div>
 
@@ -32,7 +34,11 @@
                 La collection
               </span>
               <span class="text-base font-semibold text-slate-800">
-                110 cartes à collectionner
+                @if (catalogCount() !== null) {
+                  {{ catalogCount() }} cartes à collectionner
+                } @else {
+                  Catalogue Coda Originals
+                }
               </span>
             </div>
             <div class="border-t border-slate-200/80 pt-6">
@@ -41,7 +47,9 @@
               >
                 Dans chaque paquet
               </span>
-              <span class="text-base font-semibold text-slate-800"> 5 cartes à découvrir </span>
+              <span class="text-base font-semibold text-slate-800">
+                {{ packSize }} cartes à découvrir
+              </span>
             </div>
           </div>
 
@@ -53,60 +61,135 @@
         </div>
 
         <div
-          class="flex flex-col justify-between h-full min-h-137.5 border-t md:border-t-0 md:border-l border-slate-200/60 pt-12 md:pt-0 md:pl-16 lg:pl-24"
+          class="flex h-full flex-col justify-center border-t border-slate-200/60 pt-4 md:min-h-137.5 md:justify-between md:border-l md:border-t-0 md:pl-16 md:pt-0 lg:pl-24"
         >
-          <!-- Bloc supérieur : Bouton et disponibilité -->
-          <div class="space-y-8">
+          <!-- Bloc supérieur : disponibilité et ouverture -->
+          <div class="space-y-4 md:space-y-8">
             <div class="flex items-center justify-between border-b border-slate-200/60 pb-4">
               <span class="text-[10px] tracking-[0.15em] text-slate-400 font-bold uppercase">
-                Disponible à l'ouverture
+                Disponible à l’ouverture
               </span>
-              <span class="h-2 w-2 rounded-full bg-[#2049CD] inline-block"></span>
+              @if (packEnergy(); as energy) {
+                <span
+                  class="inline-flex items-center gap-2 text-xs font-semibold"
+                  [class.text-[#2049CD]]="energy.availablePacks > 0"
+                  [class.text-slate-400]="energy.availablePacks === 0"
+                >
+                  <span
+                    class="h-2 w-2"
+                    [class.bg-[#2049CD]]="energy.availablePacks > 0"
+                    [class.bg-slate-300]="energy.availablePacks === 0"
+                    aria-hidden="true"
+                  ></span>
+                  {{ energy.availablePacks > 0 ? 'Disponible' : 'Recharge en cours' }}
+                </span>
+              }
             </div>
 
             <div>
+              <p
+                class="mb-1 text-xs font-bold uppercase tracking-[0.15em] text-[#2049CD] md:hidden"
+              >
+                La prochaine pièce
+              </p>
               <h2 class="text-3xl font-bold text-slate-950 mb-1">Coda Originals</h2>
-              <p class="text-slate-400 text-sm">5 cartes par paquet</p>
+              <p class="text-slate-400 text-sm">{{ packSize }} cartes par paquet</p>
             </div>
 
             <!-- Bouton interactif -->
             <button
               type="button"
-              class="w-full p-5 bg-[#2049CD] text-white hover:bg-[#1a3da8] active:scale-[0.99] transition-all hover:cursor-pointer flex items-center justify-between font-medium tracking-wide shadow-sm"
+              class="w-full p-5 bg-[#2049CD] text-white hover:bg-[#1a3da8] active:scale-[0.99] transition-all hover:cursor-pointer flex items-center justify-between font-medium tracking-wide shadow-sm disabled:cursor-wait disabled:opacity-70"
+              [disabled]="
+                loading() ||
+                energyLoading() ||
+                !packEnergy() ||
+                packEnergy()?.availablePacks === 0 ||
+                !auth.user()
+              "
               (click)="getPack()"
             >
-              <span>Ouvrir le paquet</span>
+              <span>
+                @if (loading()) {
+                  Préparation du paquet…
+                } @else if (packEnergy()?.availablePacks === 0) {
+                  Aucun paquet disponible
+                } @else {
+                  Ouvrir le paquet
+                }
+              </span>
               <svg lucideArrowUpRight class="w-5 h-5 ml-2"></svg>
             </button>
 
-            <!-- Statut des paquets -->
-            <div class="space-y-1">
-              <div class="flex justify-between text-sm font-semibold text-slate-800">
-                <span>4 / 10 paquets disponibles</span>
-                <span class="text-[#2049CD]">4:52</span>
+            @if (!auth.initialized() || energyLoading()) {
+              <p class="text-slate-400 text-xs" aria-live="polite">
+                Chargement des paquets disponibles…
+              </p>
+            } @else if (!auth.user()) {
+              <p class="text-slate-500 text-xs">
+                <a routerLink="/account" class="font-semibold text-[#2049CD] underline">
+                  Connecte-toi
+                </a>
+                pour récupérer tes paquets gratuits.
+              </p>
+            } @else if (energyError()) {
+              <div class="space-y-2 text-xs text-rose-700" role="alert">
+                <p>Impossible de charger tes paquets : {{ energyError() }}</p>
+                <button type="button" class="font-semibold underline" (click)="retryPackEnergy()">
+                  Réessayer
+                </button>
               </div>
-              <p class="text-slate-400 text-xs">Prochain paquet dans 4:52</p>
-            </div>
+            } @else if (packEnergy(); as energy) {
+              <div class="space-y-1">
+                <div class="flex justify-between text-sm font-semibold text-slate-800">
+                  <span>{{ energy.availablePacks }} / 5 paquets disponibles</span>
+                  @if (refillCountdown(); as countdown) {
+                    <span class="text-[#2049CD]">{{ countdown }}</span>
+                  }
+                </div>
+              </div>
+            }
           </div>
 
           <!-- Bloc inférieur : Barre de progression de la collection -->
-          <div class="border-t border-slate-200/80 pt-8 mt-12 space-y-4">
+          <div
+            class="mt-4 space-y-3 border-t border-slate-200/80 pt-4 md:mt-12 md:space-y-4 md:pt-8"
+          >
             <div class="flex items-baseline justify-between">
               <span class="text-slate-500 font-medium text-sm">Votre collection</span>
               <span class="text-3xl font-bold text-slate-900">
-                47 <span class="text-slate-300 font-normal text-2xl">/</span> 110
+                {{ collection.distinctCount() }}
+                <span class="text-slate-300 font-normal text-2xl">/</span>
+                {{ catalogCount() ?? '—' }}
                 <span class="text-slate-400 font-normal text-base">cartes</span>
               </span>
             </div>
 
             <!-- Barre de progression -->
-            <div class="w-full h-1 bg-slate-200/80 rounded-full overflow-hidden">
-              <div class="h-full bg-[#2049CD] rounded-full" style="width: 42.7%"></div>
+            <div
+              class="w-full h-1 bg-slate-200/80 overflow-hidden"
+              role="progressbar"
+              aria-label="Progression de la collection"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              [attr.aria-valuenow]="collectionProgress()"
+            >
+              <div class="h-full bg-[#2049CD]" [style.width.%]="collectionProgress()"></div>
             </div>
 
-            <p class="text-[10px] tracking-[0.15em] text-slate-400 font-bold uppercase">
-              42.7% de la collection complétée
-            </p>
+            @if (catalogError()) {
+              <p class="text-xs text-rose-700" role="status">{{ catalogError() }}</p>
+            } @else if (collection.error()) {
+              <p class="text-xs text-rose-700" role="status">
+                La progression de ta collection n’a pas pu être chargée.
+              </p>
+            } @else if (catalogCount() !== null) {
+              <p class="text-[10px] tracking-[0.15em] text-slate-400 font-bold uppercase">
+                {{ collectionProgressLabel() }}% de la collection complétée
+              </p>
+            } @else {
+              <p class="text-xs text-slate-400" aria-live="polite">Chargement de la progression…</p>
+            }
           </div>
         </div>
       </div>
@@ -114,23 +197,51 @@
   }
 
   @if (loading()) {
-    <section class="pack-room" aria-live="polite">
-      <p class="pack-status">Le booster est mélangé…</p>
+    <section class="grid justify-items-center gap-4 px-4 py-8 text-center" aria-live="polite">
+      <p class="m-0">Le booster est mélangé…</p>
     </section>
   }
 
   @if (error()) {
-    <section class="pack-message pack-error" role="alert">
-      <h2>Le booster n’a pas pu être préparé</h2>
-      <p>{{ error() }}</p>
-      <button type="button" class="pack-secondary-button" (click)="retry()">Réessayer</button>
+    <section
+      class="mx-auto my-8 grid w-full max-w-136 justify-items-center gap-3 border border-rose-200 bg-rose-50 p-8 text-center text-rose-800"
+      role="alert"
+    >
+      <h2 class="m-0 text-xl font-bold">Le booster n’a pas pu être préparé</h2>
+      <p class="m-0 text-sm leading-6 text-rose-700">{{ error() }}</p>
+      <button
+        type="button"
+        class="border border-rose-300 bg-white px-4 py-2 font-semibold text-rose-800 hover:bg-rose-100"
+        (click)="retry()"
+      >
+        Réessayer
+      </button>
     </section>
   }
 
   @if (phase() === 'sealed') {
-    <section class="pack-room" aria-label="Booster prêt à ouvrir">
-      <div class="w-xs">
-        <p class="sealed-pack">Booster prêt</p>
+    <section
+      class="sealed-pack grid justify-items-center gap-2 px-4 py-4 text-center sm:gap-4 sm:py-8"
+      aria-label="Booster prêt à ouvrir"
+    >
+      <div class="pack-opening-stage" aria-hidden="true">
+        <div class="pack-stack pack-stack-back"></div>
+        <div class="pack-stack pack-stack-middle"></div>
+        <div class="pack-sleeve">
+          <span class="pack-sleeve-mark">CODAMON</span>
+          <span class="pack-sleeve-count">{{ packSize }} CARTES</span>
+        </div>
+      </div>
+      <div class="w-xs pack-opening-controls">
+        <p class="m-0 font-semibold">Booster prêt</p>
+        @if (packEnergy(); as energy) {
+          <p class="m-0">
+            {{ energy.availablePacks }} / 5 paquets disponibles
+            @if (refillCountdown(); as countdown) {
+              · prochaine recharge dans {{ countdown }}
+            }
+          </p>
+        }
         <button
           type="button"
           class="w-full p-5 bg-[#2049CD] text-white hover:bg-[#1a3da8] active:scale-[0.99] transition-all hover:cursor-pointer flex items-center justify-between font-medium tracking-wide shadow-sm"
@@ -144,33 +255,46 @@
   }
 
   @if (phase() === 'revealing' && currentCard(); as card) {
-    <section class="reveal-room" aria-label="Révélation du pack">
-      <div class="reveal-heading">
-        <p class="pack-eyebrow">Le booster est ouvert</p>
-        <h2>
+    <section
+      class="grid justify-items-center gap-2 px-3 py-2 sm:gap-3"
+      aria-label="Révélation du pack"
+    >
+      <div class="reveal-heading text-center">
+        <p class="text-sm font-bold uppercase tracking-wide text-slate-600">
+          Le booster est ouvert
+        </p>
+        <h2 class="my-1 text-2xl font-bold">
           @if (currentCardRevealed()) {
             Carte {{ revealedCount() + 1 }} révélée
           } @else {
             Une carte se dévoile…
           }
         </h2>
-        <p>Carte {{ revealedCount() + 1 }} sur {{ cards().length }}</p>
+        <p class="m-0 text-sm text-slate-600">
+          Carte {{ revealedCount() + 1 }} sur {{ cards().length }}
+        </p>
       </div>
 
-      <div class="pull-stage">
-        <app-card-display
-          class="pull-card"
-          [class.pull-card-leaving]="cardLeaving()"
-          [card]="card"
-          [compact]="true"
-          [flippable]="true"
-          [flipped]="currentCardRevealed()"
-          (click)="revealOrContinue()"
-        />
+      <div class="card-reveal-stage grid place-items-center perspective-[1400px]">
+        <div class="card-stack" aria-hidden="true">
+          <span class="stack-card stack-card-back"></span>
+          <span class="stack-card stack-card-middle"></span>
+        </div>
+        <div class="reveal-card grid place-items-center perspective-[1400px]">
+          <app-card-display
+            class="block w-full"
+            [class.pull-card-leaving]="cardLeaving()"
+            [card]="card"
+            [tilt]="true"
+            [flippable]="true"
+            [flipped]="currentCardRevealed()"
+            (click)="revealOrContinue()"
+          />
+        </div>
       </div>
 
-      <div class="reveal-controls">
-        <p class="reveal-counter">
+      <div class="reveal-controls grid justify-items-center gap-2">
+        <p class="m-0">
           {{ remainingCards() }} carte{{ remainingCards() === 1 ? '' : 's' }} à découvrir
         </p>
         <button
@@ -194,55 +318,34 @@
   }
 
   @if (phase() === 'summary') {
-    <section class="pack-summary">
-      <div class="summary-heading">
-        <p class="pack-eyebrow">Ouverture terminée</p>
-        <h2>Voici ton tirage</h2>
-        <p>Les {{ cards().length }} cartes de ton pack, de la plus commune à la plus rare.</p>
+    <section class="mx-auto flex h-full w-full max-w-7xl flex-col px-3 py-3">
+      <div class="mb-3 text-center">
+        <p class="text-sm font-bold uppercase tracking-wide text-slate-600">Ouverture terminée</p>
+        <h2 class="my-1 text-2xl font-bold">Voici ton tirage</h2>
+        <p class="m-0 text-sm text-slate-600">
+          Les {{ cards().length }} cartes de ton pack, de la plus commune à la plus rare.
+        </p>
+        @if (packEnergy(); as energy) {
+          <p class="m-0 mt-2 text-sm text-slate-600">
+            {{ energy.availablePacks }} / 5 paquets disponibles
+            @if (refillCountdown(); as countdown) {
+              · prochaine recharge dans {{ countdown }}
+            }
+          </p>
+        }
       </div>
 
-      <div class="summary-grid">
+      <div class="grid min-h-0 flex-1 grid-cols-4 items-center gap-2 lg:grid-cols-7 lg:gap-3">
         @for (card of cards(); track card.id; let index = $index) {
-          <article
-            class="summary-card"
-            [attr.data-rarity]="card.rarity"
-            [style.animation-delay.ms]="index * 70"
-          >
-            <div class="summary-card-art">
-              @if (card.image_url || card.thumbnail_url) {
-                <img [src]="card.image_url || card.thumbnail_url" [alt]="card.name" />
-              } @else {
-                <span aria-hidden="true">{{ card.name.charAt(0).toUpperCase() }}</span>
-              }
-              <span class="summary-card-index">{{ index + 1 }}</span>
-            </div>
-            <div class="summary-card-info">
-              <p class="summary-card-rarity">{{ card.rarity }}</p>
-              <h3>{{ card.name }}</h3>
-              @if (card.subtitle) {
-                <p class="summary-card-subtitle">{{ card.subtitle }}</p>
-              }
-              @if (card.attack !== null || card.defense !== null || card.hp !== null) {
-                <p class="summary-card-stats">
-                  @if (card.hp !== null) {
-                    <span>PV {{ card.hp }}</span>
-                  }
-                  @if (card.attack !== null) {
-                    <span>ATQ {{ card.attack }}</span>
-                  }
-                  @if (card.defense !== null) {
-                    <span>DEF {{ card.defense }}</span>
-                  }
-                </p>
-              }
-            </div>
-          </article>
+          <div class="summary-card min-w-0" [style.animation-delay.ms]="index * 70">
+            <app-card-display [card]="card" [tilt]="false" />
+          </div>
         }
       </div>
 
       <button
         type="button"
-        class="p-4 bg-[#2049CD] text-white hover:bg-[#2546b3] hover:cursor-pointer"
+        class="mx-auto mt-3 block w-full max-w-96 bg-[#2049CD] p-3 text-white transition hover:bg-[#2546b3] hover:cursor-pointer"
         (click)="getPack()"
       >
         Ouvrir un autre pack

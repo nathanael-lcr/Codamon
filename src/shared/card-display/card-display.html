@@ -1,5 +1,6 @@
-<div class="card-stage" [class.card-stage-compact]="compact()">
+<div class="card-stage">
   <article
+    #cardElement
     class="trading-card"
     [attr.data-rarity]="card().rarity"
     [attr.aria-label]="'Carte ' + card().name"
@@ -8,10 +9,13 @@
     "
     [class.card-full-art]="card().rarity === 'legendary' || card().rarity === 'slegendary'"
     [class.card-flippable]="flippable()"
+    [class.card-tilt-enabled]="tilt()"
     [style.--tilt-x]="tiltX() + 'deg'"
     [style.--tilt-y]="tiltY() + 'deg'"
     [style.--pointer-x]="pointerX() + '%'"
     [style.--pointer-y]="pointerY() + '%'"
+    [style.--card-max-width.px]="width()"
+    [style.--card-scale]="scale()"
     (pointermove)="onPointerMove($event)"
     (pointerleave)="resetTilt()"
   >
@@ -21,11 +25,11 @@
       [class.card-flip-inner-revealed]="flipped()"
     >
       @if (flippable()) {
-        <div class="card-back-face pull-back bg-[#2049CD] rounded-2xl" aria-hidden="true"></div>
+        <div class="card-back-face" aria-hidden="true"></div>
       }
 
       <div
-        class="card-front-face bg-white rounded-2xl border-6 border-[#2049CD]"
+        class="card-front-face"
         [class.border-slate-400]="card().rarity === 'common'"
         [class.border-[#2049CD]]="card().rarity === 'rare'"
         [class.border-purple-500]="card().rarity === 'epic'"
@@ -37,17 +41,9 @@
         @let fullArt = card().rarity === 'legendary' || card().rarity === 'slegendary';
 
         <div
-          class="relative flex flex-col justify-between"
-          [class.p-6]="compact()"
-          [class.p-4]="!compact()"
-          [class.min-h-[27rem]]="fullArt && compact()"
-          [class.min-h-[34rem]]="fullArt && !compact()"
-          [class.h-full]="compact() && flippable()"
-          [class.min-h-0]="compact() && flippable()"
+          class="card-content relative flex h-full w-full flex-col justify-between p-4"
         >
           <header class="relative z-10 flex flex-col gap-2">
-            <div class="flex items-center justify-between gap-3"></div>
-
             <div class="flex items-center gap-6">
               <span
                 class="shrink-0 text-2xl font-black"
@@ -152,7 +148,7 @@
               </dl>
             }
 
-            <!--             @if (card().ability_name || card().ability_description) {
+            @if (card().ability_name || card().ability_description) {
               <section class="grid gap-1" [class.hidden]="basic">
                 <h3 class="flex items-center gap-1 text-sm">
                   <span aria-hidden="true">✦</span>
@@ -165,7 +161,7 @@
                   </p>
                 }
               </section>
-            } -->
+            }
 
             @if (card().quote || card().flavor_text) {
               <blockquote class="grid gap-1" [class.hidden]="basic">
